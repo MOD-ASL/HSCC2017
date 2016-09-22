@@ -247,6 +247,75 @@ Perception-informed autonomous system for modular robots that SAVES THE WORLD!!!
 
 \section{Introduction}
 
+\section{Hardware} \label{sec:hardware}
 
+\subsection{SMORES-EP Modular Robot} \label{sec:smores}
+%
+Our system is built around the SMORES-EP robot, but could easily be adapted to
+work with other hardware platforms.  In this section, we provide a brief
+introduction to the technical capabilities of SMORES-EP.
+
+Each module is about the size of an \textit{80mm cube}, and has four actuated DoF - three continuously rotating faces (left, right, and
+pan)  and one central hinge (tilt) with a \(180^\circ\) range of motion
+(Fig.~\ref{fig:smores-module}). The DoF marked left, right, and tilt  have
+ axes of rotation that are parallel and coincident. A single module can use its
+left and right wheels to drive around as a two-wheel differential drive robot.
+All four faces of the SMORES-EP module have electro-permanent (EP) magnets
+that serve as a high-strength, low-energy connector for self-reconfiguration
+\cite{tosun2016design}.  Any face of one module can connect to any face of
+another.
+
+The magnetic connectors can also attach to objects made of ferromagnetic
+materials (such as steel).  By taking advantage of this capability, SMORES-EP
+modules can use their magnets to attract, lift, and carry metal objects.
+Provided the attachment surface is flat and smooth, the attachment force
+between a SMORES-EP face and a strongly ferromagnetic object can be as high as
+90N \cite{tosun2016electropermanent}.
+
+Some of the motions a SMORES-EP cluster can perform are limited by the
+strength of the magnetic connectors, which can support the weight of at most
+three modules cantilevered horizontally against gravity.  This limitation is
+alleviated in some cases by using rigid connector plates, which are screwed
+into the faces  of two modules to create a strong permanent connection between
+them. Using connector  plates, up to four modules can be cantilevered before
+exceeding the torque limits  of the motors.  However, because the connector
+plates must be manually screwed into place,  modules with connector plates
+cannot self-reconfigure.
+
+Each module has an onboard battery, microcontroller, and 802.11b wireless
+module to send and receive UDP packets.  In this work, clusters of SMORES
+modules were controlled by a central computer running a Python program that
+sends wireless commands to control the four DoF and magnets of each module.
+Battery life is about one hour (depending on motor, magnet, and radio usage),
+and commands to a single module can be received at a rate of about 20hz.
+Wireless networking was provided by a standard off-the-shelf  router, with a
+range of about 100 feet.
+
+%% SMORES-EP module DoF picture
+\begin{figure}[h]   
+\begin{center}
+\includegraphics[height=1.5in]{images/smores_dof.pdf}
+\end{center}
+\caption{SMORES-EP module}
+\label{fig:smores-module}
+\end{figure}
+%
+
+%
+\subsection{Sensor Module} \label{sec:sensor-module}
+%
+
+
+%
+\section{Reconfiguration} \label{sec:reconfiguration}
+%
+
+
+\bibliographystyle{plain}
+\bibliography{references}
+% 
 \end{document}
+
+
+
 
