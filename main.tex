@@ -95,16 +95,35 @@
 
 \begin{abstract}
 
-Traffic cones and stuff.
+We present a fully autonomous modular robot system that can perform complex reactive high-level tasks (requiring reconfiguration) in an unknown environment without external sensing or control. \TODO{Describe system capabilities in detail here.}
 
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
 
+
 \section{Introduction} \label{sec:introduction}
 
+Modular self-reconfigurable robot (MSRR) systems are composed of a number of simple repeated robot elements (called \emph{modules}) that connect together to form larger robotic structures. These systems can \emph{self-reconfigure}, changing their shape (\emph{i.e.} the connective structure of the modules) to meet the needs of the task at hand.
+In principal, these systems can address a wide variety of tasks by transforming into a wide variety of morphologies. The traditional approach to achieving flexible robots is to build  monolithic systems that are highly capable, but also highly complex (\emph{e.g.} large humanoids).  Self-reconfigurability is an elegant, scalable alternative: since the shape of the robot is not fixed, each individual task can be solved with a morphology that is only as complicated as it needs to be.  
 
-\subsection{SMORES-EP Modular Robot} \label{sec:smores}
+
+
+Over the past three decades, dozens of modular robot systems have been built \TODO{cite}. Existing literature provides ample evidence of the ability of MSRR hardware to reconfigure, algorithms for reconfiguration planning with hundreds of modules, a number of interesting morphologies suited to object manipulation and locomotion over varying terrain, methods and interfaces for programming, controlling, and simulating modular robots, and recently, systems that select appropriate configurations and behaviors for an MSRR automatically given a high-level specification of a task \TODO{cite}.
+
+These capabilities are impressive, and each represents a significant research accomplishment in its own right. However, in order to truly live up to their promise of flexible capability in the real world, MSRR systems must demonstrate autonomy: moving, navigating, interacting with objects, and self-reconfiguring, all in unknown environments and without external localization or control. To our knowledge, this paper represents the first example of a truly autonomous MSRR system accomplishing tasks in an unknown environment.
+
+Traditional robotics literature provides numerous examples of robots operating autonomously in unknown environments \TODO{cite}. Our system goes beyond this existing work because it has the unique ability to recognize and act on situations in which reconfiguration is needed to complete a task.
+Through hardware experiments, we demonstrate that autonomous self-reconfiguration allows our system to complete tasks that would have otherwise been impossible.
+
+The remainder of the paper is structured as follows. \TODO{complete paper structure paragraph}
+
+\subsection{Related Work}\label{sec:related-work}
+%
+\TODO{coming soon}.
+
+%
+\section{SMORES-EP Modular Robot} \label{sec:smores}
 %
 Our system is built around the SMORES-EP robot, but could easily be adapted to
 work with other hardware platforms.  In this section, we provide a brief
