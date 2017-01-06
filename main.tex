@@ -19,13 +19,7 @@
 \usepackage{color}
 \usepackage{mathtools}
 \usepackage{amsmath} % assumes amsmath package installed
-\usepackage{algorithm}
 \usepackage{amssymb}  % assumes amsmath package installed
-\usepackage{caption} 
-\usepackage{algpseudocode}
-\usepackage{algorithm}
-\usepackage{subcaption}
-\usepackage[normalem]{ulem}
 %\usepackage[final]{pdfpages} % for including pdfs
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -101,29 +95,72 @@ We present a fully autonomous modular robot system that can perform complex reac
 
 \IEEEpeerreviewmaketitle
 
+       %     ____      __                 __           __  _
+       %    /  _/___  / /__________  ____/ /_  _______/ /_(_)___  ____
+       %    / // __ \/ __/ ___/ __ \/ __  / / / / ___/ __/ / __ \/ __ \
+       %  _/ // / / / /_/ /  / /_/ / /_/ / /_/ / /__/ /_/ / /_/ / / / /
+       % /___/_/ /_/\__/_/   \____/\__,_/\__,_/\___/\__/_/\____/_/ /_/
 
 \section{Introduction} \label{sec:introduction}
 
 Modular self-reconfigurable robot (MSRR) systems are composed of a number of simple repeated robot elements (called \emph{modules}) that connect together to form larger robotic structures. These systems can \emph{self-reconfigure}, changing their shape (\emph{i.e.} the connective structure of the modules) to meet the needs of the task at hand.
 In principal, these systems can address a wide variety of tasks by transforming into a wide variety of morphologies. The traditional approach to achieving flexible robots is to build  monolithic systems that are highly capable, but also highly complex (\emph{e.g.} large humanoids).  Self-reconfigurability is an elegant, scalable alternative: since the shape of the robot is not fixed, each individual task can be solved with a morphology that is only as complicated as it needs to be.  
 
-
-
-Over the past three decades, dozens of modular robot systems have been built \TODO{cite}. Existing literature provides ample evidence of the ability of MSRR hardware to reconfigure, algorithms for reconfiguration planning with hundreds of modules, a number of interesting morphologies suited to object manipulation and locomotion over varying terrain, methods and interfaces for programming, controlling, and simulating modular robots, and recently, systems that select appropriate configurations and behaviors for an MSRR automatically given a high-level specification of a task \TODO{cite}.
+Over the past three decades, dozens of modular robot systems have been built \cite{Yim2007a}. Existing literature provides ample evidence of MSRR systems reconfiguring and assuming interesting morphologies, as well as methods for programming, controlling, and simulating modular robots \cite{Yim2007,Jing2016,Yim1994}. 
 
 These capabilities are impressive, and each represents a significant research accomplishment in its own right. However, in order to truly live up to their promise of flexible capability in the real world, MSRR systems must demonstrate autonomy: moving, navigating, interacting with objects, and self-reconfiguring, all in unknown environments and without external localization or control. To our knowledge, this paper represents the first example of a truly autonomous MSRR system accomplishing tasks in an unknown environment.
 
-Traditional robotics literature provides numerous examples of robots operating autonomously in unknown environments \TODO{cite}. Our system goes beyond this existing work because it has the unique ability to recognize and act on situations in which reconfiguration is needed to complete a task.
+Traditional robotics literature provides numerous examples of robots operating autonomously in unknown environments \TODO{jonathan -cite}. Our system goes beyond this existing work because it has the unique ability to recognize and act on situations in which reconfiguration is needed to complete a task.
 Through hardware experiments, we demonstrate that autonomous self-reconfiguration allows our system to complete tasks that would have otherwise been impossible.
 
 The remainder of the paper is structured as follows. \TODO{complete paper structure paragraph}
 
-\subsection{Related Work}\label{sec:related-work}
-%
-\TODO{coming soon}.
 
+       %     ____       __      __           __   _       __           __
+       %    / __ \___  / /___ _/ /____  ____/ /  | |     / /___  _____/ /__
+       %   / /_/ / _ \/ / __ `/ __/ _ \/ __  /   | | /| / / __ \/ ___/ //_/
+       %  / _, _/  __/ / /_/ / /_/  __/ /_/ /    | |/ |/ / /_/ / /  / ,<
+       % /_/ |_|\___/_/\__,_/\__/\___/\__,_/     |__/|__/\____/_/  /_/|_|
+
+\section{Related Work}\label{sec:related-work}
 %
-\section{SMORES-EP Modular Robot} \label{sec:smores}
+
+\subsection{Mapping and Navigation}\label{mapping-and-navigation}
+
+\TODO{Jonathan, can you add some relevant literature here?}
+
+\subsection{Modular Robots Completing Tasks}
+%
+MSRR systems have demonstrated the ability to accomplish low-level tasks such as  various modes of locomotion \cite{Yim1994}.
+Recently work includes a system which integrate many low-level capabilities of a MSRR system in a design library, and accomplishes high-level user-specified tasks by synthesizing elements of the library into a reactive state-machine \cite{Jing2016}. While this system demonstrates autonomy with respect to task-related decision making, it is designed to operate in a fully known environment with external sensing.
+
+Modular robots have long been regarded as having the potential to make impact in unknown environments (such as search and rescue scenarios), because  self-reconfiguration theoretically gives them the flexibility to respond to whatever they encounter \cite{Yim2007a,Yim2000}.  However, examples of MSRR actually operating in unknown environments are very limited. To our knowledge, no MSRR system has been used for SLAM. We believe our system has more autonomy in an unknown environment than any existing modular robot system, and represents an important step toward the application of MSRR in the real world.
+
+There is work on mapping with swarm robot systems. The Millibot system has demonstrated the ability to map a partially unknown environment when operating as a swarm \cite{Grabowski2000}. The autonomy of the Millibot swarm is limited: a human operator makes all high-level decisions, and is responsible for navigation using a GUI. Certain members of the swarm are designated as ``beacons,'' and have known locations, making the environment only partially unknown.
+
+The swarm-bots are a MSRR system that has been applied in exploration \cite{Dorigo2005} and collective manipulation \cite{Mondada2005} scenarios.  Like the Millibots, exploration is demonstrated in partially unknown environments, with some members of the swarm acting as ``beacons'' with known location.  In a collective manipulation task, the swarm-bots have limited autonomy, with a human operator specifying the location of the manipulation target and the global sequence of manipulation actions. The swarmanoid project (successor to the swarm-bots), moves a step beyond this capability, using a heterogeneous swarm of ground and flying robots (called ``hand-'', ``foot-'', and ``eye-'' bots) to perform exploration and object retrieval tasks in unknown environments \cite{Dorigo2013}. 
+%
+\subsection{Autonomous Self-Reconfiguration}
+\label{autonomous-self-reconfiguration}
+%
+Autonomous reconfiguration has been demonstrated with several modular robot systems. CKbot, Conro, and MTRAN have all demonstrated the ability to join disconnected clusters of modules together \cite{Yim2007, Rubenstein2004,Murata2006}. In order to align, Conro uses infra-red sensors on the docking faces of the modules, while CKBot and MTRAN use a separate sensor module on each cluster.  In all cases, individual clusters locate and servo towards each other until they are close enough to dock.
+
+While these proof-of-concept experiments demonstrate the ability to reconfigure, these capabilities have not been used as part of a larger system to complete tasks. The experiments do not include any planning or sequencing of multiple reconfiguration actions in order to create a goal structure appropriate for a task.  Additionally, because these are all chain-type modular robots, individual modules are not able to locomote on their own, and mobile clusters of modules are limited to slow crawling gaits.  Consequently, reconfiguration is very time consuming, with a single connection requiring 5-15 minutes.
+
+Other work has focused on reconfiguration planning, but not autonomous reconfiguration.  Paulos et al. present a system in which self-reconfigurable modular boats self-assemble into functional floating structures, such as a bridge \cite{Paulos2015}.  Like the SMORES-EP modules used in this paper, individual boat modules are able to move about the pool, allowing for rapid reconfiguration.  However, external localization is provided by an overhead AprilTag system. 
+
+To our knowledge, this paper represents the first examples of a MSRR system autonomously making the decision to reconfigure in response to its sensed environment, and then actually reconfiguring\ in order to complete its task.  In \cite{Dorigo2013}, hand-bot and foot-bot elements of the swarmanoid system connect and disconnect in order to complete a book-retrieval task, but the decision to take this action is not made autonomously by the robot in response to sensed environment conditions. 
+
+       %     __  __               __
+       %    / / / /___ __________/ /      ______ _________
+       %   / /_/ / __ `/ ___/ __  / | /| / / __ `/ ___/ _ \
+       %  / __  / /_/ / /  / /_/ /| |/ |/ / /_/ / /  /  __/
+       % /_/ /_/\__,_/_/   \__,_/ |__/|__/\__,_/_/   \___/
+
+\section{Hardware} % (fold)
+\label{sec:hardware}
+%
+\subsection{SMORES-EP Modular Robot} \label{sec:smores}
 %
 Our system is built around the SMORES-EP robot, but could easily be adapted to
 work with other hardware platforms.  In this section, we provide a brief
@@ -175,6 +212,13 @@ range of about 100 feet.
 \end{figure}
 %
 
+\subsection{Sensor Module} % (fold)
+\label{sec:sensor_module}
+%
+In most MSRR systems, individual modules have very limited sensing capability, so autonomous reconfiguration is accomplished by including a sensor or camera module as a component of each cluster of modules in the system.  In our system, the sensor module is capable not only of determining the position of individual modules relative to the cluster, but also includes an RGB-D camera that facilitates SLAM in an unknown environment.
+%
+% subsection sensor_module (end)
+% section hardware (end)
 %
 \section*{Acknowledgments}
 %
@@ -182,16 +226,20 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 \TODO{Is this all of them?}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%                      Bibliography                        %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       %     ____       ____
+       %    / __ \___  / __/__  ________  ____  ________  _____
+       %   / /_/ / _ \/ /_/ _ \/ ___/ _ \/ __ \/ ___/ _ \/ ___/
+       %  / _, _/  __/ __/  __/ /  /  __/ / / / /__/  __(__  )
+       % /_/ |_|\___/_/  \___/_/   \___/_/ /_/\___/\___/____/
 
 %% Use plainnat to work nicely with natbib. 
-
 \bibliographystyle{plainnat}
 \bibliography{references}
 
 \end{document}
+
+
+
 
 
 
