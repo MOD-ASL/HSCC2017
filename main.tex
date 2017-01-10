@@ -183,16 +183,6 @@ Provided the attachment surface is flat and smooth, the attachment force
 between a SMORES-EP face and a strongly ferromagnetic object can be as high as
 90N \cite{tosun2016design}.
 
-Some of the motions a SMORES-EP cluster can perform are limited by the
-strength of the magnetic connectors, which can support the weight of at most
-three modules cantilevered horizontally against gravity.  This limitation is
-alleviated in some cases by using rigid connector plates, which are screwed
-into the faces  of two modules to create a strong permanent connection between
-them. Using connector  plates, up to four modules can be cantilevered before
-exceeding the torque limits  of the motors.  However, because the connector
-plates must be manually screwed into place,  modules with connector plates
-cannot self-reconfigure.
-
 Each module has an onboard battery, microcontroller, and 802.11b wireless
 module to send and receive UDP packets.  In this work, clusters of SMORES
 modules were controlled by a central computer running a Python program that
@@ -203,7 +193,7 @@ Wireless networking was provided by a standard off-the-shelf  router, with a
 range of about 100 feet.
 
 %% SMORES-EP module DoF picture
-\begin{figure}[h]   
+\begin{figure}   
 \begin{center}
 \includegraphics[height=1.5in]{images/smores_dof.pdf}
 \end{center}
@@ -215,7 +205,17 @@ range of about 100 feet.
 \subsection{Sensor Module} % (fold)
 \label{sec:sensor_module}
 %
-In most MSRR systems, individual modules have very limited sensing capability, so autonomous reconfiguration is accomplished by including a sensor or camera module as a component of each cluster of modules in the system.  In our system, the sensor module is capable not only of determining the position of individual modules relative to the cluster, but also includes an RGB-D camera that facilitates SLAM in an unknown environment.
+In most MSRR systems, individual modules have very limited sensing capability, so autonomous reconfiguration is accomplished by including a sensor or camera module as a component of each cluster of modules in the system.  In our system, the sensor module (Figure~\ref{fig:sensor-module}) is capable not only of determining the position of individual modules relative to the cluster, but also includes an Xtion-Pro RGB-D camera that facilitates SLAM in an unknown environment.
+Onboard computation is provided by an UP-board \TODO{cite and get specs}, which communicates with the ROS core over 802.11 wifi.  The sensor module is self-powered, with a battery life of about 1.5 hours.
+
+% Sensor Module Figure
+\begin{figure}
+\begin{center}
+\includegraphics[height=1.5in]{images/sensor_module.jpg}
+\caption{Sensor module. \TODO{get better picture}.}
+\label{fig:sensor-module}
+\end{center}
+\end{figure}
 %
 % subsection sensor_module (end)
 % section hardware (end)
