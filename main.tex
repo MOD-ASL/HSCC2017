@@ -89,7 +89,9 @@
 
 \begin{abstract}
 
-We present a fully autonomous modular robot system that can perform complex reactive high-level tasks (requiring reconfiguration) in an unknown environment without external sensing or control. \TODO{Describe system capabilities in detail here.}
+We present a fully autonomous modular robot system that can perform complex, high-level tasks in an unknown environment without external sensing or control. The physical robot is composed of modules that support multiple robot configurations. An onboard 3D sensor provides information about the environment, which is used to perform SLAM in the unknown environment and inform exploration and feedback control. No external sensors, pose providers, or beacons are used. A centralized planning algorithm uses the information from the environment and the desired high-level task description to synthesize low-level controllers to perform locomotion, reconfiguration, and special actions. A novel, centralized, self-reconfiguration method is used to change robot configurations when desired. To the authors' knowledge, the proposed work comprises the first modular robot system that intelligently uses reconfiguration to adapt to an \textit{a priori} unknown environment to perform complex tasks with no human aid or external inputs.
+
+
 
 \end{abstract}
 
