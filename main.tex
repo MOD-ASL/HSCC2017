@@ -217,7 +217,8 @@ range of about 100 feet.
 \subsection{Sensor Module} % (fold)
 \label{sec:sensor_module}
 %
-In most MSRR systems, individual modules have very limited sensing capability, so autonomous reconfiguration is accomplished by including a sensor or camera module as a component of each cluster of modules in the system.  In our system, the sensor module is capable not only of determining the position of individual modules relative to the cluster, but also includes an RGB-D camera that facilitates SLAM in an unknown environment.
+In MSRR systems, sensing and processing capabilities of individual modules are severely limited by the size and weight constraints of the module form factor. Therefore, the proposed system uses a special module dedicated to sensing and processing equipment. The module has no actuation capabilities and is larger than SMORES-EP modules. It is equipped with a front-facing Xtion Pro Live RGB-D sensor\footnote{TODO: Xtion Ref} which enables the robot to explore and map the environment and recognize objects of interest. A high, downward-facing HD webcam is included to provide a view of the robot itself, which is used for self-reconfiguration. Finally, an UP computing board\footnote{TODO: Up Board Ref} provides high performance I/O and processing capability in a small form factor. The UP Board used in the proposed system has an Intel Atom 1.92 GHz processor, 4 GB memory, and a 64 GB hard drive.
+
 %
 % subsection sensor_module (end)
 % section hardware (end)
