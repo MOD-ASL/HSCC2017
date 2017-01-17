@@ -230,7 +230,11 @@ In MSRR systems, sensing and processing capabilities of individual modules are s
 
 \section{Perception and Environment Characterization}
 
-\TODO{Yup yup yup}
+Since the proposed system performs tasks in unknown environments and conditions, a robust suite of perception algorithms is required to inform control and decision-making. The robot must have the ability to explore and build a map of its environment while avoiding obstacles and tracking its pose. The system must be able to recognize objects and regions of interest related to the desired task. Finally, the system must characterize the environment in terms of configuration capabilities. Features in the environment may restrict which robot configurations can viably perform parts of the high-level task, such as retrieving an object or navigating to a waypoint. The system needs to recognize these features to be able to intelligently choose the appropriate robot configuration for performing the task.
+
+To facilitate the use of open source software and enable networking between components, the proposed system is built in a ROS framework.\footnote{http://www.ros.org} Robot pose is provided by a RGB-D SLAM software package called RTAB-MAP.\cite{rtabmap} A 3D map of the environment is incrementally built and stored in an efficient octree-based volumetric map using Octomap.\cite{octomap} Task-related objects and regions of interest in the environment are given distinctive colors. These colors are recognized using color recognition software\footnote{CMVision: http://www.cs.cmu.edu/$\sim$jbruce/cmvision/} and tracked in 3D using depth information from the Xtion sensor.\footnote{Lucas Coelho Figueiredo: https://github.com/lucascoelho91/ballFollower}
+
+The system must explore the \textit{a priori} unknown environment to search for task-related objects and zones. The system performs this exploration in an intelligent manner using a new next best view planner for object exploration created by two of the authors.\footnote{This work has been newly accepted for journal publication in 2017}. The exploration algorithm uses the current volumetric map of the environment and estimates the next reachable sensor viewpoint that will observe the largest volume of undiscovered portions of objects. It also estimates the amount of information (in an entropy-reduction sense) that will be gained from a sensor measurement taken at that viewpoint.
 
 \section{Configuration-Specific Controllers}
 
