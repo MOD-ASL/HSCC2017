@@ -276,8 +276,24 @@ In order to intelligently choose appropriate configurations when performing task
 \section{Reconfiguration}
 
 One major advantage of modular robot system is the ability to change into different configurations and therefore adapting to different environment.
-While there are a lot of research on modular robot reconfiguration algorithms \TODO{cite}, in this work we developed a simple but robust reconfiguration controller for the SMORES modular robot system.
+Reconfiguration refers to the process of changing the robot configuration from one to another.
+In most cases, reconfiguration requires the change of topology of a set of modules.
+While there are a lot of research on modular robot reconfiguration algorithms \TODO{cite}, in this work we developed a simple but robust reconfiguration controller that is best suitable for the SMORES modular robot system.
+Since each SMORES module has four degrees of freedom and is able to drive on a flat surface as a differential drive robot, we utilize this ability during reconfiguration to reduce the number of operations required to change robot topology.
+Given an initial configuration and a goal configuration, our reconfiguration controller commands a set of modules to disconnect, move and connect in order to form the new topology of the goal configuration.
+We require both left and right wheels of a module to be contacting the supporting surface during reconfiguration, so that the module can drive as a differential drive robot.
 
+A reconfiguration process consists of three states in the order of: i) Pre-reconfiguration, ii) Module operations, iii) Post-reconfiguration.
+
+\paragraph{Pre-reconfiguration} In this stage, the robot with initial configuration performs a set of actions to prepare for the reconfiguration process. Here are some possible actions:
+\begin{itemize}
+\item The robot confirms the space around itself is free of obstacle for reconfiguration
+\item The robot drops any item that it is carrying currently
+\item The robot changes joint angles of some modules to make sure all modules are able to drive on the supporting surface with their wheels
+\end{itemize}
+Once the robot is ready for reconfiguration, the controller moves on to the module operation state.
+
+\paragraph{Module operations} All changes of topology happens in this state of the reconfiguration. A sequence of module operations are executed where each operation changes the location of one module.
 
 \section{High-Level Planner}
 % Automaton
