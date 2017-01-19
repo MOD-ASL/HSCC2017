@@ -38,8 +38,10 @@
 \newcommand{\cbj}[2]{\textcolor{blue}{\sout{#1}}\textcolor{blue}{~#2}}
 \newcommand{\abt}[1]{\textcolor{magenta}{#1}}
 % Handy commands
-\newcommand{\lt}{{\tt True}}
-\newcommand{\lf}{{\tt False}}
+\newcommand{\lt}{{\tt True }}
+\newcommand{\lf}{{\tt False }}
+\newcommand{\ltnsp}{{\tt True}}
+\newcommand{\lfnsp}{{\tt False}}
 \newtheorem{definition}{Definition}
 \DeclareMathOperator{\F}{\rotatebox[origin=c]{45}{$\Box$}}
 \DeclareMathOperator{\X}{\bigcirc}
@@ -273,17 +275,72 @@ In order to intelligently choose appropriate configurations when performing task
 
 \section{Reconfiguration}
 
-\TODO{So robust...}
+One major advantage of modular robot system is the ability to change into different configurations and therefore adapting to different environment.
+While there are a lot of research on modular robot reconfiguration algorithms \TODO{cite}, in this work we developed a simple but robust reconfiguration controller for the SMORES modular robot system.
+
 
 \section{High-Level Planner}
+% Automaton
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.4\textwidth]{images/autSimple.png}
+\caption{Planner Automaton}
+\label{fig:automaton}
+\end{center}
+\end{figure}
 
-\TODO{Like, over 9000}
+To utilize the sensing and actuation capabilities of the robot as a complete system for accomplishing various tasks, we employ an existing framework called LTLMoP for automatically generating robot controller from user specified high-level instructions using formal method \TODO{cite}.
+LTLMoP allows us to use each component of our system as a low-level atomic controller and specify a wide-range of reactive(\TODO{define reactive}) robotic tasks as a set of high-level instructions using these controllers.
+We direct readers to \TODO{cite} for more details on LTLMoP.
+In this section, we will mainly discuss how we model our system in order to use LTLMoP to automatically generate a high-level controller for our desired robot task.
+
+\subsection{Synthesize a controller}
+We first abstract our system and the environment with a set of Boolean propositions.
+A system proposition ``pickUp'' is \lt means that the robot is picking up an item and \lf otherwise.
+An environment proposition ``pinkObject'' is \lt means that the robot is currently sensing a pink object and \lf otherwise.
+Then we can specify the robot task in high-level instructions, such as Structured English, supported by LTLMoP.
+Following is an example of a robot task written in Structured English for searching a pink object and picking it up once the robot finds it. \TODO{double check this}
+
+\begin{itemize}
+\item do {\bf explore} if and only if you are not sensing {\bf pinkObject} and you are not activating {\bf pickUp}
+\item do {\bf driveToObject} if and only if you are not activating {\bf pickUp} and you are sensing {\bf pinkObject}
+\item do {\bf pickUp} if and only if you were activating {\bf driveToObject} and you are sensing {\bf arrived}
+\end{itemize}
+
+In additions to ``pickUp'' and ``pinkObject'', there are some more propositions. 
+``explore'' and ``driveToObject'' are system propositions that each represents a different robot action.
+``arrived'' is an environment proposition that is \lt if the robot arrives at the pink object.
+
+Using LTLMoP, we can synthesize a robot controller, if one exists, that satisfies the given robot task. The controller is in the form of a finite state automaton as shown in Fig.~\ref{fig:automaton}. Each state is labeled with the value of all system propositions. We denote a proposition with the value of \lf using a ``!'' prefix. Each transition between two states is labeled with the value of {\tt some} environment propositions. Some states and transitions are omitted for clear presentation.
+
+\subsection{Execute a controller}
+Since the synthesized high-level controller is a discrete finite state automaton, we need to implement it continuously in order to control the robot to satisfy the given task. 
+Each system proposition is mapped to a low-level control program that commands the robot to perform some behaviors.
+For example, the proposition ``pickUp'' is mapped to a program that will be executed when ``pickUp'' is \ltnsp. The program command the robot to perform a predefined behavior that will pick up a small magnetic object in front of the robot.
+Each environment propositions is mapped to a low-level sensing program that gathers and processes the information from sensors in order to characterize the environment state.
+For example, the propositions ``pinkObject'' is mapped to a sensing program that returns \lt or \lf based on whether the robot can detect a predefined pink object with its camera.
+
+To execute the synthesized high-level controller, we start with the predefined initial state in the finite state automaton.
+In each iteration, first we determine the value of each environment propositions by calling each corresponding sensing program.
+We then can find the next state in the finite state automaton by taking the transition that matches with the current values of all environment propositions.
+At last, we execute the corresponding control program based on the value of each system proposition specified in the next state and continue to the next iteration.
+For example, we start in the top state in Fig.~\ref{fig:automaton} and execute the ``explore'' program.
+If the robot senses a pink object, the value of ``pinkObject'' is \lt and therefore the next state is the bottom right state. We then stop the ``explore'' program and execute the ``driveToObject'' program.
 
 \section{Experiment Results}
 
 To validate and demonstrate the capabilities of the proposed system, a real-world experiment was run in which a robot composed of SMORES-EP modules completed a complex, high-level task in an unknown environment. Figure \ref{fig:map} shows the environment layout, setup to represent a cluttered office. The high-level task consisted of 5 sub-tasks of 3 different types: explore the environment, find and retrieve 2 objects in the office, and deliver each to a drop-off zone. One object was in the open (a ``free'' environment type), and the other was positioned between two obstacles (a ``hallway'' environment). Obstacles, environment types, and locations of the objects and drop-off zone were unknown to the robot \textit{a priori}.
 
 5 SMORES-EP modules, 1 Sensor Module, and 3 dummy modules were used to compose the robot for performing the task. Objects were grasped magnetically using the electromagnets on SMORES-EP modules. 2 configurations were setup and made available for selection by the high-level planner. Figure {fig:configs} shows the two configurations. A ``car'' configuration was designed to drive with maximal speed and agility and grasp objects that are in ``free'' environments. A ``proboscis'' configuration was setup to have a long arm for reaching between obstacles in a ``hallway'' environment type to grasp objects. However, the locomotion ability of this configuration is limited to forward/backward motion, making it unsuitable for general navigation.
+
+% Map
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.4\textwidth]{images/RSSMap.png}
+\caption{Experiment Map}
+\label{fig:map}
+\end{center}
+\end{figure}
 
 \begin{figure}[t]
       \centering
