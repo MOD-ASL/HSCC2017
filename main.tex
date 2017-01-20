@@ -326,9 +326,58 @@ A reconfiguration process consists of three states in the order of: i) Pre-recon
 \item The robot drops any item that it is carrying currently
 \item The robot changes joint angles of some modules to make sure all modules are able to drive on the supporting surface with their wheels
 \end{itemize}
-Once the robot is ready for reconfiguration, the controller moves on to the module operation state.
+Once the robot is ready for reconfiguration, the controller moves on to the module operations state.
 
-\paragraph{Module operations} All changes of topology happens in this state of the reconfiguration. A sequence of module operations are executed where each operation changes the location of one module.
+\paragraph{Module operations} All changes of topology happens in this state of the reconfiguration.
+A sequence of module operations are executed where each operation changes the location of one module.
+A single module operation involves detaching one module from the rest of the robot, driving the detached module to the new location, and attaching the module back to the robot.
+We denote a module operation as $MP=\left(m, m_d, m_a, f_m^d, f_m^a, f_{m_d}, f_{m_a}, \sigma \right)$ where:
+\begin{itemize}
+\item $m$ is the module whose location will be changed in this module operation.
+\item $m_d$ is the module that connects with $m$ before the operation.
+\item $m_a$ is the module that connects with $m$ after the operation. Notice $m_d$ and $m_a$ can be the same module. 
+\item The face $f_m^d$ of module $m$ connects with the face $f_{m_d}$ of module $m_d$ before the operation.
+\item The face $f_m^a$ of module $m$ connects with the face $f_{m_a}$ of module $m_a$ after the operation. Notice $f_m^d$ and $f_m^a$ can be the same face. In this work, we assume $f_m^a$ can only be the front or the back face of the module $m$.
+\item $\sigma$ is the path that module $m$ will follow during the operation.
+\end{itemize}
+
+Fig.~\ref{fig:reconf} demonstrates an example of a single module operation.
+As shown in Fig.~\ref{fig:reconf}a, module $m$ detaches from module $m_d$.
+In this process, magnets on $f_m^d$ and $f_{m_d}$ are turned off to eliminate the bond between two faces.
+Then module $m$ moves the tilt joint while rotating the left and right wheel forwards to break the connection with $m_d$ and drives away from it.
+After $m$ detaches from $m_d$, the controller drives $m$ as a two-wheel differential drive robot to follow the path $\sigma$ with localization provided with the sensor module using AprilTags(\TODO{cite}) system. This process is illustrated by Fig.~\ref{fig:reconf}b.
+The path $\sigma$ is collision free with the rest of the robot and computed a priori. 
+Once $m$ reaches the end of $\sigma$, it adjusts its heading by spinning in place till face $f_m^a$ aligning with $f_{m_a}$.
+The magnets on face $f_m^a$ and $f_{m_a}$ are turned on to help create connection later between two faces.
+As demonstrated in Fig.~\ref{fig:reconf}c, as last $m$ drives towards $m_a$ while perform minor adjustment in the tilt joint till two modules are fully connected.
+
+\begin{figure}[t]
+      \centering
+      \begin{subfigure}[t]{0.32\columnwidth}
+        \includegraphics[width=\textwidth]{images/reconf_detach.jpg}
+        \label{fig:reconfa}
+        \caption{Module detaches from the rest of the robot}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.32\columnwidth}
+        \includegraphics[width=\textwidth]{images/reconf_drive.jpg}
+        \label{fig:reconfb}
+        \caption{Module drives to the new location}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.32\columnwidth}
+        \includegraphics[width=\textwidth]{images/reconf_attach.jpg}
+        \label{fig:reconfc}
+        \caption{Module attaches to the rest of the robot}
+    \end{subfigure}
+    \caption{An example of a module operation for reconfiguration.}
+      \label{fig:reconf}
+\end{figure}
+
+\paragraph{Post-reconfiguration} With new topology formed in the previous state, the robot then perform a set of actions required to finish the reconfiguration process. Here are some possible actions:
+\begin{itemize}
+\item The robot changes joint angles of some modules to match with the joint values in the goal configuration
+\item The robot picks up any item that is dropped previously
+\end{itemize}
+The reconfiguration process is complete after all required post-reconfiguration actions are finished.
 
 %     __  ___       __          __                   __
 %    / / / (_)___ _/ /_        / /   ___ _   _____  / /
