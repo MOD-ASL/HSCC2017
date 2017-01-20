@@ -297,10 +297,36 @@ In order to intelligently choose appropriate configurations when performing task
 
 
 \section{Configuration-Specific Controllers}
+\label{sec:configSpecific}
+Modular robots can change their configurations to gain new capabilities and accomplish various tasks.
+Since the configuration affects the dynamics of the modular robots, configuration-specific controllers are required for commanding modular robots.
+In this work, we utilize a library-driven system to create, organize and execute modular robot behaviors based on the robot configuration, the runtime environment and the robot behavior properties.
+A modular robot behavior library consists of a collection of different library entries.
+A library entry is defined as $l = (C,B_C,P_e,P_b)$ where:
+\begin{itemize}
+\item $C$ specifies the configuration of the robot
+\item $B$ is the controller that commands the robot to perform a specific behavior
+\item $P_e$ holds information about the environment where this library entry is suitable
+\item $P_b$ describes the properties of the robot behavior
+\end{itemize}
 
-\TODO{All that low-level stuff}
+In order to control the robot to perform desired behaviors in the \textit{a priori} unknown environment, we employ a perception-driven method to intelligently choose the library entry from the modular robot behavior library.
+First the desired behavior is specified as a set of behavior properties $P'_b$.
+We characterize the current environment as described in Section~\ref{sec:perception} to a set of environment properties $P'_e$.
+Then we can find a set of library entries that match with $P'_e$ and $P'_b$.
+If a library entry requires a different configuration from the current robot configuration, a reconfiguration process can be performed as described in Section~\ref{sec:reconfiguration}.
+To minimize complexity in runtime, we bias towards the library entries that require no reconfiguration when choosing the appropriate library entry.
+Once the library entry is selected, the controller $B$ is executed to produce the desired robot behavior.
 
-
+In this work, we created six library entries for two different configurations as listed in Fig.~\ref{fig:library}.
+% Automaton
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.4\textwidth]{images/library.png}
+\caption{This is temporary}
+\label{fig:library}
+\end{center}
+\end{figure}
 %     ____                        _____                        __  _
 %    / __ \___  _________  ____  / __(_)___ ___  ___________ _/ /_(_)___  ____
 %   / /_/ / _ \/ ___/ __ \/ __ \/ /_/ / __ `/ / / / ___/ __ `/ __/ / __ \/ __ \
@@ -346,7 +372,7 @@ As shown in Fig.~\ref{fig:reconf}a, module $m$ detaches from module $m_d$.
 In this process, magnets on $f_m^d$ and $f_{m_d}$ are turned off to eliminate the bond between two faces.
 Then module $m$ moves the tilt joint while rotating the left and right wheel forwards to break the connection with $m_d$ and drives away from it.
 After $m$ detaches from $m_d$, the controller drives $m$ as a two-wheel differential drive robot to follow the path $\sigma$ with localization provided with the sensor module using AprilTags(\TODO{cite}) system. This process is illustrated by Fig.~\ref{fig:reconf}b.
-The path $\sigma$ is collision free with the rest of the robot and computed a priori. 
+The path $\sigma$ is collision free with the rest of the robot and computed \textit{a priori}. 
 Once $m$ reaches the end of $\sigma$, it adjusts its heading by spinning in place till face $f_m^a$ aligning with $f_{m_a}$.
 The magnets on face $f_m^a$ and $f_{m_a}$ are turned on to help create connection later between two faces.
 As demonstrated in Fig.~\ref{fig:reconf}c, as last $m$ drives towards $m_a$ while perform minor adjustment in the tilt joint till two modules are fully connected.
