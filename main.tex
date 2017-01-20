@@ -110,14 +110,43 @@ We present a fully autonomous modular robot system that can perform complex, hig
 \section{Introduction} \label{sec:introduction}
 %
 Modular self-reconfigurable robot (MSRR) systems are composed of a number of simple repeated robot elements (called \emph{modules}) that connect together to form larger robotic structures. These systems can \emph{self-reconfigure}, changing their shape (\emph{i.e.} the connective structure of the modules) to meet the needs of the task at hand.
-In principal, these systems can address a wide variety of tasks by transforming into a wide variety of morphologies. The traditional approach to achieving flexible robots is to build  monolithic systems that are highly capable, but also highly complex (\emph{e.g.} large humanoids).  Self-reconfigurability is an elegant, scalable alternative: since the shape of the robot is not fixed, each individual task can be solved with a morphology that is only as complicated as it needs to be.  
+In principal, these systems can address a wide variety of tasks by transforming into a wide variety of morphologies.   
 
-Over the past three decades, dozens of modular robot systems have been built \cite{Yim2007a}. Existing literature provides ample evidence of MSRR systems reconfiguring and assuming interesting morphologies, as well as methods for programming, controlling, and simulating modular robots \cite{Yim2007,Jing2016,Yim1994}. 
+Over the past three decades, dozens of modular robot systems have been built \cite{Yim2007a}. Existing literature provides ample evidence of MSRR systems reconfiguring and assuming interesting morphologies, as well as methods for programming, controlling, and simulating modular robots \cite{Yim2007,Jing2016,Yim1994}.
 
-These capabilities are impressive, and each represents a significant research accomplishment in its own right. However, in order to truly live up to their promise of flexible capability in the real world, MSRR systems must demonstrate autonomy: moving, navigating, interacting with objects, and self-reconfiguring, all in unknown environments and without external localization or control. To our knowledge, this paper represents the first example of a truly autonomous MSRR system accomplishing tasks in an unknown environment.
+These capabilities are impressive, and each represents a significant research accomplishment in its own right. However, in order to truly live up to their promise of flexible capability in the real world, MSRR systems must demonstrate autonomy: moving, navigating, interacting with objects, and self-reconfiguring, all in unknown environments and without external localization or control. 
 
-Traditional robotics literature provides numerous examples of robots operating autonomously in unknown environments \TODO{jonathan -cite}. Our system goes beyond this existing work because it has the unique ability to recognize and act on situations in which reconfiguration is needed to complete a task.
-Through hardware experiments, we demonstrate that autonomous self-reconfiguration allows our system to complete tasks that would have otherwise been impossible.
+We provide a system capable of \emph{autonomously} solving \emph{high-level
+tasks} in \emph{unknown environments} using \emph{modular self-reconfigurable
+robots}.  When we say the task is performed \emph{autonomously}, we mean that
+no decisions are made by a human. A \emph{high-level task} is specified in terms
+of general objectives, and requires some decision-making regarding the specific
+way in which the task will be solved. The environment is \emph{unknown}, meaning
+that the robot does not have a map of the environment or obstacles before the
+task begins. To our knowledge, this paper represents the first example of a truly autonomous MSRR system accomplishing these kinds of tasks.
+
+The system we present provides four major tools:
+
+\begin{enumerate}
+\item \textbf{Hardware:} The SMORES-EP Modular robot, and sensing hardware designed
+to work with SMORES-EP.  
+\item \textbf{High-Level Task Description:} A framework for specifying high-level
+tasks in terms of state machines, and for abstracting modular robots.
+\item \textbf{Perception and Environment Characterization:} Tools for SLAM,
+navigation, and obstacle avoidance with modular robots, as well as tools that
+parse sensor information into actionable conclusions relevant to high-level
+tasks.
+\item \textbf{Reconfiguration:} Software and hardware tools enabling robust
+autonomous reconfiguration with SMORES-EP.
+\end{enumerate}
+
+Through hardware experiments, we demonstrate that this system is capable of autonomously completing high-level object-retrieval tasks in unknown environments.
+
+It is worth noting that traditional robotics literature provides numerous examples of robots operating
+autonomously in unknown environments \TODO{jonathan -cite}. Our system goes
+beyond this existing work because it has the unique ability to recognize and
+act on situations in which self-reconfiguration is needed to complete a task.
+ We demonstrate (in hardware) that autonomous self-reconfiguration allows our system to complete tasks that would have otherwise been impossible.
 %
        %     ____       __      __           __   _       __           __
        %    / __ \___  / /___ _/ /____  ____/ /  | |     / /___  _____/ /__
@@ -127,13 +156,21 @@ Through hardware experiments, we demonstrate that autonomous self-reconfiguratio
 
 \section{Related Work}\label{sec:related-work}
 %
-
+%
 \subsection{Mapping and Navigation}\label{mapping-and-navigation}
 
 \TODO{Jonathan, can you add some relevant literature here?}
 
 \subsection{Modular Robots Completing Tasks}
 %
+%%% Paragraph from intro
+% The traditional approach to achieving flexible
+% robots is to build  monolithic systems that are highly capable, but also highly
+% complex (\emph{e.g.} large humanoids).  Self-reconfigurability is an elegant,
+% scalable alternative: since the shape of the robot is not fixed, each individual
+% task can be solved with a morphology that is only as complicated as it needs
+% to be.
+%%%
 MSRR systems have demonstrated the ability to accomplish low-level tasks such as  various modes of locomotion \cite{Yim1994}.
 Recently work includes a system which integrate many low-level capabilities of a MSRR system in a design library, and accomplishes high-level user-specified tasks by synthesizing elements of the library into a reactive state-machine \cite{Jing2016}. While this system demonstrates autonomy with respect to task-related decision making, it is designed to operate in a fully known environment with external sensing.
 
@@ -162,17 +199,6 @@ To our knowledge, this paper represents the first examples of a MSRR system auto
     %      /____/
 \section{System Overview}
 %
-We provide a system capable of \emph{autonomously} solving \emph{high-level tasks} in \emph{unknown environments} using \emph{modular self-reconfigurable robots}.  When we say the task is performed \emph{autonomously}, we mean that no decisions are made by a human. A \emph{high-level task} is specified in terms of general objectives, and requires some decision-making regarding the specific way in which the task will be solved. The environment is \emph{unknown}, meaning that the robot does not have a map of the environment or obstacles before the task begins.  \emph{Modular self-reconfigurable robots} are characterized by their ability to reconfigure. \TODO{make better.}
-
-To solve these kinds of problems, our system provides four major tools:
-
-\begin{enumerate}
-\item \textbf{Hardware:} The SMORES-EP Modular robot, and sensing hardware designed to work with SMORES-EP. 
-\item \textbf{High-Level Task Description:} A framework for specifying high-level tasks in terms of state machines, and for abstracting modular robots.
-\item \textbf{Perception and Environment Characterization:} Tools for SLAM, navigation, and obstacle avoidance with modular robots, as well as tools that parse sensor information into actionable conclusions relevant to high-level tasks.
-\item \textbf{Reconfiguration:} Software and hardware tools enabling robust autonomous reconfiguration with SMORES-EP.
-\end{enumerate}
-
 Figure~\ref{fig:overview} shows a flowchart including each of these four subsystems, as well as the software and hardware components that comprise them.
 
 In the remainder of the paper, we present the hardware, software, and algorithms that comprise our system in detail, and demonstrate through hardware experiments how it can be used to complete autonomous, high-level tasks in unknown environments. Sections \ref{sec:hardware}, \ref{sec:high-level}, \ref{sec:perception}, and \ref{sec:reconfiguration}, we describe the details of our hardware, high-level, perception, and reconfiguration subsystems in detail.  In Section~\ref{sec:experiments}, we show how our system can be used to complete a realistic object retrieval task in an unknown environment with full autonomy.  Finally, in Sections~\ref{sec:discussion} and \ref{sec:conclusion}, we evaluate the success of our system in achieving its goals, and conclude.
@@ -296,6 +322,12 @@ The system must explore the \textit{a priori} unknown environment to search for 
 In order to intelligently choose appropriate configurations when performing tasks, the robot must perceive and characterize its environment into a discrete set of environment types that correspond with configuration capabilities. The proposed system includes a perception component that discretely characterizes the environment for the purpose of retrieving an object. This characterization can then be used by the high-level planner to determine the appropriate configuration and gait for successful object retrieval. The 3 environment characterizations are shown in Figure \ref{fig:characters}. Once the object is observed by the robot, the environment is assumed to fall under one of these types. If the object is higher than a threshold level, the environment is characterized as the ``ledge'' environment. This requires a configuration/gait that can reach up to the top of the ledge to retrieve the object. If the object is on the ground, an occupancy grid is created around the object, and all grid cells within a robot radius of obstacles are denoted unreachable. The closest reachable point to the object within $20^o$ of the robot's line of sight to the object is selected. If the distance from this point to the object is over a certain threshold, the environment is characterized as ``hallway''. To retrieve the object in this type of environment, a configuration with a long, thin arm is required to reach between the surrounding obstacles to retrieve the object. If the distance to the object is under the threshold, the environment is characterized as ``free''. This means no special configurations are required to reach the object. Depending on the environment type, the characterization algorithm also determines a navigation waypoint from which the robot can either grasp the object or reconfigure to the appropriate configuration for grasping the object. This information is passed to the high-level planner for use in controller synthesis.
 
 
+%    ______            _____          _____                 _ _____
+%   / ____/___  ____  / __(_)___ _   / ___/____  ___  _____(_) __(_)_________
+%  / /   / __ \/ __ \/ /_/ / __ `/   \__ \/ __ \/ _ \/ ___/ / /_/ / ___/ ___/
+% / /___/ /_/ / / / / __/ / /_/ /   ___/ / /_/ /  __/ /__/ / __/ / /__(__  )
+% \____/\____/_/ /_/_/ /_/\__, /   /____/ .___/\___/\___/_/_/ /_/\___/____/
+%                        /____/        /_/
 \section{Configuration-Specific Controllers}
 
 \TODO{All that low-level stuff}
@@ -552,6 +584,8 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 \bibliography{references}
 
 \end{document}
+
+
 
 
 
