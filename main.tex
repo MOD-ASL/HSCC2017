@@ -330,7 +330,16 @@ The system must explore the \textit{a priori} unknown environment to search for 
 \subsection{Environment Characterization}
 \label{sec:environment-characterization}
 %
-In order to intelligently choose appropriate configurations when performing tasks, the robot must perceive and characterize its environment into a discrete set of environment types that correspond with configuration capabilities. The proposed system includes a perception component that discretely characterizes the environment for the purpose of retrieving an object. This characterization can then be used by the high-level planner to determine the appropriate configuration and gait for successful object retrieval. The 3 environment characterizations are shown in Figure \ref{fig:characters}. Once the object is observed by the robot, the environment is assumed to fall under one of these types. If the object is higher than a threshold level, the environment is characterized as the ``ledge'' environment. This requires a configuration/gait that can reach up to the top of the ledge to retrieve the object. If the object is on the ground, an occupancy grid is created around the object, and all grid cells within a robot radius of obstacles are denoted unreachable. The closest reachable point to the object within $20^o$ of the robot's line of sight to the object is selected. If the distance from this point to the object is over a certain threshold, the environment is characterized as ``tunnel''. To retrieve the object in this type of environment, a configuration with a long, thin arm is required to reach between the surrounding obstacles to retrieve the object. If the distance to the object is under the threshold, the environment is characterized as ``free''. This means no special configurations are required to reach the object. Depending on the environment type, the characterization algorithm also determines a navigation waypoint from which the robot can either grasp the object or reconfigure to the appropriate configuration for grasping the object. This information is passed to the high-level planner for use in controller synthesis.
+In order to intelligently choose appropriate configurations when performing tasks, the robot must perceive and characterize its environment into a discrete set of environment types that correspond with configuration capabilities. The proposed system includes a perception component that discretely characterizes the environment for the purpose of retrieving an object. This characterization can then be used by the high-level planner to determine the appropriate configuration and gait for successful object retrieval. The 3 environment characterizations are shown in Figure \ref{fig:characters}. Once the object is observed by the robot, the environment is assumed to fall under one of these types. If the object is higher than a threshold level, the environment is characterized as the ``ledge'' environment. This requires a configuration/gait that can reach up to the top of the ledge to retrieve the object. If the object is on the ground, the remaining two characterizations are distinguished using the following method, illustrated in Figure \ref{fig:characterization}. An occupancy grid is created around the object, and all grid cells within a robot radius of obstacles are denoted unreachable (light blue in Figure \ref{fig:characterization}). The closest reachable point to the object within $20^o$ of the robot's line of sight to the object is selected. If the distance from this point to the object is greater than a threshold value, the environment is characterized as ``tunnel''. To retrieve the object in this type of environment, a configuration with a long, thin arm is required to reach between the surrounding obstacles to retrieve the object. If the distance to the object is under the threshold, the environment is characterized as ``free''. This means no special configurations are required to reach the object. If the environment type is ``tunnel'', the algorithm also selects a navigation waypoint at which the robot can reconfigure before retrieving the object. This waypoint is calculated by extending the closest point farther away from the object to be retrieved (red arrow in Figure \ref{fig:characterization}). This information is passed to the high-level planner for use in controller synthesis.
+
+% Characterization method
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.4\textwidth]{images/characterization.png}
+\caption{\textbf{Tunnel} environment characterization method.}
+\label{fig:characterization}
+\end{center}
+\end{figure}
 
 
 %    ______            _____          _____                 _ _____
@@ -514,9 +523,9 @@ If the robot senses a pink object, the value of ``pinkObject'' is \lt and theref
 \section{Experiment Results}
 \label{sec:experiments}
 %
-To validate and demonstrate the capabilities of the proposed system, a real-world experiment was run in which a robot composed of SMORES-EP modules completed a complex, high-level task in an unknown environment. Figure \ref{fig:map} shows the environment layout, setup to represent a cluttered office. The high-level task consisted of 5 sub-tasks of 3 different types: explore the environment, find and retrieve 2 objects in the office, and deliver each to a drop-off zone. One object was in the open (a ``free'' environment type), and the other was positioned between two obstacles (a ``tunnel'' environment). Obstacles, environment types, and locations of the objects and drop-off zone were unknown to the robot \textit{a priori}.
+To validate and demonstrate the capabilities of our system, a real-world experiment was run in which a robot composed of SMORES-EP modules completed a complex, high-level task in an unknown environment. Figure \ref{fig:map} shows the environment layout, setup to represent a cluttered office. The high-level task consisted of 5 sub-tasks of 3 different types: explore the environment, find and retrieve 2 objects in the office, and deliver each to a drop-off zone. One object was in the open (a ``free'' environment type), and the other was positioned between two obstacles (a ``tunnel'' environment). Obstacles, environment types, and locations of the objects and drop-off zone were unknown to the robot \textit{a priori}.
 
-5 SMORES-EP modules, 1 Sensor Module, and 3 dummy modules were used to compose the robot for performing the task. Objects were grasped magnetically using the electromagnets on SMORES-EP modules. 2 configurations were setup and made available for selection by the high-level planner. Figure {fig:configs} \TODO{make figure}shows the two configurations. A ``car'' configuration was designed to drive with maximal speed and agility and grasp objects that are in ``free'' environments. A ``proboscis'' configuration was setup to have a long arm for reaching between obstacles in a ``tunnel'' environment type to grasp objects. However, the locomotion ability of this configuration is limited to forward/backward motion, making it unsuitable for general navigation.
+5 SMORES-EP modules, 1 Sensor Module, and 3 dummy modules were used to compose the robot for performing the task. Objects were grasped magnetically using the electromagnets on SMORES-EP modules. The 2 configurations shown in Figure \ref{fig:pink_grab} and Figure \ref{fig:dropoff} were setup and made available for selection by the high-level planner. A ``car'' configuration was designed to drive with maximal speed and agility and grasp objects that are in ``free'' environments. A ``proboscis'' configuration was setup to have a long arm for reaching between obstacles in a ``tunnel'' environment type to grasp objects. However, the locomotion ability of this configuration is limited to forward/backward motion, making it unsuitable for general navigation.
 
 % Map
 \begin{figure}
@@ -546,18 +555,18 @@ To validate and demonstrate the capabilities of the proposed system, a real-worl
     \end{subfigure}
     \begin{subfigure}[t]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/pink_retrieval.jpg}
-        %\label{fig:objb}
         \caption{Retrieving pink object}
+        \label{fig:pink_grab}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{images/dropoff.jpg}
+        \caption{Dropping off an object in the delivery zone}
+        \label{fig:dropoff}
     \end{subfigure}
     \begin{subfigure}[t]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/green_retrieval.jpg}
         %\label{fig:objb}
         \caption{Retrieving green object}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{images/dropoff.jpg}
-        %\label{fig:objb}
-        \caption{Dropping off an object in the delivery zone}
     \end{subfigure}
       \caption{Environment characterization types for object retrieval.}
       \label{fig:demo}
@@ -581,7 +590,7 @@ Fgure \ref{fig:demo} shows snapshots from the experiment run. A video of the ent
 \section{Discussion}
 \label{sec:discussion}
 %
-The experiment demonstrated that the proposed system can autonomously perform complex high-level tasks in an unknown environment. It also revealed many issues that make autonomous reactive tasks difficult to achieve in modular systems. This section discusses issues that were observed and solutions that were implemented to overcome them.
+The experiment demonstrated that our system can autonomously perform complex high-level tasks in an unknown environment. It also revealed many issues that make autonomous reactive tasks difficult to achieve in modular systems. This section discusses issues that were observed and solutions that were implemented to overcome them.
 
 Due to limitations of individual modules, robot speed was very low. In addition, having a robotic system composed of 6 individual robotic components (5 SMORES-EP modules and 1 sensor module) multiplies the chance of a component having a hardware failure. The long runtime combined with multiplied failure points resulted in a high risk of an error occuring during the experiment. Thus, each system component had to be designed with features to make it as robust as possible, and several error recovery features had to be implemented in the system.
 
