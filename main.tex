@@ -21,8 +21,8 @@
 \usepackage{amsmath} % assumes amsmath package installed
 \usepackage{amssymb}  % assumes amsmath package installed
 %\usepackage[final]{pdfpages} % for including pdfs
-
 \usepackage{subcaption}
+\usepackage{multirow}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%  Macros:
@@ -361,15 +361,28 @@ If a library entry requires a different configuration from the current robot con
 To minimize complexity in runtime, we bias towards the library entries that require no reconfiguration when choosing the appropriate library entry.
 Once the library entry is selected, the controller $B$ is executed to produce the desired robot behavior.
 
-In this work, we created six library entries for two different configurations as listed in Fig.~\ref{fig:library}.
-% Automaton
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.4\textwidth]{images/library.png}
-\caption{This is temporary}
-\label{fig:library}
-\end{center}
-\end{figure}
+In this work, we created five library entries for two different configurations as listed in Table.~\ref{table:1}. 
+The ``Tank'' configuration is capable of picking up and dropping items while navigating on a flat plain as a holonomic robot. \TODO{photo?}
+The ``Proboscis'' configuration sacrifices its capability to drive efficiently, but is able to pick up and drop items that is hidden inside of a short tunnel, using its long proboscis. \TODO{photo?}
+
+
+\begin{table}
+\centering
+\begin{tabular}{ |c|c|c| } 
+ \hline
+ Configuration & Behavior Properties & Environment Properties \\
+ \hline
+ Tank & Pick up & Item in free space\\ 
+ Tank & Drop & Drop-off zone in free space\\
+ Tank & Drive & Flat plain\\ 
+ Proboscis & Pick up & Item in tunnel or free space \\ 
+ \multirow{2}{4em}{Proboscis} & \multirow{2}{2em}{Drop} & Drop-off zone in \\
+ & & tunnel or free space \\ 
+ \hline
+\end{tabular}
+\caption{A library of robot behaviors}
+\label{table:1}
+\end{table}
 %     ____                        _____                        __  _
 %    / __ \___  _________  ____  / __(_)___ ___  ___________ _/ /_(_)___  ____
 %   / /_/ / _ \/ ___/ __ \/ __ \/ /_/ / __ `/ / / / ___/ __ `/ __/ / __ \/ __ \
@@ -563,7 +576,7 @@ To validate and demonstrate the capabilities of the proposed system, a real-worl
       \label{fig:demo}
    \end{figure*}
 
-Fgure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is also available at \TODO{la link}. The starting location prevented the robot from seeing the objects initially, forcing it to explore the environment to search for them. After a period of exploration the robot discovered the pink object first. The characterization algorithm correctly classified the surrounding environment as a ``tunnel'' type, and accordingly the robot navigated in front of the object and reconfigured to the ``proboscis'' configuration. Once this was done, the object was retrieved and pulled out into the open. The robot then dropped the object, reconfigured back to the ``car'' configuration for navigation to the drop-off zone, and again retrieved the object. The robot then navigated to and dropped off the object at the drop-off zone, which was seen during exploration and recorded in the global map built by the SLAM algorithm. Once done, the robot navigated to the green object which was correctly determined to not require any reconfiguration. No further exploration was required since the green object was discovered while the robot was dropping off the pink object. The robot finished the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows the final volumetric map of the environment explored by the robot as it explored the environment and delivered objects. The robot successfully completed all tasks in the experiment in about 26 minutes. Note that the video shows a human reaching into the field to touch the green object once the robot comes into conact with it. This was due to a error on the field resulting in the object becoming stuck between two floor boards, so a human dislodged it so the robot could grasp it normally.
+Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is also available at \TODO{la link}. The starting location prevented the robot from seeing the objects initially, forcing it to explore the environment to search for them. After a period of exploration the robot discovered the pink object first. The characterization algorithm correctly classified the surrounding environment as a ``tunnel'' type, and accordingly the robot navigated in front of the object and reconfigured to the ``proboscis'' configuration. Once this was done, the object was retrieved and pulled out into the open. The robot then dropped the object, reconfigured back to the ``car'' configuration for navigation to the drop-off zone, and again retrieved the object. The robot then navigated to and dropped off the object at the drop-off zone, which was seen during exploration and recorded in the global map built by the SLAM algorithm. Once done, the robot navigated to the green object which was correctly determined to not require any reconfiguration. No further exploration was required since the green object was discovered while the robot was dropping off the pink object. The robot finished the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows the final volumetric map of the environment explored by the robot as it explored the environment and delivered objects. The robot successfully completed all tasks in the experiment in about 26 minutes. Note that the video shows a human reaching into the field to touch the green object once the robot comes into contact with it. This was due to a error on the field resulting in the object becoming stuck between two floor boards, so a human dislodged it so the robot could grasp it normally.
 
 \begin{figure}
 \begin{center}
