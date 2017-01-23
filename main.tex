@@ -361,7 +361,7 @@ A library entry is defined as $l = (C,B_C,P_e,P_b)$ where:
 
 In order to control the robot to perform desired behaviors in the \textit{a priori} unknown environment, we employ a perception-driven method to intelligently choose the library entry from the modular robot behavior library.
 First the desired behavior is specified as a set of behavior properties $P'_b$.
-We characterize the current environment as described in Section~\ref{sec:perception} to a set of environment properties $P'_e$.
+We characterize the current environment as described in Section~\ref{sec:environment-characterization} to a set of environment properties $P'_e$.
 Then we can find a set of library entries that match with $P'_e$ and $P'_b$.
 If a library entry requires a different configuration from the current robot configuration, a reconfiguration process can be performed as described in Section~\ref{sec:reconfiguration}.
 To minimize complexity in runtime, we bias towards the library entries that require no reconfiguration when choosing the appropriate library entry.
