@@ -67,7 +67,7 @@
 \begin{document}
 
 
-\title{Awesome Autonomous Modular Robots in Unknown Environments}
+\title{An Integrated System for Autonomously Performing Perception-Driven Tasks with Modular Robots}
 
 \author{Mystery Authors}
 
@@ -94,8 +94,6 @@
 \begin{abstract}
 
 We present a fully autonomous modular robot system that can perform complex, high-level tasks in an unknown environment without external sensing or control. The validity of the system is demonstrated in a real-world experiment. The physical robot is composed of modules that support multiple robot configurations. An onboard 3D sensor provides information about the environment, which is used to perform SLAM in the unknown environment and inform exploration and feedback control. No external sensors, pose providers, or beacons are used. A centralized planning algorithm uses the information from the environment and the desired high-level task description to synthesize low-level controllers to perform locomotion, reconfiguration, and special actions. A novel, centralized, self-reconfiguration method is used to change robot configurations when desired. To the authors' knowledge, the proposed work comprises the first modular robot system that uses perception-driven reconfiguration to intelligently adapt to an \textit{a priori} unknown environment to perform complex tasks.
-
-
 
 \end{abstract}
 
@@ -141,11 +139,6 @@ autonomous reconfiguration with SMORES-EP.
 
 Through hardware experiments, we demonstrate that this system is capable of autonomously completing high-level object-retrieval tasks in unknown environments.
 
-It is worth noting that traditional robotics literature provides numerous examples of robots operating
-autonomously in unknown environments \TODO{jonathan -cite}. Our system goes
-beyond this existing work because it has the unique ability to recognize and
-act on situations in which self-reconfiguration is needed to complete a task.
- We demonstrate (in hardware) that autonomous self-reconfiguration allows our system to complete tasks that would have otherwise been impossible.
 %
 %    _____            __                    ____                        _
 %   / ___/__  _______/ /____  ____ ___     / __ \_   _____  ______   __(_)__ _      __
@@ -620,14 +613,10 @@ In summary, a novel modular robotic system has been presented that is the first 
 %  / /   / __ \/ __ \/ ___/ / / / / ___/ / __ \/ __ \
 % / /___/ /_/ / / / / /__/ / /_/ (__  ) / /_/ / / / /
 % \____/\____/_/ /_/\___/_/\__,_/____/_/\____/_/ /_/
-\section{Conclusion} \label{sec:conclusion}
-%
-\TODO{Let's wrap this up. Note the last paragraph of Discussion, may allow us to drop this section per Hadas' suggestion.}
 
 \section*{Acknowledgments}
 %
 This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
-\TODO{Is this all of them?}
 
 
        %     ____       ____
