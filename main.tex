@@ -264,13 +264,13 @@ range of about 100 feet.
 \label{sec:sensor_module}
 %
 
-In MSRR systems, sensing and processing capabilities of individual modules are severely limited by the size and weight constraints of the module form factor. Therefore, the proposed system uses a special sensor module dedicated to sensing and processing equipment, shown in Figure \ref{fig:sensor-module}. The module has no actuation capabilities and is larger than SMORES-EP modules. It is equipped with a front-facing Xtion Pro Live RGB-D sensor\footnote{TODO: Xtion Ref} which enables the robot to explore and map the environment and recognize objects of interest. A high, downward-facing HD webcam is included to provide a view of the robot itself, which is used for self-reconfiguration. Finally, an UP computing board\footnote{TODO: Up Board Ref} provides high performance I/O and processing capability in a small form factor. The UP Board used in the proposed system has an Intel Atom 1.92 GHz processor, 4 GB memory, and a 64 GB hard drive. It is network connected via 802.11 wifi. A battery provides power to the Up Board with a lifetime of about 1.5 hours.
+In MSRR systems, sensing and processing capabilities of individual modules are severely limited by the size and weight constraints of the module form factor. Therefore, the proposed system uses a special sensor module dedicated to sensing and processing equipment, shown in Figure \ref{fig:sensor-module}. The module has no actuation capabilities and is larger than SMORES-EP modules. It is equipped with a front-facing Xtion Pro Live RGB-D sensor which enables the robot to explore and map the environment and recognize objects of interest. A high, downward-facing HD webcam is included to provide a view of the robot itself, which is used for self-reconfiguration. Finally, an UP computing board provides high performance I/O and processing capability in a small form factor. The UP Board used in the proposed system has an Intel Atom 1.92 GHz processor, 4 GB memory, and a 64 GB hard drive. It is network connected via 802.11 wifi. A battery provides power to the Up Board with a lifetime of about 1.5 hours.
 
 % Sensor Module Figure
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.4\textwidth]{images/sensor_module.jpg}
-\caption{Sensor module. \TODO{get better picture}.}
+\includegraphics[width=0.3\textwidth]{images/sensor_module.jpg}
+\caption{Sensor module.}
 \label{fig:sensor-module}
 \end{center}
 \end{figure}
@@ -311,7 +311,7 @@ The system must explore the \textit{a priori} unknown environment to search for 
         \caption{\textbf{``ledge''} environment}
     \end{subfigure}
         \begin{subfigure}[t]{0.15\textwidth}
-        \includegraphics[width=\textwidth]{images/hallway.png}
+        \includegraphics[width=\textwidth]{images/tunnel.png}
         %\label{fig:objb}
         \caption{\textbf{``tunnel''} environment}
     \end{subfigure}
@@ -560,7 +560,7 @@ To validate and demonstrate the capabilities of our system, an experiment was ru
         \caption{Reconfiguring to retrieve pink object}
     \end{subfigure}
     \begin{subfigure}[t]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{images/pink_retrieval.jpg}
+        \includegraphics[width=\textwidth]{images/pink_retrieval.png}
         \caption{Retrieving pink object}
         \label{fig:pink_grab}
     \end{subfigure}
