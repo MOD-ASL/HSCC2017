@@ -104,7 +104,7 @@
 
 \begin{abstract}
 
-We present a fully autonomous modular robot system that can perform complex, high-level tasks in an unknown environment without external sensing or control. The validity of the system is demonstrated in a real-world experiment. The physical robot is composed of modules that support multiple robot configurations. An onboard 3D sensor provides information about the environment, which is used to perform SLAM in the unknown environment and inform exploration and feedback control. No external sensors, pose providers, or beacons are used. A centralized planning algorithm uses the information from the environment and the desired high-level task description to synthesize low-level controllers to perform locomotion, reconfiguration, and special actions. A novel, centralized, self-reconfiguration method is used to change robot configurations when desired. To the authors' knowledge, the proposed work comprises the first modular robot system that uses perception-driven reconfiguration to intelligently adapt to an \textit{a priori} unknown environment to perform complex tasks.
+We present a fully autonomous modular robot system that can perform complex, high-level tasks in an unknown environment without external sensing or control. The validity of the system is demonstrated in a real-world experiment. The physical robot is composed of modules that support multiple robot configurations. An onboard 3D sensor provides information about the environment, which is used to perform SLAM in the unknown environment and inform exploration and feedback control. No external sensors, pose providers, or beacons are used. A centralized planning algorithm uses the information from the environment and the desired high-level task description to synthesize low-level controllers to perform locomotion, reconfiguration, and special actions. A novel, centralized, self-reconfiguration method is used to change robot configurations when desired. To the authors' knowledge, this is the first modular robot system that uses perception-driven reconfiguration to intelligently adapt to an \textit{a priori} unknown environment to perform complex tasks.
 
 \end{abstract}
 
@@ -163,17 +163,19 @@ Here we provide a brief overview of the entire system.  Figure~\ref{fig:overview
 
 Tasks are specified in a high-level mission planner using Linear Temporal Logic (LTL). The user does not specify a specific sequence of actions that should be completed, but rather expresses the task in the form of logical statements which map conditions to actions. Additionally, because a modular robot system is being used to complete the task, the task definitions do not directly specify which configuration (connected robot shape) should be used to execute each action. Instead, actions are specified in an abstract sense, for example ``If you encounter a pink object, pick it up." When a pink object is encountered, the planner will evaluate the environment surrounding the pink object and decide whether the current configuration of the robot is capable of executing a "pick up" action.  If it is not, the planner may decide reconfigure to another configuration which is capable of picking up the object under the current conditions.  Section \ref{sec:high-level} describes our high-level mission planner in detail.
 
-Our system is built around the SMORES-EP modular robot system, described in detail in Section \ref{sec:hardware}. Because SMORES-EP is capable of changing its physical morphology through self-reconfiguration, we must provide appropriate high-level abstractions of the robot that allows our high-level planner to address tasks.  These abstractions are described in Section \ref{sec:configuration-specifics}.
+Our system is built around the SMORES-EP modular robot, described in detail in Section \ref{sec:hardware}. Because SMORES-EP is capable of changing its physical morphology through self-reconfiguration, we must provide appropriate abstractions of the robot that allows our high-level planner to address tasks.  These abstractions are described in Section \ref{sec:configuration-specifics}.
 
-The modularity of our robot makes sensing challenging.  We have extended the existing SMORES-EP robot system by developing a sensor module which can be carried as part of a cluster of SMORES-EP modules to provide sensing and localization information, described in detail in Section \ref{sec:sensor_module}.
+The modularity of our robot makes sensing challenging.  We have extended the existing SMORES-EP hardware system by developing a sensor module which can be carried as part of a cluster of SMORES-EP modules to provide sensing and localization information, described in detail in Section \ref{sec:sensor_module}.
 
-Our system is intended to address tasks where the robot is required to explore an \emph{a priori} unknown environment and react to what it encounters.  To that end, we provide a suite of software tools for sensing and perception. Our perception tools allow a SMORES-EP robot to perform SLAM, navigation, and obstacle avoidance using the sensor module.  This software has been specifically optimized to work with data from the onbord XTion Pro depth camera, and to run efficiently using the limited computation power of the onboard UPboard computer.  Additionally, a novel next-best-view algorithm automatically selects waypoints in the environment to allow the robot to maximize information gain as it explores.  These tools are discussed in detail in Section \ref{sec:perception}
+Our system is intended to address tasks where the robot must explore an \emph{a priori} unknown environment and react to what it encounters.  To that end, we provide a suite of software tools for sensing and perception. Our perception tools allow a SMORES-EP robot to perform SLAM, navigation, and obstacle avoidance using the sensor module.  This software has been specifically optimized to work with data from lightweight onboard depth camera, and to run efficiently using the limited computation power of the onboard computer.  Additionally, a novel next-best-view algorithm automatically selects waypoints in the environment to allow the robot to maximize information gain as it explores.  These tools are discussed in detail in Section \ref{sec:perception}
 
 While exploring, the robot must recognize and react to objects and features of the environment.  We provide environment characterization tools that parse raw sensor information into actionable conclusions relevant to high-level tasks.  More specifically, we provide classifiers that can identify objects based on color, and classifiers that characterize different kinds of environments (such as ledges and tunnels) based on 3D depth information.  These are described in Section \ref{sec:environment-characterization}.
 
-Finally, we provide software and hardware tools enabling rapid, robust, autonomous reconfiguration with SMORES-EP. Our system is capable of completing reconfiguration tasks without any external localization, by using AprilTags for reconfiguration. The system features an overhead camera carried along with the robot as part of the sensor module, which is a novel localization modality for reconfiguration. Our reconfiguration system also relies on elements of our perception algorithms, which provide goal pose information for docking.  Our reconfiguration tools are described in Section \ref{sec:reconfiguration}.
+Finally, we provide software and hardware tools enabling rapid, robust, autonomous self-reconfiguration. Our system allows SMORES-EP to self-reconfigure without external localization, using overhead camera carried by the robot to track AprilTag fiducials mounted to the modules.
+%Our reconfiguration system also relies on elements of our perception algorithms, which provide goal pose information for docking.
+Our reconfiguration tools are described in Section \ref{sec:reconfiguration}.
 
-After presenting the complete system, we demonstrate how these individual components form a complete system capable of autonomously solving high-level tasks in unknown environments with modular robots.  In Section~\ref{sec:experiments}, we show how our system can be used to complete a realistic object retrieval task in an unknown environment with full autonomy.  Finally, in Section~\ref{sec:discussion}, we evaluate the success of our system in achieving its goals, and conclude.
+After presenting each component, we demonstrate how they can operate as an integrated system capable of autonomously solving high-level tasks in unknown environments.  In Section~\ref{sec:experiments}, we demonstrate completion of a realistic object retrieval task in an unknown environment with full autonomy.  Finally, in Section~\ref{sec:discussion}, we evaluate the success of our system in achieving its goals, and conclude.
 %
 % System Overview Figure
 \begin{figure}
@@ -231,13 +233,13 @@ The swarm-bots are a MSRR system that has been applied in exploration \cite{Dori
 %
 \subsection{SMORES-EP Modular Robot} \label{sec:smores}
 %
-Our system is built around the SMORES-EP robot, but could easily be adapted to
+Our system is built around the SMORES-EP robot, but could be adapted to
 work with other hardware platforms.  In this section, we provide a brief
 introduction to the technical capabilities of SMORES-EP.
 
-Each module is about the size of an \textit{80mm cube}, and has four actuated DoF - three continuously rotating faces (left, right, and
+Each module is the size of an \textit{80mm cube}, and has four actuated degrees of freedom (DoF) - three continuously rotating faces (left, right, and
 pan)  and one central hinge (tilt) with a \(180^\circ\) range of motion
-(Fig.~\ref{fig:smores-module}). The DoF marked left, right, and tilt  have
+(Fig.~\ref{fig:smores-module}). The left, right, and tilt DoF have
  axes of rotation that are parallel and coincident. A single module can use its
 left and right wheels to drive around as a two-wheel differential drive robot.
 All four faces of the SMORES-EP module have electro-permanent (EP) magnets
@@ -247,7 +249,7 @@ another.
 
 The magnetic connectors can also attach to objects made of ferromagnetic
 materials (such as steel).  By taking advantage of this capability, SMORES-EP
-modules can use their magnets to attract, lift, and carry metal objects.
+modules can use their magnets to pick up and carry metal objects.
 Provided the attachment surface is flat and smooth, the attachment force
 between a SMORES-EP face and a strongly ferromagnetic object can be as high as
 90N \cite{tosun2016design}.
@@ -275,7 +277,7 @@ range of about 100 feet.
 \label{sec:sensor_module}
 %
 
-In MSRR systems, sensing and processing capabilities of individual modules are severely limited by the size and weight constraints of the module form factor. Therefore, the proposed system uses a special sensor module dedicated to sensing and processing equipment, shown in Figure \ref{fig:sensor-module}. The module has no actuation capabilities and is larger than SMORES-EP modules. It is equipped with a front-facing Xtion Pro Live RGB-D sensor which enables the robot to explore and map the environment and recognize objects of interest. A high, downward-facing HD webcam is included to provide a view of the robot itself, which is used for self-reconfiguration. Finally, an UP computing board provides high performance I/O and processing capability in a small form factor. The UP Board used in the proposed system has an Intel Atom 1.92 GHz processor, 4 GB memory, and a 64 GB hard drive. It is network connected via 802.11 wifi. A battery provides power to the Up Board with a lifetime of about 1.5 hours.
+In MSRR systems, sensing and processing capabilities of individual modules are limited by the size and weight constraints of the module form factor. Therefore, the proposed system uses a special sensor module dedicated to sensing and processing equipment, shown in Figure \ref{fig:sensor-module}. The module has no actuation capabilities and is larger than SMORES-EP modules. It is equipped with a front-facing Xtion Pro Live RGB-D sensor which enables the robot to explore and map the environment and recognize objects of interest. A high, downward-facing HD webcam is included to provide a view of the robot itself, which is used for self-reconfiguration. Finally, an UP computing board provides high performance I/O and processing capability in a small form factor. The UP Board used in the proposed system has an Intel Atom 1.92 GHz processor, 4 GB memory, and a 64 GB hard drive. It is network connected via 802.11 wifi. A battery provides power to the Up Board with a lifetime of about 1.5 hours.
 
 % Sensor Module Figure
 \begin{figure}
@@ -285,11 +287,74 @@ In MSRR systems, sensing and processing capabilities of individual modules are s
 \label{fig:sensor-module}
 \end{center}
 \end{figure}
+%    ______            _____          _____                 _ _____
+%   / ____/___  ____  / __(_)___ _   / ___/____  ___  _____(_) __(_)_________
+%  / /   / __ \/ __ \/ /_/ / __ `/   \__ \/ __ \/ _ \/ ___/ / /_/ / ___/ ___/
+% / /___/ /_/ / / / / __/ / /_/ /   ___/ / /_/ /  __/ /__/ / __/ / /__(__  )
+% \____/\____/_/ /_/_/ /_/\__, /   /____/ .___/\___/\___/_/_/ /_/\___/____/
+%                        /____/        /_/
+\section{Hardware Abstraction}
+\label{sec:configuration-specifics}
+%
+SMORES-EP has the capability to \emph{self-reconfigure}: changing the connected structure of a cluster of modules to assume different shapes and capabilities.  In order to specify tasks for SMORES-EP (or any other self-reconfigurable robot) at a high level, we must abstract the robot in a way that captures the fact that its capabilities are a function of its configuration (connected structure). For the purposes of this work, we rely on a framework first presented in \cite{Jing2016}, which we summarize here.
+
+In this framework, the entire modular robot system is treated as a single robot with capabilities defined by a design library. A library entry is defined as $l = (C,B_C,P_e,P_b)$ where:
+\begin{itemize}
+\item $C$ is the robot \emph{configuration}, specified by the connected structure of the modules.
+\item $B$ is a \emph{behavior} that $C$ can perform. A behavior is a controller that commands the robot to perform a specific useful action. 
+\item $P_b$ is a set of \emph{behavior properties} that describes what $B$ does. 
+\item $P_e$ is a set of \emph{environment properties} that describe the environment in which this library entry is suitable. 
+\end{itemize} 
+
+
+
+
+In this work, we created five library entries for two different configurations,
+listed in Table~\ref{table:1}. 
+The ``Tank'' configuration shown in Fig.~\ref{fig:dropoff} is capable of picking
+up and dropping items in ``free'' environment while driving on a flat plain as a
+differential drive robot.
+The ``Proboscis'' configuration shown in Fig.~\ref{fig:pink_grab} has
+a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects.
+However, the locomotion ability of this configuration is limited to forward/backward
+motion, making it unsuitable for general navigation.
+
+This library-based framework allows us to specify tasks for modular robots at a high level. Environment
+properties $P_e$ specify when a given behavior can be used, and are a function of
+the sensed environment.  In Section~\ref{sec:environment-characterization}, we discuss
+the methods we use to extract environment properties from 3D sensor data. When we
+specify tasks at the high level, we use behavior properties $P_b$ to describe an
+action we want the robot to take without explicitly specifying which configuration
+or behavior to use.
+
+For example, if a task specification requires the robot to execute a $pickUp$ behavior, our system could select  either the Tank or Proboscis configurations to perform the action, since both have behaviors with $P_b=pickUp$. To make the decision, the system will consider the current environment properties $P_e$, extracted from sensor data.  In the case that $P_e=tunnel$, only the Proboscis configuration can be used, and the robot will take  reconfigure to form the Proboscis if it is not already in that configuration.
+
+Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
+%
+\begin{table}
+\centering
+\begin{tabular}{ |c|c|c| } 
+ \hline
+ \multirow{2}{6em}{Configuration} & Behavior & Environment \\
+ & properties & properties \\
+ \hline
+ Tank & Pick up & Item in ``free'' environment \\\hline
+ Tank & Drop & Drop-off zone in ``free'' environment \\\hline
+ Tank & Drive & Flat plain\\ \hline
+ Proboscis & Pick up & Item in ``tunnel'' or ``free'' environment \\ \hline
+ \multirow{2}{4em}{Proboscis} & \multirow{2}{2em}{Drop} & Drop-off zone in \\
+ & & ``tunnel'' or ``free'' environment \\ 
+ \hline
+\end{tabular}
+\caption{A library of robot behaviors}
+\label{table:1}
+\end{table}
 
 %
 % subsection sensor_module (end)
 % section hardware (end)
 %
+
 
 %     ____                            __  _
 %    / __ \___  _____________  ____  / /_(_)___  ____
@@ -345,57 +410,6 @@ In order to intelligently choose appropriate configurations when performing task
 \end{center}
 \end{figure}
 
-
-%    ______            _____          _____                 _ _____
-%   / ____/___  ____  / __(_)___ _   / ___/____  ___  _____(_) __(_)_________
-%  / /   / __ \/ __ \/ /_/ / __ `/   \__ \/ __ \/ _ \/ ___/ / /_/ / ___/ ___/
-% / /___/ /_/ / / / / __/ / /_/ /   ___/ / /_/ /  __/ /__/ / __/ / /__(__  )
-% \____/\____/_/ /_/_/ /_/\__, /   /____/ .___/\___/\___/_/_/ /_/\___/____/
-%                        /____/        /_/
-\section{Configuration-Specific Controllers}
-\label{sec:configuration-specifics}
-Modular robots can change their configurations to gain new capabilities and accomplish various tasks.
-Since the configuration affects the dynamics of the modular robots, configuration-specific controllers are required for commanding modular robots.
-In this work, we utilize a library-driven system to create, organize and execute modular robot behaviors based on the robot configuration, the runtime environment and the robot behavior properties.
-A modular robot behavior library consists of a collection of different library entries.
-A library entry is defined as $l = (C,B_C,P_e,P_b)$ where:
-\begin{itemize}
-\item $C$ specifies the configuration of the robot
-\item $B$ is the controller that commands the robot to perform a specific behavior
-\item $P_e$ holds information about the environment where this library entry is suitable
-\item $P_b$ describes the properties of the robot behavior
-\end{itemize}
-
-In order to control the robot to perform desired behaviors in the \textit{a priori} unknown environment, we employ a perception-driven method to intelligently choose the library entry from the modular robot behavior library.
-First the desired behavior is specified as a set of behavior properties $P'_b$.
-We characterize the current environment as described in Section~\ref{sec:environment-characterization} to a set of environment properties $P'_e$.
-Then we can find a set of library entries that match with $P'_e$ and $P'_b$.
-If a library entry requires a different configuration from the current robot configuration, a reconfiguration process can be performed as described in Section~\ref{sec:reconfiguration}.
-To minimize complexity in runtime, we bias towards the library entries that require no reconfiguration when choosing the appropriate library entry.
-Once the library entry is selected, the controller $B$ is executed to produce the desired robot behavior.
-
-In this work, we created five library entries for two different configurations as listed in Table.~\ref{table:1}. 
-The ``Tank'' configuration shown in Fig.~\ref{fig:dropoff} is capable of picking up and dropping items in ``free'' environment while driving on a flat plain as a holonomic drive robot.
-The ``Proboscis'' configuration shown in Fig.~\ref{fig:pink_grab} is setup to have a long arm for reaching between obstacles in a ``tunnel'' environment to grasp objects. However, the locomotion ability of this configuration is limited to forward/backward motion, making it unsuitable for general navigation.
-
-\begin{table}
-\centering
-\begin{tabular}{ |c|c|c| } 
- \hline
- \multirow{2}{6em}{Configuration} & Behavior & Environment \\
- & properties & properties \\
- \hline
- Tank & Pick up & Item in ``free'' environment \\\hline
- Tank & Drop & Drop-off zone in ``free'' environment \\\hline
- Tank & Drive & Flat plain\\ \hline
- Proboscis & Pick up & Item in ``tunnel'' or ``free'' environment \\ \hline
- \multirow{2}{4em}{Proboscis} & \multirow{2}{2em}{Drop} & Drop-off zone in \\
- & & ``tunnel'' or ``free'' environment \\ 
- \hline
-\end{tabular}
-\caption{A library of robot behaviors}
-\label{table:1}
-\end{table}
 %     ____                        _____                        __  _
 %    / __ \___  _________  ____  / __(_)___ ___  ___________ _/ /_(_)___  ____
 %   / /_/ / _ \/ ___/ __ \/ __ \/ /_/ / __ `/ / / / ___/ __ `/ __/ / __ \/ __ \
@@ -623,10 +637,10 @@ The two configurations and five behaviors described in Section \ref{sec:configur
 &\text{ {\bf carry} is set on {\bf pickup} and reset on {\bf drop}}&& \notag \\
 &\text{if you are not activating ({\bf carry} or {\bf pickup} or {\bf drop}}&& \notag \\
 &\hspace{1cm}\text{or {\bf driveToItem} or {\bf driveToDropoff}) then do {\bf explore}}&& \notag \\
-&\text{if you are activating {\bf carry} and you are not sensing {\bf dropoffzone}}&& \notag \\
+&\text{if you are activating {\bf carry} and you are not sensing {\bf dropoffZone}}&& \notag \\
 &\hspace{1cm}\text{then do {\bf explore}}&& \notag \\
 &\text{do {\bf driveToDropoff} if and only if you are activating {\bf carry} }&& \notag \\
-&\hspace{1cm}\text{and you are sensing {\bf dropoffzone}}&& \notag \\
+&\hspace{1cm}\text{and you are sensing {\bf dropoffZone}}&& \notag \\
 &\text{do {\bf driveToItem} if and only if you are not activating {\bf carry} }&& \notag \\
 &\hspace{1cm}\text{and you are sensing {\bf item}}&& \notag \\
 &\text{do {\bf drop} if and only if you were activating {\bf driveToDropoff } }&& \notag \\
@@ -679,7 +693,7 @@ The system is not without limitations, and could be significantly extended in fu
 
 While the presented system successfully demonstrated that modular robots can autonomously achieve a realistic object retrieval task, limitations of the modular hardware make them unsuitable for application in harsh real-world scenarios such as search-and-rescue.  One of the biggest limitations is simply the small size and small forces that can be applied by the modules.  Given current actuator and connector technology, it is still very difficult to apply large enough forces to operate in a realistic search-and-rescue environment. 
 
-It is important to consider how the presented system could be adapted to work with other modular robot hardware.  Certain aspects of the system are almost entirely hardware-independent, such as the sensing and navigation tools, the high-level planner, and the hardware abstractions.  The reconfiguration method is in some ways specific to SMORES-EP, because it relies on the ability of each module to move by differential drive on the flat plane.  The majority of MSRR hardware systems do not have this capability, and would not be able to reconfigure in this way.  However, we believe the success of this novel reconfiguration method could have some implications for MSRR hardware design: future designers might want to consider designing for individual motility and forgiving connectors, in order to take advantage of a reconfiguration method similar to the one present.
+It is important to consider how the presented system could be adapted to work with other modular robot hardware.  Certain aspects of the system are almost entirely hardware-independent, such as the sensing and navigation tools, the high-level planner, and the hardware abstractions.  The reconfiguration method is in some ways specific to SMORES-EP, because it relies on the ability of each module to move by differential drive on the flat plane.  The majority of MSRR hardware systems do not have this capability, and would not be able to reconfigure in this way.  However, we believe the success of this novel reconfiguration method could have some implications for MSRR hardware design: future designers might want to consider designing for individual mobility and forgiving connectors, in order to take advantage of a reconfiguration method similar to the one present.
 
 To conclude, this paper presents the first system that enables modular self-reconfigurable robots to autonomously achieve tasks requiring perception-informed reconfiguration in an unknown environment.  This capability is crucial to the success of modular robots as a technology, and by demonstrating it for the first time, we believe we have taken a real step toward the application of modular robots to solve tasks in the real world.
 %
@@ -699,6 +713,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 \bibliography{references}
 
 \end{document}
+
 
 
 
