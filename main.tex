@@ -260,7 +260,7 @@ Battery life is about one hour (depending on motor, magnet, and radio usage),
 and commands to a single module can be received at a rate of about 20hz.
 Wireless networking was provided by a standard off-the-shelf  router, with a
 range of about 100 feet.
-\TODO{Mention dummy modules.}
+%\TODO{Mention dummy modules.}
 %% SMORES-EP module DoF picture
 \begin{figure}   
 \begin{center}
@@ -407,7 +407,7 @@ The ``Proboscis'' configuration shown in Fig.~\ref{fig:pink_grab} is setup to ha
 %
 Reconfiguration refers to the process of changing the connective topology of an MSRR system's modules in order to change its morphology.  SMORES-EP is capable of all three classes of modular self-reconfiguration (chain, lattice, and mobile reconfiguration).  For the purposes of this work, we have developed tools for mobile reconfiguration with SMORES-EP, taking advantage of the modules' ability to drive on flat surfaces as described in section \ref{sec:hardware}.
 
-Determining the relative position of modules during mobile self-reconfiguration is an important challenge. As discussed in Section~\ref{sec:related-work}, past systems have relied on offboard global positioning systems \cite{Paulos2015} or distributed approaches, in which sensors are mounted on each disconnected set of modules \cite{Yim2007}.  Our localization method is centralized, using an RGB camera carried by the robot to track AprilTag fiducials mounted to individual modules.  The camera is mounted to the sensor module at a height of 20cm above the xtion RGB-D camera, and faces downward at \(40^\circ\) to vertical, providing accurate tracking in a \(1m\) by \(1.5m\) rectangular area on the ground in front of the sensor module.  Within this area (which we call the \emph{reconfiguration zone}), any module equipped with an AprilTag marker can detach from the cluster, drive to another location, and reattach to the cluster, provided that both of its wheels were in contact with the ground in its starting position. \TODO{Get accurate number for height and FoV.}
+Determining the relative position of modules during mobile self-reconfiguration is an important challenge. As discussed in Section~\ref{sec:related-work}, past systems have relied on offboard global positioning systems \cite{Paulos2015} or distributed approaches, in which sensors are mounted on each disconnected set of modules \cite{Yim2007}.  Our localization method is centralized, using an RGB camera carried by the robot to track AprilTag fiducials mounted to individual modules.  The camera is mounted to the sensor module at a height of 20cm above the xtion RGB-D camera, and faces downward at \(40^\circ\) to vertical, providing accurate tracking in a \(1m\) by \(1.5m\) rectangular area on the ground in front of the sensor module.  Within this area (which we call the \emph{reconfiguration zone}), any module equipped with an AprilTag marker can detach from the cluster, drive to another location, and reattach to the cluster, provided that both of its wheels were in contact with the ground in its starting position.% \TODO{Get accurate number for height and FoV.}
 
 \subsection{Reconfiguration Procedure}
 Given an initial configuration and a goal configuration, our reconfiguration controller commands a set of modules to disconnect, move and reconnect in order to form the new topology of the goal configuration. The process consists of three stages: i) Pre-reconfiguration, ii) Module Movement, iii) Post-reconfiguration.
@@ -430,7 +430,9 @@ Fig.~\ref{fig:reconf} demonstrates an example of a single module operation.
 As shown in Fig.~\ref{fig:reconf}a, module $m$ detaches from module $m_d$.
 In this process, magnets on $f_m^d$ and $f_{m_d}$ are turned off to eliminate the bond between two faces.
 Then module $m$ moves the tilt joint while rotating the left and right wheel forwards to break the connection with $m_d$ and drives away from it.
-After $m$ detaches from $m_d$, the controller drives $m$ as a two-wheel differential drive robot to follow the path $\sigma$ with localization provided with the sensor module using AprilTags(\TODO{cite}) system. This process is illustrated by Fig.~\ref{fig:reconf}b.
+After $m$ detaches from $m_d$, the controller drives $m$ as a two-wheel differential drive robot to follow the path $\sigma$ with localization provided with the sensor module using AprilTags
+%(\TODO{cite})
+system. This process is illustrated by Fig.~\ref{fig:reconf}b.
 The path $\sigma$ is collision free with the rest of the robot and computed \textit{a priori}. 
 Once $m$ reaches the end of $\sigma$, it adjusts its heading by spinning in place till face $f_m^a$ aligning with $f_{m_a}$.
 The magnets on face $f_m^a$ and $f_{m_a}$ are turned on to help create connection later between two faces.
@@ -462,7 +464,7 @@ As demonstrated in Fig.~\ref{fig:reconf}c, as last $m$ drives towards $m_a$ whil
 \subsection{Comparison with Existing Methods}
 Our method of reconfiguration has distinct advantages and disadvantages compared to existing methods.  To the authors' knowledge, use of an onboard overhead camera to provide fiducial-based localization for reconfiguration is novel.  This centralized strategy provides localization only near the sensor module, so the number of modules that can reconfigure simultaneously is limited by the size of the reconfiguration zone.  This means it could not be directly scaled to large clusters of modules the way some existing distributed methods could be (\cite{Yim2007},\cite{Murata2006},\cite{Rubenstein2004}).  However, it is not clear how these distributed methods would be employed in the context of a high-level task.  Additionally, most require one sensor module per distinct cluster, which is cumbersome.
 
-By exploiting high-fidelity centralized localization and the individual mobility of the SMORES-EP modules, we achieve reconfiguration that is rapid, robust, and cleanly deployable in the context of a high-level task.  In our experiments (Section~\ref{sec:experiments}), we observed that the pre-reconfiguration state required about 20 seconds, each module movement operation required about 45 seconds, and post-reconfiguration required about 10 seconds.  Each reconfiguration action had a success rate over 90\%.  This compares very favorably with existing methods, in which each reconfiguration action can take on the order of ten minutes \cite{Yim2007},\cite{Murata2006},\cite{Rubenstein2004}\TODO{Verify exact numbers}.
+By exploiting high-fidelity centralized localization and the individual mobility of the SMORES-EP modules, we achieve reconfiguration that is rapid, robust, and cleanly deployable in the context of a high-level task.  In our experiments (Section~\ref{sec:experiments}), we observed that the pre-reconfiguration state required about 20 seconds, each module movement operation required about 45 seconds, and post-reconfiguration required about 10 seconds.  Each reconfiguration action had a success rate over 90\%.  This compares very favorably with existing methods, in which each reconfiguration action can take on the order of ten minutes \cite{Yim2007},\cite{Murata2006},\cite{Rubenstein2004}%\TODO{Verify exact numbers}.
 
 %     __  ___       __          __                   __
 %    / / / (_)___ _/ /_        / /   ___ _   _____  / /
@@ -483,9 +485,11 @@ By exploiting high-fidelity centralized localization and the individual mobility
 \end{center}
 \end{figure}
 
-To utilize the sensing and actuation capabilities of the robot as a complete system for accomplishing various tasks, we employ an existing framework called LTLMoP for automatically generating robot controller from user specified high-level instructions using formal method \TODO{cite}.
+To utilize the sensing and actuation capabilities of the robot as a complete system for accomplishing various tasks, we employ an existing framework called LTLMoP for automatically generating robot controller from user specified high-level instructions using formal methods
+%\TODO{cite}
+.
 LTLMoP allows us to use each component of our system as a low-level atomic controller and specify a wide-range of reactive robotic tasks as a set of high-level instructions using these controllers.
-We direct readers to \TODO{cite} for more details on LTLMoP.
+%We direct readers to \TODO{cite} for more details on LTLMoP.
 In this section, we will mainly discuss how we model our system in order to use LTLMoP to automatically generate a high-level controller for our desired robot task.
 
 \subsection{Synthesize a controller}
