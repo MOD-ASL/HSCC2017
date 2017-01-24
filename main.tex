@@ -394,28 +394,18 @@ The ``Proboscis'' configuration sacrifices its capability to drive efficiently, 
 \section{Reconfiguration}
 \label{sec:reconfiguration}
 %
-One major advantage of modular robot system is the ability to change into different configurations and therefore adapting to different environment.
-Reconfiguration refers to the process of changing the robot configuration from one to another.
-In most cases, reconfiguration requires the change of topology of a set of modules.
-While there are a lot of research on modular robot reconfiguration algorithms \TODO{cite}, in this work we developed a simple but robust reconfiguration controller that is best suitable for the SMORES modular robot system.
-Since each SMORES module has four degrees of freedom and is able to drive on a flat surface as a differential drive robot, we utilize this ability during reconfiguration to reduce the number of operations required to change robot topology.
-Given an initial configuration and a goal configuration, our reconfiguration controller commands a set of modules to disconnect, move and connect in order to form the new topology of the goal configuration.
-We require both left and right wheels of a module to be contacting the supporting surface during reconfiguration, so that the module can drive as a differential drive robot.
+Reconfiguration refers to the process of changing the connective topology of an MSRR system's modules in order to change its morphology.  SMORES-EP is capable of all three classes of modular self-reconfiguration (chain, lattice, and mobile reconfiguration).  For the purposes of this work, we have developed tools for mobile reconfiguration with SMORES-EP, taking advantage of the modules' ability to drive on flat surfaces as described in section \ref{sec:hardware}.
 
-A reconfiguration process consists of three states in the order of: i) Pre-reconfiguration, ii) Module operations, iii) Post-reconfiguration.
+Determining the relative position of modules during mobile self-reconfiguration is an important challenge. As discussed in Section~\ref{sec:related-work}, past systems have relied on offboard global positioning systems \cite{Paulos2015} or distributed approaches, in which sensors are mounted on each disconnected set of modules \cite{Yim2007}.  Our localization method is centralized, using an RGB camera carried by the robot to track AprilTag fiducials mounted to individual modules.  The camera is mounted to the sensor module at a height of 20cm above the xtion RGB-D camera, and faces downward at \(40^\circ\) to vertical, providing accurate tracking in a \(1m\) by \(1.5m\) rectangular area on the ground in front of the sensor module.  Within this area (which we call the \emph{reconfiguration zone}), any module equipped with an AprilTag marker can detach from the cluster, drive to another location, and reattach to the cluster, provided that both of its wheels were in contact with the ground in its starting position. \TODO{Get accurate number for height and FoV.}
 
-\paragraph{Pre-reconfiguration} In this stage, the robot with initial configuration performs a set of actions to prepare for the reconfiguration process. Here are some possible actions:
-\begin{itemize}
-\item The robot confirms the space around itself is free of obstacle for reconfiguration
-\item The robot drops any item that it is carrying currently
-\item The robot changes joint angles of some modules to make sure all modules are able to drive on the supporting surface with their wheels
-\end{itemize}
-Once the robot is ready for reconfiguration, the controller moves on to the module operations state.
+\subsection{Reconfiguration Procedure}
+Given an initial configuration and a goal configuration, our reconfiguration controller commands a set of modules to disconnect, move and reconnect in order to form the new topology of the goal configuration. The process consists of three stages: i) Pre-reconfiguration, ii) Module Movement, iii) Post-reconfiguration.
 
-\paragraph{Module operations} All changes of topology happens in this state of the reconfiguration.
-A sequence of module operations are executed where each operation changes the location of one module.
-A single module operation involves detaching one module from the rest of the robot, driving the detached module to the new location, and attaching the module back to the robot.
-We denote a module operation as $MP=\left(m, m_d, m_a, f_m^d, f_m^a, f_{m_d}, f_{m_a}, \sigma \right)$ where:
+\paragraph{Pre-reconfiguration} In the pre-reconfiguration stage, the robot takes actions to establish the conditions needed for reconfiguration.  It begins by confirming that the reconfiguration zone is a flat surface free of obstacles (other than the modules themselves).  If the robot is carrying an object, it drops the object outside of the reconfiguration zone. It then assumes a stance (by changing its joint angles) in which any modules that will need to detach have both of their wheels on the ground, ready to drive. Once these conditions are established, module movement begins.
+
+\paragraph{Module Movement} During this stage, the topology of the cluster changes as a sequence of module movement operations are performed.  Each operation involves detaching one module from the cluster, driving, and re-attaching at its new location in the goal configuration.
+
+We denote a module movement operation as $MP=\left(m, m_d, m_a, f_m^d, f_m^a, f_{m_d}, f_{m_a}, \sigma \right)$ where:
 \begin{itemize}
 \item $m$ is the module whose location will be changed in this module operation.
 \item $m_d$ is the module that connects with $m$ before the operation.
@@ -456,12 +446,12 @@ As demonstrated in Fig.~\ref{fig:reconf}c, as last $m$ drives towards $m_a$ whil
       \label{fig:reconf}
 \end{figure}
 
-\paragraph{Post-reconfiguration} With new topology formed in the previous state, the robot then perform a set of actions required to finish the reconfiguration process. Here are some possible actions:
-\begin{itemize}
-\item The robot changes joint angles of some modules to match with the joint values in the goal configuration
-\item The robot picks up any item that is dropped previously
-\end{itemize}
-The reconfiguration process is complete after all required post-reconfiguration actions are finished.
+\paragraph{Post-reconfiguration} Once all module movement operations have completed and the goal topology is formed, the robot changes its joint angles to assume a stance in which the goal configuration can begin performing desired behaviors, and if necessary, the robot picks up any objects it dropped. This completes the reconfiguration process. 
+
+\subsection{Comparison with Existing Methods}
+Our method of reconfiguration has distinct advantages and disadvantages compared to existing methods.  To the authors' knowledge, use of an onboard overhead camera to provide fiducial-based localization for reconfiguration is novel.  This centralized strategy provides localization only near the sensor module, so the number of modules that can reconfigure simultaneously is limited by the size of the reconfiguration zone.  This means it could not be directly scaled to large clusters of modules the way some existing distributed methods could be (\cite{Yim2007},\cite{Murata2006},\cite{Rubenstein2004}).  However, it is not clear how these distributed methods would be employed in the context of a high-level task.  Additionally, most require one sensor module per distinct cluster, which is cumbersome.
+
+By exploiting high-fidelity centralized localization and the individual mobility of the SMORES-EP modules, we achieve reconfiguration that is rapid, robust, and cleanly deployable in the context of a high-level task.  In our experiments (Section~\ref{sec:experiments}), we observed that the pre-reconfiguration state required about 20 seconds, each module movement operation required about 45 seconds, and post-reconfiguration required about 10 seconds.  Each reconfiguration action had a success rate over 90\%.  This compares very favorably with existing methods, in which each reconfiguration action can take on the order of ten minutes \cite{Yim2007},\cite{Murata2006},\cite{Rubenstein2004}\TODO{Verify exact numbers}.
 
 %     __  ___       __          __                   __
 %    / / / (_)___ _/ /_        / /   ___ _   _____  / /
@@ -635,6 +625,9 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 \bibliography{references}
 
 \end{document}
+
+
+
 
 
 
