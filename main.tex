@@ -23,6 +23,10 @@
 %\usepackage[final]{pdfpages} % for including pdfs
 \usepackage{subcaption}
 \usepackage{multirow}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{nccmath} % for fleqn
+\usepackage{algorithm}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%  Macros:
@@ -31,7 +35,7 @@
 % the braces to make the text appear later.:
 \newcommand{\doubleBlind}[1]{} 
 
-% For marking Todos and changes:
+% For marking Todos and changes
 \newcommand{\TODO}[1]{ {\bf \textcolor{red}{TODO:} #1 }}
 \newcommand{\abj}[1]{\textcolor{blue}{#1}}
 \newcommand{\dbj}[1]{\textcolor{blue}{\sout{#1}}}
@@ -49,6 +53,13 @@
 \newcommand{\LTLG}{\G}
 \newcommand{\LTLF}{\F}
 \newcommand{\LTLX}{\X}
+
+\newfloat{spec}{thb}{lop} %{thb}{lop}
+\floatname{spec}{Specification}
+\makeatletter
+\newcommand{\leqnomode}{\tagsleft@true}
+\newcommand{\reqnomode}{\tagsleft@false}
+\makeatother
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \pdfinfo{
@@ -371,22 +382,22 @@ To minimize complexity in runtime, we bias towards the library entries that requ
 Once the library entry is selected, the controller $B$ is executed to produce the desired robot behavior.
 
 In this work, we created five library entries for two different configurations as listed in Table.~\ref{table:1}. 
-The ``Tank'' configuration is capable of picking up and dropping items while navigating on a flat plain as a holonomic robot. \TODO{photo?}
-The ``Proboscis'' configuration sacrifices its capability to drive efficiently, but is able to pick up and drop items that is hidden inside of a short tunnel, using its long proboscis. \TODO{photo?}
-
+The ``Tank'' configuration shown in Fig.~\ref{fig:dropoff} is capable of picking up and dropping items in ``free'' environment while driving on a flat plain with maximal speed and agility.
+The ``Proboscis'' configuration shown in Fig.~\ref{fig:pink_grab} is setup to have a long arm for reaching between obstacles in a ``tunnel'' environment to grasp objects. However, the locomotion ability of this configuration is limited to forward/backward motion, making it unsuitable for general navigation.
 
 \begin{table}
 \centering
 \begin{tabular}{ |c|c|c| } 
  \hline
- Configuration & Behavior Properties & Environment Properties \\
+ \multirow{2}{6em}{Configuration} & Behavior & Environment \\
+ & properties & properties \\
  \hline
- Tank & Pick up & Item in free space\\ 
- Tank & Drop & Drop-off zone in free space\\
- Tank & Drive & Flat plain\\ 
- Proboscis & Pick up & Item in tunnel or free space \\ 
+ Tank & Pick up & Item in ``free'' environment \\\hline
+ Tank & Drop & Drop-off zone in ``free'' environment \\\hline
+ Tank & Drive & Flat plain\\ \hline
+ Proboscis & Pick up & Item in ``tunnel'' or ``free'' environment \\ \hline
  \multirow{2}{4em}{Proboscis} & \multirow{2}{2em}{Drop} & Drop-off zone in \\
- & & tunnel or free space \\ 
+ & & ``tunnel'' or ``free'' environment \\ 
  \hline
 \end{tabular}
 \caption{A library of robot behaviors}
@@ -490,7 +501,7 @@ The reconfiguration process is complete after all required post-reconfiguration 
 \end{figure}
 
 To utilize the sensing and actuation capabilities of the robot as a complete system for accomplishing various tasks, we employ an existing framework called LTLMoP for automatically generating robot controller from user specified high-level instructions using formal method \TODO{cite}.
-LTLMoP allows us to use each component of our system as a low-level atomic controller and specify a wide-range of reactive(\TODO{define reactive}) robotic tasks as a set of high-level instructions using these controllers.
+LTLMoP allows us to use each component of our system as a low-level atomic controller and specify a wide-range of reactive robotic tasks as a set of high-level instructions using these controllers.
 We direct readers to \TODO{cite} for more details on LTLMoP.
 In this section, we will mainly discuss how we model our system in order to use LTLMoP to automatically generate a high-level controller for our desired robot task.
 
@@ -499,13 +510,32 @@ We first abstract our system and the environment with a set of Boolean propositi
 A system proposition ``pickUp'' is \lt means that the robot is picking up an item and \lf otherwise.
 An environment proposition ``pinkObject'' is \lt means that the robot is currently sensing a pink object and \lf otherwise.
 Then we can specify the robot task in high-level instructions, such as Structured English, supported by LTLMoP.
-Following is an example of a robot task written in Structured English for searching a pink object and picking it up once the robot finds it. \TODO{double check this}
-
-\begin{itemize}
-\item do {\bf explore} if and only if you are not sensing {\bf pinkObject} and you are not activating {\bf pickUp}
-\item do {\bf driveToObject} if and only if you are not activating {\bf pickUp} and you are sensing {\bf pinkObject}
-\item do {\bf pickUp} if and only if you were activating {\bf driveToObject} and you are sensing {\bf arrived}
-\end{itemize}
+Spec.~\ref{spec:simple} is an example of a robot task written in Structured English for searching a pink object and picking it up once the robot finds it.
+\begin{spec}[h!]
+\caption{Search and pick up a pink object}
+\label{spec:simple}
+\vspace{-0.1cm}
+\small\setlength{\jot}{0pt}
+\begin{fleqn}[3pt]
+\leqnomode
+\begin{subequations}
+\renewcommand{\theequation}{\arabic{equation}} 
+\makeatletter
+\renewcommand\tagform@[1]{\maketag@@@{\ignorespaces#1\unskip\@@italiccorr}}
+\makeatother
+\hskip-10cm
+\begin{alignat}{2}
+&\text{do {\bf explore} if and only if you are not sensing {\bf pinkObject}}&& \notag \\ 
+&\hspace{1cm}\text{and you are not activating {\bf pickUp}}&& \notag \\
+& \text{do {\bf driveToObject} if and only if you are not activating {\bf pickUp}}&& \notag \\
+&\hspace{1cm} \text{and you are sensing {\bf pinkObject}}&& \notag \\
+& \text{do {\bf pickUp} if and only if you were activating {\bf driveToObject}} && \notag \\
+&\hspace{1cm} \text{and you are sensing {\bf arrived}} &&  \notag
+\end{alignat}
+\end{subequations}
+\end{fleqn}
+\vspace{-0.4cm}
+\end{spec}
 
 In additions to ``pickUp'' and ``pinkObject'', there are some more propositions. 
 ``explore'' and ``driveToObject'' are system propositions that each represents a different robot action.
@@ -537,8 +567,10 @@ If the robot senses a pink object, the value of ``pinkObject'' is \lt and theref
 \label{sec:experiments}
 %
 To validate and demonstrate the capabilities of our system, a real-world experiment was run in which a robot composed of SMORES-EP modules completed a complex, high-level task in an unknown environment. Figure \ref{fig:map} shows the environment layout, setup to represent a cluttered office. The high-level task consisted of 5 sub-tasks of 3 different types: explore the environment, find and retrieve 2 objects in the office, and deliver each to a drop-off zone. One object was in the open (a ``free'' environment type), and the other was positioned between two obstacles (a ``tunnel'' environment). Obstacles, environment types, and locations of the objects and drop-off zone were unknown to the robot \textit{a priori}.
+Spec.~\ref{spec:experiment} shows the high-level instructions from the user for synthesizing a robot controller for this experiment.
 
-5 SMORES-EP modules, 1 Sensor Module, and 3 dummy modules were used to compose the robot for performing the task. Objects were grasped magnetically using the electromagnets on SMORES-EP modules. The 2 configurations shown in Figure \ref{fig:pink_grab} and Figure \ref{fig:dropoff} were setup and made available for selection by the high-level planner. A ``car'' configuration was designed to drive with maximal speed and agility and grasp objects that are in ``free'' environments. A ``proboscis'' configuration was setup to have a long arm for reaching between obstacles in a ``tunnel'' environment type to grasp objects. However, the locomotion ability of this configuration is limited to forward/backward motion, making it unsuitable for general navigation.
+5 SMORES-EP modules, 1 Sensor Module, and 3 dummy modules were used to compose the robot for performing the task. Objects were grasped magnetically using the electromagnets on SMORES-EP modules. 
+2 configurations described in Section \ref{sec:configuration-specifics} were used for this experiment.
 
 % Map
 \begin{figure}
@@ -585,7 +617,41 @@ To validate and demonstrate the capabilities of our system, a real-world experim
       \label{fig:demo}
    \end{figure*}
 
-Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is also available at \TODO{la link}. The starting location prevented the robot from seeing the objects initially, forcing it to explore the environment to search for them. After a period of exploration the robot discovered the pink object first. The characterization algorithm correctly classified the surrounding environment as a ``tunnel'' type, and accordingly the robot navigated in front of the object and reconfigured to the ``proboscis'' configuration. Once this was done, the object was retrieved and pulled out into the open. The robot then dropped the object, reconfigured back to the ``car'' configuration for navigation to the drop-off zone, and again retrieved the object. The robot then navigated to and dropped off the object at the drop-off zone, which was seen during exploration and recorded in the global map built by the SLAM algorithm. Once done, the robot navigated to the green object which was correctly determined to not require any reconfiguration. No further exploration was required since the green object was discovered while the robot was dropping off the pink object. The robot finished the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows the final volumetric map of the environment explored by the robot as it explored the environment and delivered objects. The robot successfully completed all tasks in the experiment in about 26 minutes. Note that the video shows a human reaching into the field to touch the green object once the robot comes into contact with it. This was due to a error on the field resulting in the object becoming stuck between two floor boards, so a human dislodged it so the robot could grasp it normally.
+\begin{spec}[h!]
+\caption{Search and move any pink or green object to the drop-off zone}
+\label{spec:experiment}
+\vspace{-0.1cm}
+\small\setlength{\jot}{0pt}
+\begin{fleqn}[3pt]
+\leqnomode
+\begin{subequations}
+\renewcommand{\theequation}{\arabic{equation}} 
+\makeatletter
+\renewcommand\tagform@[1]{\maketag@@@{\ignorespaces#1\unskip\@@italiccorr}}
+\makeatother
+\hskip-10cm
+\begin{alignat}{2}
+&\text{ {\bf carry} is set on {\bf pickup} and reset on {\bf drop}}&& \notag \\
+&\text{if you are not activating ({\bf carry} or {\bf pickup} or {\bf drop}}&& \notag \\
+&\hspace{1cm}\text{or {\bf driveToItem} or {\bf driveToDropoff}) then do {\bf explore}}&& \notag \\
+&\text{if you are activating {\bf carry} and you are not sensing {\bf dropoffzone}}&& \notag \\
+&\hspace{1cm}\text{then do {\bf explore}}&& \notag \\
+&\text{do {\bf driveToDropoff} if and only if you are activating {\bf carry} }&& \notag \\
+&\hspace{1cm}\text{and you are sensing {\bf dropoffzone}}&& \notag \\
+&\text{do {\bf driveToItem} if and only if you are not activating {\bf carry} }&& \notag \\
+&\hspace{1cm}\text{and you are sensing {\bf item}}&& \notag \\
+&\text{do {\bf drop} if and only if you were activating {\bf driveToDropoff } }&& \notag \\
+&\hspace{1cm}\text{and you are sensing {\bf arrived}}&& \notag \\
+&\text{do {\bf pickup } if and only if you were activating {\bf driveToItem  } }&& \notag \\
+&\hspace{1cm}\text{and you are sensing {\bf arrived}}&& \notag \\
+&\text{infinitely often not {\bf carry}}&& \notag
+\end{alignat}
+\end{subequations}
+\end{fleqn}
+\vspace{-0.4cm}
+\end{spec}
+
+Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is also available at \TODO{la link}. The starting location prevented the robot from seeing the objects initially, forcing it to explore the environment to search for them. After a period of exploration the robot discovered the pink object first. The characterization algorithm correctly classified the surrounding environment as a ``tunnel'' type, and accordingly the robot navigated in front of the object and reconfigured to the ``proboscis'' configuration. Once this was done, the object was retrieved and pulled out into the open. The robot then dropped the object, reconfigured back to the ``tank'' configuration for navigation to the drop-off zone, and again retrieved the object. The robot then navigated to and dropped off the object at the drop-off zone, which was seen during exploration and recorded in the global map built by the SLAM algorithm. Once done, the robot navigated to the green object which was correctly determined to not require any reconfiguration. No further exploration was required since the green object was discovered while the robot was dropping off the pink object. The robot finished the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows the final volumetric map of the environment explored by the robot as it explored the environment and delivered objects. The robot successfully completed all tasks in the experiment in about 26 minutes. Note that the video shows a human reaching into the field to touch the green object once the robot comes into contact with it. This was due to a error on the field resulting in the object becoming stuck between two floor boards, so a human dislodged it so the robot could grasp it normally.
 
 \begin{figure}
 \begin{center}
