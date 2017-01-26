@@ -161,26 +161,19 @@ Through hardware experiments, we demonstrate that this system is capable of auto
 %
 Here we provide a brief overview of the entire system.  Figure~\ref{fig:overview} shows a flowchart which serves as a visual companion to this section. 
 
-Tasks are specified in a high-level mission planner using Linear Temporal Logic (LTL). The user does not specify a specific sequence of actions that should be completed, but rather expresses the task in the form of logical statements which map conditions to actions. Additionally, because a modular robot system is being used to complete the task, the task definitions do not directly specify which configuration (connected robot shape) should be used to execute each action. Instead, actions are specified in an abstract sense, for example ``If you encounter a pink object, pick it up." When a pink object is encountered, the planner will evaluate the environment surrounding the pink object and decide whether the current configuration of the robot is capable of executing a "pick up" action.  If it is not, the planner may decide reconfigure to another configuration which is capable of picking up the object under the current conditions.  Section \ref{sec:high-level} describes our high-level mission planner in detail.
+Our system is built around the SMORES-EP modular robot. Because the modules cannot sense their environment, we extend the SMORES-EP hardware system by introducing a novel sensor module, described in Section~\ref{sec:hardware}.
 
-Our system is built around the SMORES-EP modular robot, described in detail in Section \ref{sec:hardware}. Because SMORES-EP is capable of changing its physical morphology through self-reconfiguration, we must provide appropriate abstractions of the robot that allows our high-level planner to address tasks.  These abstractions are described in Section \ref{sec:configuration-specifics}.
+Perception-informed exploration is essential to completing tasks in unknown environments.  Section~\ref{sec:exploration} presents a suite of tools that allows the robot to map and explore its environment and identify objects of interest. 
 
-The modularity of our robot makes sensing challenging.  We have extended the existing SMORES-EP hardware system by developing a sensor module which can be carried as part of a cluster of SMORES-EP modules to provide sensing and localization information, described in detail in Section \ref{sec:sensor_module}.
+The advantage of modular self-reconfigurable robots lies in their ability to assume different configurations in response to their environment.  In Section~\ref{sec:configuration-specifics}, we describe the library-based framework used to generate appropriate configurations (shapes) and behaviors (controlling programs) for a given task, and in Section~\ref{sec:environment-characterization}, we discuss the methods we use to characterize environments, so that appropriate configurations can be chosen.  In Section~\ref{sec:reconfiguration}, we present a novel centralized reconfiguration method for SMORES-EP.  These three components of the system allow the robot to autonomously assess its environment and reconfigure in order to complete a task.
 
-Our system is intended to address tasks where the robot must explore an \emph{a priori} unknown environment and react to what it encounters.  To that end, we provide a suite of software tools for sensing and perception. Our perception tools allow a SMORES-EP robot to perform SLAM, navigation, and obstacle avoidance using the sensor module.  This software has been specifically optimized to work with data from lightweight onboard depth camera, and to run efficiently using the limited computation power of the onboard computer.  Additionally, a novel next-best-view algorithm automatically selects waypoints in the environment to allow the robot to maximize information gain as it explores.  These tools are discussed in detail in Section \ref{sec:exploration}.
-
-While exploring, the robot must recognize and react to objects and features of the environment.  We provide environment characterization tools that parse raw sensor information into actionable conclusions relevant to high-level tasks.  More specifically, we provide classifiers that can identify objects based on color, and classifiers that characterize different kinds of environments (such as ledges and tunnels) based on 3D depth information.  These are described in Section \ref{sec:environment-characterization}.
-
-Finally, we provide software and hardware tools enabling rapid, robust, autonomous self-reconfiguration. Our system allows SMORES-EP to self-reconfigure without external localization, using overhead camera carried by the robot to track AprilTag fiducials mounted to the modules.
-%Our reconfiguration system also relies on elements of our perception algorithms, which provide goal pose information for docking.
-Our reconfiguration tools are described in Section \ref{sec:reconfiguration}.
-
-After presenting each component, we demonstrate how they can operate as an integrated system capable of autonomously solving high-level tasks in unknown environments.  In Section~\ref{sec:experiments}, we demonstrate completion of a realistic object retrieval task in an unknown environment with full autonomy.  Finally, in Section~\ref{sec:discussion}, we evaluate the success of our system in achieving its goals, and conclude.
+Finally, Section~\ref{sec:high-level} describes a high-level mission planner that allows tasks to be specified in the form of logical statements which map conditions to actions.  Section~\ref{sec:experiments} demonstrates how the system can be used to complete a realistic object retrieval task in an unknown environment with full autonomy. 
 %
 % System Overview Figure
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.4\textwidth]{images/overview.png}
+%\includegraphics[width=0.4\textwidth]{images/overview.png}
+\includegraphics[width=\columnwidth]{images/RSS17flowchartv2.pdf}
 \caption{System Overview Flowchart}
 \label{fig:overview}
 \end{center}
@@ -730,6 +723,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 \bibliography{references}
 
 \end{document}
+
 
 
 
