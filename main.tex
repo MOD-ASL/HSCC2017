@@ -287,6 +287,32 @@ In MSRR systems, sensing and processing capabilities of individual modules are l
 \label{fig:sensor-module}
 \end{center}
 \end{figure}
+
+
+%     ____                            __  _
+%    / __ \___  _____________  ____  / /_(_)___  ____
+%   / /_/ / _ \/ ___/ ___/ _ \/ __ \/ __/ / __ \/ __ \
+%  / ____/  __/ /  / /__/  __/ /_/ / /_/ / /_/ / / / /
+% /_/    \___/_/   \___/\___/ .___/\__/_/\____/_/ /_/
+%                          /_/
+\section{Mapping and Exploration}
+\label{sec:exploration}
+%
+Our system provides a robust suite of perception algorithms to inform control and decision-making in unknown environments.  This suite of tools serves three major functions.  First, it enables exploration, allowing the robot to map its environment, localize, and avoid obstacles.  Second, it provides the capability to recognize objects and regions of interest related to the desired task.  Third, it provides functions that characterize environment properties, providing information that allows appropriate configurations and behaviors to be selected from the design library.
+
+%Since the proposed system performs tasks in unknown environments and conditions, a robust suite of perception algorithms is required to inform control and decision-making. The robot must have the ability to explore and build a map of its environment while avoiding obstacles and tracking its pose. The system must be able to recognize objects and regions of interest related to the desired task. Finally, the system must characterize the environment in terms of configuration capabilities. Features in the environment may restrict which robot configurations can viably perform parts of the high-level task, such as retrieving an object or navigating to a waypoint. The system needs to recognize these features to be able to intelligently choose the appropriate robot configuration for performing the task.
+
+Exploration of unknown environments is a core functionality of our system.  While the methods used are not novel in the broader context of robotics,  this system represents (to the authors' knowledge) one of the first modular robot systems capable of exploring and operating in totally unknown environments.
+
+To facilitate the use of open source software and enable networking between components, the proposed system is built in a ROS framework\footnote{http://www.ros.org}. Mapping and robot pose are provided by a RGB-D SLAM software package called RTAB-MAP\cite{rtabmap}. A 3D map of the environment is incrementally built and stored in an efficient octree-based volumetric map using Octomap\cite{octomap}.
+
+The system intelligently explores an unknown environment using using a new next best view planner for object exploration created by two of the authors\footnote{This work has been newly accepted for journal publication in 2017}. This planner directs the robot to explore its environment in a way that maximizes information gain while avoiding collision with obstacles. The algorithm uses the current volumetric map of the environment and estimates the next reachable sensor viewpoint that will observe the largest volume of undiscovered portions of objects. It also estimates the amount of information (in an entropy-reduction sense) that will be gained from a sensor measurement taken at that viewpoint. To integrate into the proposed system, the exploration algorithm is offered as a service that can be queried by the high-level planner when desired. A volumetric map of the environment and the reachable space of sensor viewpoints in that map must be provided to the algorithm. The algorithm then computes and returns the next best view for the sensor, which the high-level planner can then set as a navigation waypoint.
+
+Note that the reachable space is dependent on the locomotion capabilities of the specific robot configuration. This information is associated with the configuration in the design library.
+
+To identify objects of interest to a high-level task, our system provides tools to recognize color blobs and track their location in 3D.  Colors are recognized using CMVision\footnote{CMVision: http://www.cs.cmu.edu/$\sim$jbruce/cmvision/}, and tracked in 3D using depth information from the Xtion sensor\footnote{Lucas Coelho Figueiredo: https://github.com/lucascoelho91/ballFollower}.  This information is used to evaluate environment propositions in the high-level task, discussed in Section~\ref{sec:high-level}.  While we currently only provide object recognition by color, more sophisticated methods could easily be included. 
+%
+
 %    ______            _____          _____                 _ _____
 %   / ____/___  ____  / __(_)___ _   / ___/____  ___  _____(_) __(_)_________
 %  / /   / __ \/ __ \/ /_/ / __ `/   \__ \/ __ \/ _ \/ ___/ / /_/ / ___/ ___/
@@ -355,36 +381,7 @@ Since self-reconfiguration is time-consuming, decisions are biased toward behavi
 % section hardware (end)
 %
 
-
-%     ____                            __  _
-%    / __ \___  _____________  ____  / /_(_)___  ____
-%   / /_/ / _ \/ ___/ ___/ _ \/ __ \/ __/ / __ \/ __ \
-%  / ____/  __/ /  / /__/  __/ /_/ / /_/ / /_/ / / / /
-% /_/    \___/_/   \___/\___/ .___/\__/_/\____/_/ /_/
-%                          /_/
-\section{Perception and Environment Characterization}
-\label{sec:perception-and-env-characterization}
-%
-Our system provides a robust suite of perception algorithms to inform control and decision-making in unknown environments.  This suite of tools serves three major functions.  First, it enables exploration, allowing the robot to map its environment, localize, and avoid obstacles.  Second, it provides the capability to recognize objects and regions of interest related to the desired task.  Third, it provides functions that characterize environment properties, providing information that allows appropriate configurations and behaviors to be selected from the design library.
-
-%Since the proposed system performs tasks in unknown environments and conditions, a robust suite of perception algorithms is required to inform control and decision-making. The robot must have the ability to explore and build a map of its environment while avoiding obstacles and tracking its pose. The system must be able to recognize objects and regions of interest related to the desired task. Finally, the system must characterize the environment in terms of configuration capabilities. Features in the environment may restrict which robot configurations can viably perform parts of the high-level task, such as retrieving an object or navigating to a waypoint. The system needs to recognize these features to be able to intelligently choose the appropriate robot configuration for performing the task.
-
-\subsection{Exploration}
-\label{sec:exploration}
-%
-Exploration of unknown environments is a core functionality of our system.  While the methods used are not novel in the broader context of robotics,  this system represents (to the authors' knowledge) one of the first modular robot systems capable of exploring and operating in totally unknown environments.
-
-To facilitate the use of open source software and enable networking between components, the proposed system is built in a ROS framework\footnote{http://www.ros.org}. Mapping and robot pose are provided by a RGB-D SLAM software package called RTAB-MAP\cite{rtabmap}. A 3D map of the environment is incrementally built and stored in an efficient octree-based volumetric map using Octomap\cite{octomap}.
-
-The system intelligently explores an unknown environment using using a new next best view planner for object exploration created by two of the authors\footnote{This work has been newly accepted for journal publication in 2017}. This planner directs the robot to explore its environment in a way that maximizes information gain while avoiding collision with obstacles. The algorithm uses the current volumetric map of the environment and estimates the next reachable sensor viewpoint that will observe the largest volume of undiscovered portions of objects. It also estimates the amount of information (in an entropy-reduction sense) that will be gained from a sensor measurement taken at that viewpoint. To integrate into the proposed system, the exploration algorithm is offered as a service that can be queried by the high-level planner when desired. A volumetric map of the environment and the reachable space of sensor viewpoints in that map must be provided to the algorithm. The algorithm then computes and returns the next best view for the sensor, which the high-level planner can then set as a navigation waypoint.
-
-Note that the reachable space is dependent on the locomotion capabilities of the specific robot configuration. This information is associated with the configuration in the design library.
-
-\subsection{Object Recognition}
-%
-To identify objects of interest to a high-level task, our system provides tools to recognize color blobs and track their location in 3D.  Colors are recognized using CMVision\footnote{CMVision: http://www.cs.cmu.edu/$\sim$jbruce/cmvision/}, and tracked in 3D using depth information from the Xtion sensor\footnote{Lucas Coelho Figueiredo: https://github.com/lucascoelho91/ballFollower}.  This information is used to evaluate environment propositions in the high-level task, discussed in Section~\ref{sec:high-level}.  While we currently only provide object recognition by color, more sophisticated methods could easily be included. 
-%
-\subsection{Characterization of Environment Properties}
+\section{Characterization of Environment Properties}
 \label{sec:environment-characterization}
 %
 As discussed in Section~\ref{sec:configuration-specifics}, the system takes environment properties into account when selecting an appropriate library entry to complete an action. Our perception suite includes functions that process the 3D information to identify environment properties.
