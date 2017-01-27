@@ -315,7 +315,7 @@ To identify objects of interest to a high-level task, our system provides tools 
 % / /___/ /_/ / / / / __/ / /_/ /   ___/ / /_/ /  __/ /__/ / __/ / /__(__  )
 % \____/\____/_/ /_/_/ /_/\__, /   /____/ .___/\___/\___/_/_/ /_/\___/____/
 %                        /____/        /_/
-\section{Hardware Abstraction}
+\section{Library of Configurations and Behaviors}
 \label{sec:configuration-specifics}
 %
 SMORES-EP has the capability to \emph{self-reconfigure}: changing the connected structure of a cluster of modules to assume different shapes and capabilities.  In order to specify tasks for SMORES-EP (or any other self-reconfigurable robot) at a high level, we must abstract the robot in a way that captures the fact that its capabilities are a function of its configuration (connected structure). For the purposes of this work, we rely on a framework first presented in \cite{Jing2016}, which we summarize here.
@@ -438,49 +438,32 @@ Given an initial configuration and a goal configuration, our reconfiguration con
 
 \paragraph{Pre-reconfiguration} In the pre-reconfiguration stage, the robot takes actions to establish the conditions needed for reconfiguration.  It begins by confirming that the reconfiguration zone is a flat surface free of obstacles (other than the modules themselves).  If the robot is carrying an object, it drops the object outside of the reconfiguration zone. It then  sets its joint angles so that all modules that need to detach have both of their wheels on the ground, ready to drive. Once these conditions are established, module movement begins.
 
-\paragraph{Module Movement} During this stage, the topology of the cluster changes as a sequence of module movement operations are performed.  Each operation involves detaching one module from the cluster, driving, and re-attaching at its new location in the goal configuration.
+\paragraph{Module Movement} During this stage, the topology of the cluster changes as a sequence of module movement operations are performed.  Each operation changes the topology of the cluster by detaching a module from the cluster, driving, and re-attaching at its new location in the goal configuration, as shown in Figure~\ref{fig:reconf}.
 
-We denote a module movement operation as $MP=\left(m, m_d, m_a, f_m^d, f_m^a, f_{m_d}, f_{m_a}, \sigma \right)$ where:
-\begin{itemize}
-\item $m$ is the module whose location will be changed in this module operation.
-\item $m_d$ is the module that connects with $m$ before the operation.
-\item $m_a$ is the module that connects with $m$ after the operation. Notice $m_d$ and $m_a$ can be the same module. 
-\item The face $f_m^d$ of module $m$ connects with the face $f_{m_d}$ of module $m_d$ before the operation.
-\item The face $f_m^a$ of module $m$ connects with the face $f_{m_a}$ of module $m_a$ after the operation. Notice $f_m^d$ and $f_m^a$ can be the same face. In this work, we assume $f_m^a$ can only be the front or the back face of the module $m$.
-\item $\sigma$ is the path that module $m$ will follow during the operation.
-\end{itemize}
+In order to transform from an initial configuration to a goal configuration, a feasible reconfiguration plan (sequence of module movement operations) must be supplied to the reconfiguration software before reconfiguration begins.  Each configuration in the library has an associated set of reconfiguration plans that allows it to transform to other configurations in the library.  Currently, reconfiguration plans are created by hand.  In the future, existing assembly planning algorithms (\cite{Werfel2007,Seo2013}) could be adapted to generate reconfiguration plans automatically.
 
-Fig.~\ref{fig:reconf} demonstrates an example of a single module operation.
-As shown in Fig.~\ref{fig:reconf}a, module $m$ detaches from module $m_d$.
-In this process, magnets on $f_m^d$ and $f_{m_d}$ are turned off to eliminate the bond between two faces.
-Then module $m$ moves the tilt joint while rotating the left and right wheel forwards to break the connection with $m_d$ and drives away from it.
-After $m$ detaches from $m_d$, the controller drives $m$ as a two-wheel differential drive robot to follow the path $\sigma$ with localization provided with the sensor module using AprilTags
-%(\TODO{cite})
-system. This process is illustrated by Fig.~\ref{fig:reconf}b.
-The path $\sigma$ is collision free with the rest of the robot and computed \textit{a priori}. 
-Once $m$ reaches the end of $\sigma$, it adjusts its heading by spinning in place till face $f_m^a$ aligning with $f_{m_a}$.
-The magnets on face $f_m^a$ and $f_{m_a}$ are turned on to help create connection later between two faces.
-As demonstrated in Fig.~\ref{fig:reconf}c, as last $m$ drives towards $m_a$ while perform minor adjustment in the tilt joint till two modules are fully connected.
+% We denote a module movement operation as $MP=\left(m, m_d, m_a, f_m^d, f_m^a, f_{m_d}, f_{m_a}, \sigma \right)$ where:
+% \begin{itemize}
+% \item $m$ is the module whose location will be changed in this module operation.
+% \item $m_d$ is the module that connects with $m$ before the operation.
+% \item $m_a$ is the module that connects with $m$ after the operation. Notice $m_d$ and $m_a$ can be the same module. 
+% \item The face $f_m^d$ of module $m$ connects with the face $f_{m_d}$ of module $m_d$ before the operation.
+% \item The face $f_m^a$ of module $m$ connects with the face $f_{m_a}$ of module $m_a$ after the operation. Notice $f_m^d$ and $f_m^a$ can be the same face. In this work, we assume $f_m^a$ can only be the front or the back face of the module $m$.
+% \item $\sigma$ is the path that module $m$ will follow during the operation.
+% \end{itemize}
 
+To travel from its initial location to its final location, a module uses its left and right wheels to move by differential-drive.  Because the reconfiguration zone is free of obstacles, collision-free paths can be pre-computed and stored as part of the reconfiguration plan.  Paths can also be computed at runtime if desired.  AprilTag localization allows the robot to follow the path.
+
+Several techniques were developed to ensure reliable connection and disconnection during reconfiguration.  When a module disconnects from the cluster, the electro-permanent magnets on the connected faces are turned off.  To guarantee a clean break of the magnetic connection, the disconnecting module bends its tilt joint up and down, mechanically separating itself from the cluster. During docking, accurate alignment is crucial to the strength of the magnetic connection \cite{tosun2016design}.  For this reason, rather than driving directly to its final docking location, a module instead drives to a pre-docking waypoint directly in front of its docking location.  At the waypoint, the module spins in place slowly until its heading is perfectly aligned with the dock point, and then drives in straight to attach. To guarantee a good connection, the module intentionally overdrives its dock point, pushing itself into the cluster while firing its magnets.
+%
 \begin{figure}[t]
-      \centering
-      \begin{subfigure}[t]{0.32\columnwidth}
-        \includegraphics[width=\textwidth]{images/reconf_detach.jpg}
-        \label{fig:reconfa}
-        \caption{Module detaches from the rest of the robot}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.32\columnwidth}
-        \includegraphics[width=\textwidth]{images/reconf_drive.jpg}
-        \label{fig:reconfb}
-        \caption{Module drives to the new location}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.32\columnwidth}
-        \includegraphics[width=\textwidth]{images/reconf_attach.jpg}
-        \label{fig:reconfc}
-        \caption{Module attaches to the rest of the robot}
-    \end{subfigure}
-    \caption{An example of a module operation for reconfiguration.}
-      \label{fig:reconf}
+\begin{center}
+  \includegraphics[width=0.32\columnwidth]{images/reconf_detach.jpg}
+  \includegraphics[width=0.32\columnwidth]{images/reconf_waypoint.jpg}
+  \includegraphics[width=0.32\columnwidth]{images/reconf_attach.jpg}
+  \caption{Module movement during reconfiguration. (1) Left module detaches from cluster. (2) Module drives to waypoint, and spins to establish perfect heading. (2) Module drives straight in to dock point, and reattaches.}
+  \label{fig:reconf}
+\end{center}
 \end{figure}
 
 \paragraph{Post-reconfiguration} Once all module movement operations have completed and the goal topology is formed, the robot sets its joints to appropriate angles for the goal configuration to begin performing desired behaviors, and if necessary, the robot picks up any objects it dropped. This completes the reconfiguration process. 
@@ -703,6 +686,8 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 \bibliography{references}
 
 \end{document}
+
+
 
 
 
