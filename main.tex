@@ -433,7 +433,7 @@ Determining the relative position of modules during mobile self-reconfiguration 
 \subsection{Reconfiguration Procedure}
 Given an initial configuration and a goal configuration, our reconfiguration controller commands a set of modules to disconnect, move and reconnect in order to form the new topology of the goal configuration. The process consists of three stages: i) Pre-reconfiguration, ii) Module Movement, iii) Post-reconfiguration.
 
-\paragraph{Pre-reconfiguration} In the pre-reconfiguration stage, the robot takes actions to establish the conditions needed for reconfiguration.  It begins by confirming that the reconfiguration zone is a flat surface free of obstacles (other than the modules themselves).  If the robot is carrying an object, it drops the object outside of the reconfiguration zone. It then assumes a stance (by changing its joint angles) in which any modules that will need to detach have both of their wheels on the ground, ready to drive. Once these conditions are established, module movement begins.
+\paragraph{Pre-reconfiguration} In the pre-reconfiguration stage, the robot takes actions to establish the conditions needed for reconfiguration.  It begins by confirming that the reconfiguration zone is a flat surface free of obstacles (other than the modules themselves).  If the robot is carrying an object, it drops the object outside of the reconfiguration zone. It then  sets its joint angles so that all modules that need to detach have both of their wheels on the ground, ready to drive. Once these conditions are established, module movement begins.
 
 \paragraph{Module Movement} During this stage, the topology of the cluster changes as a sequence of module movement operations are performed.  Each operation involves detaching one module from the cluster, driving, and re-attaching at its new location in the goal configuration.
 
@@ -480,13 +480,8 @@ As demonstrated in Fig.~\ref{fig:reconf}c, as last $m$ drives towards $m_a$ whil
       \label{fig:reconf}
 \end{figure}
 
-\paragraph{Post-reconfiguration} Once all module movement operations have completed and the goal topology is formed, the robot changes its joint angles to assume a stance in which the goal configuration can begin performing desired behaviors, and if necessary, the robot picks up any objects it dropped. This completes the reconfiguration process. 
-
-\subsection{Comparison with Existing Methods}
-Our method of reconfiguration has distinct advantages and disadvantages compared to existing methods.  To the authors' knowledge, use of an onboard overhead camera to provide fiducial-based localization for reconfiguration is novel.  This centralized strategy provides localization only near the sensor module, so the number of modules that can reconfigure simultaneously is limited by the size of the reconfiguration zone.  This means it could not be directly scaled to large clusters of modules the way some existing distributed methods could be (\cite{Yim2007},\cite{Murata2006},\cite{Rubenstein2004}).  However, it is not clear how these distributed methods would be employed in the context of a high-level task.  Additionally, most require one sensor module per distinct cluster, which is cumbersome.
-
-By exploiting high-fidelity centralized localization and the individual mobility of the SMORES-EP modules, we achieve reconfiguration that is rapid, robust, and cleanly deployable in the context of a high-level task.  In our experiments (Section~\ref{sec:experiments}), we observed that the pre-reconfiguration state required about 20 seconds, each module movement operation required about 45 seconds, and post-reconfiguration required about 10 seconds.  Each reconfiguration action had a success rate over 90\%.  This compares very favorably with existing methods, in which each reconfiguration action can take on the order of ten minutes \cite{Yim2007},\cite{Murata2006},\cite{Rubenstein2004}%\TODO{Verify exact numbers}.
-
+\paragraph{Post-reconfiguration} Once all module movement operations have completed and the goal topology is formed, the robot sets its joints to appropriate angles for the goal configuration to begin performing desired behaviors, and if necessary, the robot picks up any objects it dropped. This completes the reconfiguration process. 
+%
 %     __  ___       __          __                   __
 %    / / / (_)___ _/ /_        / /   ___ _   _____  / /
 %   / /_/ / / __ `/ __ \______/ /   / _ \ | / / _ \/ /
@@ -695,6 +690,14 @@ As with many autonomous systems, uncertainties such as sensor noise and controll
 
 Finally, some simple hardware failures were encountered during experiment runs. Since SMORES-EP modules are research prototypes built from scratch, they are more prone to failures such as microcontroller errors and position control errors from custom encoders. Future experiments can be improved in robustness by improving the hardware quality of modules to bring them closer to the level of a commercial product.
 %
+\subsection{Reconfiguration}
+Our method of reconfiguration has advantages compared to existing methods.  Use of an onboard overhead camera to provide fiducial-based localization for reconfiguration is novel.  This centralized strategy provides localization only near the sensor module, so the number of modules that can reconfigure at once is limited by the size of the camera view. In order to scale to large numbers of modules, multiple sensor modules would need to be used in parallel.
+
+By exploiting high-fidelity centralized localization and the individual mobility of the SMORES-EP modules, we achieve reconfiguration that is rapid, robust, and cleanly deployable in the context of a high-level task.  In our experiments (Section~\ref{sec:experiments}), we observed that the pre-reconfiguration state required about 20 seconds, each module movement operation required about 45 seconds, and post-reconfiguration required about 10 seconds.
+%Each reconfiguration action had a success rate over 90\%.
+This compares very favorably with existing methods, in which each reconfiguration action can take on the order of ten minutes \cite{Yim2007},\cite{Murata2006},\cite{Rubenstein2004}.
+%\TODO{Verify exact numbers}
+%
 \subsection{Future Work and Conclusion}
 %
 We presented a novel system for autonomously accomplishing high-level tasks in unknown environments with modular self-reconfigurable robots.  This system is the first to use perception of an unknown environment to reactively perform complex high-level tasks using intelligent reconfiguration. Components of this system include novel controller synthesis, environment characterization, and self-reconfiguration methods. The system was validated using a physical experiment using a high-level task consisting of a heterogenous set of 5 sub-tasks in an \textit{a priori} unknown environment. 
@@ -723,6 +726,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 \bibliography{references}
 
 \end{document}
+
 
 
 
