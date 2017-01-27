@@ -133,22 +133,25 @@ way in which the task will be solved. The environment is \emph{unknown}, meaning
 that the robot does not have a map of the environment or obstacles before the
 task begins. To our knowledge, this paper represents the first example of a truly autonomous MSRR system accomplishing these kinds of tasks.
 
-The system we present provides four major tools:
 
-\begin{enumerate}
-\item \textbf{Hardware:} The SMORES-EP Modular robot, and sensing hardware designed
-to work with SMORES-EP.  
-\item \textbf{High-Level Task Description:} A framework for specifying high-level
-tasks in terms of state machines, and for abstracting modular robots.
-\item \textbf{Perception and Environment Characterization:} Tools for SLAM,
-navigation, and obstacle avoidance with modular robots, as well as tools that
-parse sensor information into actionable conclusions relevant to high-level
-tasks.
-\item \textbf{Reconfiguration:} Software and hardware tools enabling robust
-autonomous reconfiguration with SMORES-EP.
-\end{enumerate}
+Our system provides five major tools to address these tasks.  The system is built around the SMORES-EP modular robot hardware system (1), but could be adapted to work with other modular robots. Tasks are specified in a high-level mission planner (2).  Perception-driven mapping and object recognition tools (3) allows the robot to explore unknown environments and react to what it finds. Environment characterization tools (4) allow the robot to assess its environment and determine whether it needs to reconfigure to solve a task.  A novel, rapid, centralized reconfiguration strategy (5) allows the robot to autonomously change its morphology in response to its environment.
 
-Through hardware experiments, we demonstrate that this system is capable of autonomously completing high-level object-retrieval tasks in unknown environments.
+Through hardware experiments, we demonstrate the system autonomously completing high-level a object-retrieval task in an unknown environment.  This is the first example of a modular robot using perception-driven reconfiguration to intelligently adapt to an \emph{a priori} unknown environment to complete a complex task.
+
+% The system we present provides four major tools:
+
+% \begin{enumerate}
+% \item \textbf{Hardware:} The SMORES-EP Modular robot, and sensing hardware designed
+% to work with SMORES-EP.  
+% \item \textbf{High-Level Task Description:} A framework for specifying high-level
+% tasks in terms of state machines, and for abstracting modular robots.
+% \item \textbf{Perception and Environment Characterization:} Tools for SLAM,
+% navigation, and obstacle avoidance with modular robots, as well as tools that
+% parse sensor information into actionable conclusions relevant to high-level
+% tasks.
+% \item \textbf{Reconfiguration:} Software and hardware tools enabling robust
+% autonomous reconfiguration with SMORES-EP.
+% \end{enumerate}
 
 %
 %    _____            __                    ____                        _
@@ -700,6 +703,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 \bibliography{references}
 
 \end{document}
+
 
 
 
