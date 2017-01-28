@@ -278,7 +278,7 @@ SMORES-EP modules have very limited onboard computation, and no sensors that all
 
 The body of the brain module is a $160\times80\times80mm$ box, roughly the size of two SMORES-EP side-by-side.  The brain module can be configured to provide attachment points on the back, front, or bottom that allow easy connection to SMORES-EP modules or passive cubes.
 
-Computation is provided by an UP computing board \TODO{cite} with an Intel Atom 1.92 GHz processor, 4 GB memory, and a 64 GB hard drive. A USB WiFi adapter provides network connectivity. A front-facing XTION-Pro Live camera \TODO{cite} mounted on top of the brain module body provides RGB-D data, enabling the robot to explore and map its environment and recognize objects of interest.  A thin stem extends $30cm$ above the top of the body, supporting a downward-facing Microsoft Lifecam webcam \TODO{cite} mounted at $40^\circ$ to vertical.  This camera provides a view of a  $1m\times0.75m$ area in front of the brain module, and is used to track AprilTag fiducials during reconfiguration. A $7.4v$, $3600mAh$ LiPo battery provides about 1.5 hours of up time.
+Computation is provided by an UP computing board with an Intel Atom 1.92 GHz processor, 4 GB memory, and a 64 GB hard drive. A USB WiFi adapter provides network connectivity. A front-facing XTION-Pro Live camera mounted on top of the brain module body provides RGB-D data, enabling the robot to explore and map its environment and recognize objects of interest.  A thin stem extends $30cm$ above the top of the body, supporting a downward-facing Microsoft Lifecam webcam mounted at $40^\circ$ to vertical.  This camera provides a view of a  $1m\times0.75m$ area in front of the brain module, and is used to track AprilTag fiducials during reconfiguration. A $7.4v$, $3600mAh$ LiPo battery provides about 1.5 hours of up time.
 %
 % Sensor Module Figure
 \begin{figure}
@@ -570,11 +570,10 @@ The system then maps the system proposition specified in the next state to its s
 \label{sec:experiments}
 %
 
-To validate and demonstrate the capabilities of our system, an experiment was run in which a robot composed of SMORES-EP modules completed a complex, high-level task in an unknown environment. Figure \ref{fig:map} shows the environment layout, designed to represent a cluttered office. The high-level task consisted of five sub-tasks of three different types: explore the environment, find and retrieve two objects in the office, and deliver each to a drop-off zone. One object was in the open (a ``free'' environment type), and the other was positioned between two obstacles (a ``tunnel'' environment). Obstacles, environment types, and locations of the objects and drop-off zone were unknown to the robot \textit{a priori}.
+We validated and demonstrated our system's capabilities with a real-world experiment in which a robot composed of SMORES-EP modules completed a complex, high-level task in an unknown environment.  The high-level task consisted of three different types of sub-tasks: explore the environment, find and retrieve all objects in the office, and deliver each to a drop-off zone. Figure \ref{fig:map} shows the environment layout used in the experiment, designed to represent a cluttered office. Two objects to be retrieved were used: one was placed in the open (a ``free'' environment type), and another was positioned between two obstacles (a ``tunnel'' environment). Obstacles, environment types, and locations of the objects and drop-off zone were unknown to the robot \textit{a priori}.
 
-Five SMORES-EP modules, one Brain Module, and three passive cubes were used to compose the robot for performing the task. Steel objects were attached to and carried using the electro-permanent magnets of the SMORES-EP modules.
-The two configurations and five behaviors described in Section \ref{sec:configuration-specifics} were available for selection by the high-level planner for this experiment.
-
+Five SMORES-EP modules, one Brain Module, and three passive cubes composed the robot for performing the task. The robot grasped objects using modules' electro-permanent magnets to attach to steel plates on the objects.
+During the experiment, the high-level planner used the library of two configurations and five behaviors described in Section \ref{sec:configuration-specifics}.
 
 % Map
 \begin{figure}
@@ -628,7 +627,7 @@ Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the en
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.45\textwidth]{images/octomap.png}
+\includegraphics[width=0.4\textwidth]{images/octomap.png}
 \caption{Volumetric map of environment built by visual SLAM}
 \label{fig:octomap}
 \end{center}
