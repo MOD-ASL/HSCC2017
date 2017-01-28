@@ -199,7 +199,7 @@ Finally, Section~\ref{sec:high-level} describes a high-level mission planner tha
 % task can be solved with a morphology that is only as complicated as it needs
 % to be.
 %%%
-Modular robots have long been regarded as having the potential to make impact in unknown environments (such as search and rescue scenarios), because  self-reconfiguration theoretically gives them the flexibility to respond to whatever they encounter \cite{Yim2007a,Yim2000}.  However, examples of MSRR actually operating in unknown environments are very limited. We believe our system demonstrates more autonomy in an unknown environment than any existing MSRR system.  Our work is particularly novel because we use perception-driven reconfiguration to address high-level tasks in unknown environments.
+Modular robots have long been regarded as having the potential to make impact in unknown environments (such as search and rescue scenarios), because  self-reconfiguration theoretically gives them the flexibility to respond to whatever they encounter \cite{Yim2007a,yim2003modular}.  However, examples of MSRR actually operating in unknown environments are very limited. We believe our system demonstrates more integrated autonomy in an unknown environment than any existing MSRR system.  Our work is particularly novel because we use perception-driven reconfiguration to address high-level tasks in unknown environments.
 
 To our knowledge, no MSRR system has been used to map a completely unknown environment. The Millibot system has demonstrated the ability to map a partially unknown environment when operating as a swarm \cite{Grabowski2000}. The autonomy of the Millibot swarm is limited: a human operator makes all high-level decisions, and is responsible for navigation using a GUI. Certain members of the swarm are designated as ``beacons,'' and have known locations, making the environment only partially unknown.
 
@@ -209,7 +209,7 @@ The swarm-bots are a MSRR system that has been applied in exploration \cite{Dori
 Swarm-bots have demonstrated the capability to use self-assembly to solve low-level tasks, such as crossing a gap \cite{Mondada2004} or ascending a small hill \cite{OGrady2005}.  In these scenarios, low-level sensors (ground proximity sensors and tilt sensors) are used to trigger self-assembly.  In our work, 3D map data is used to characterize the environment, and the system autonomously selects specific morphologies that are appropriate to the task and environment. 
 
 %swarmanoid
-The swarmanoid project (successor to the swarm-bots), uses a heterogeneous swarm of ground and flying robots (called ``hand-'', ``foot-'', and ``eye-'' bots) to perform exploration and object retrieval tasks  \cite{Dorigo2013}. Hand-bot and foot-bot elements of the swarmanoid system connect and disconnect to complete the task, but the decision to take this action is not made autonomously by the robot in response to sensed environment conditions. While the location of the object to be retrieved is unknown, the method for retrieval is known and constant.
+The swarmanoid project (successor to the swarm-bots), uses a heterogeneous swarm of ground and flying robots (called ``hand-'', ``foot-'', and ``eye-'' bots) to perform exploration and object retrieval tasks  \cite{Dorigo2013}. Robotic elements of the swarmanoid system connect and disconnect to complete the task, but the decision to take this action is not made autonomously by the robot in response to sensed environment conditions. While the location of the object to be retrieved is unknown, the method for retrieval is known and constant.
 
 % CKbot, Conro, MTRAN
 Autonomous reconfiguration has been demonstrated with several other modular robot systems. CKbot, Conro, and MTRAN have all demonstrated the ability to join disconnected clusters of modules together \cite{Yim2007, Rubenstein2004,Murata2006}. In order to align, Conro uses infra-red sensors on the docking faces of the modules, while CKBot and MTRAN use a separate sensor module on each cluster.  In all cases, individual clusters locate and servo towards each other until they are close enough to dock. These experiments do not include any planning or sequencing of multiple reconfiguration actions in order to create a goal structure appropriate for a task.  Additionally,  modules are not individually mobile, and mobile clusters of modules are limited to slow crawling gaits.  Consequently, reconfiguration is very time consuming, with a single connection requiring 5-15 minutes.
@@ -234,10 +234,7 @@ Traditional robotics literature provides numerous examples of robots operating a
 \subsection{SMORES-EP Modular Robot} \label{sec:smores}
 %
 Our system is built around the SMORES-EP robot, but could be adapted to
-work with other hardware platforms.  In this section, we provide a brief
-introduction to the technical capabilities of SMORES-EP.
-
-Each module is the size of an \textit{80mm cube}, and has four actuated joints - three continuously rotating faces (left, right, and
+work with other hardware platforms. Each module is the size of an \textit{80mm cube}, and has four actuated joints - three continuously rotating faces (left, right, and
 pan)  and one central hinge (tilt) with a \(180^\circ\) range of motion
 (Fig.~\ref{fig:smores-module}). The left, right, and tilt joints have
  axes of rotation that are parallel and coincident. A single module can use its
@@ -335,11 +332,8 @@ In this framework, the entire modular robot system is treated as a single robot 
 \item $P_b$ is a set of \emph{behavior properties} that describes what $B$ does. 
 \item $P_e$ is a set of \emph{environment properties} that describe the environment in which this library entry is suitable. 
 \end{itemize} 
-
-
-
-
-In this work, we created five library entries for two different configurations,
+%
+In this work, we create five library entries for two different configurations,
 listed in Table~\ref{table:1}. 
 The ``Tank'' configuration shown in Fig.~\ref{fig:dropoff} is capable of picking
 up and dropping objects in ``free'' environment while driving on a flat plain as a
@@ -437,7 +431,7 @@ If the environment surrounding the object does not meet the criteria for either 
 \section{Reconfiguration}
 \label{sec:reconfiguration}
 %
-Reconfiguration refers to the process of changing the connective topology of an MSRR system's modules in order to change its morphology.  SMORES-EP is capable of all three classes of modular self-reconfiguration (chain, lattice, and mobile reconfiguration) \cite{Davey2012}.  For the purposes of this work, we have developed tools for mobile reconfiguration with SMORES-EP, taking advantage of the modules' ability to drive on flat surfaces as described in section \ref{sec:hardware}.
+Reconfiguration refers to the process of changing the connective topology of an MSRR system's modules in order to change its morphology.  SMORES-EP is capable of all three classes of modular self-reconfiguration (chain, lattice, and mobile reconfiguration) \cite{Davey2012,yim2003modular}.  For the purposes of this work, we have developed tools for mobile reconfiguration with SMORES-EP, taking advantage of the modules' ability to drive on flat surfaces as described in section \ref{sec:hardware}.
 
 Determining the relative position of modules during mobile self-reconfiguration is an important challenge. As discussed in Section~\ref{sec:related-work}, past systems have relied on offboard global positioning systems \cite{Paulos2015} or distributed approaches, in which sensors are mounted on each disconnected set of modules \cite{Yim2007}.  Our localization method is centralized, using an RGB camera carried by the robot to track AprilTag fiducials mounted to individual modules.  As discussed in Section~\ref{sec:hardware}, the camera provides a view of a $1m\times0.75m$ area on the ground in front of the brain module.  Within this area (which we call the \emph{reconfiguration zone}), any module equipped with an AprilTag marker can detach from the cluster, drive to another location, and reattach to the cluster, provided that both of its wheels were in contact with the ground in its starting position.% \TODO{Get accurate number for height and FoV.}
 
@@ -724,3 +718,4 @@ To conclude, this paper presents the first MSRR system that uses perception of a
   
 
 
+ 
