@@ -233,24 +233,23 @@ Our system is built around the SMORES-EP robot, but could be adapted to
 work with other hardware platforms.  In this section, we provide a brief
 introduction to the technical capabilities of SMORES-EP.
 
-Each module is the size of an \textit{80mm cube}, and has four actuated degrees of freedom (DoF) - three continuously rotating faces (left, right, and
+Each module is the size of an \textit{80mm cube}, and has four actuated joints - three continuously rotating faces (left, right, and
 pan)  and one central hinge (tilt) with a \(180^\circ\) range of motion
-(Fig.~\ref{fig:smores-module}). The left, right, and tilt DoF have
+(Fig.~\ref{fig:smores-module}). The left, right, and tilt joints have
  axes of rotation that are parallel and coincident. A single module can use its
 left and right wheels to drive around as a two-wheel differential drive robot.
 All four faces of the SMORES-EP module have electro-permanent (EP) magnets
 that serve as a high-strength, low-energy connector for self-reconfiguration
 \cite{tosun2016design}.  Any face of one module can connect to any face of
-another.
+another, with an attachment force of $90N$ \cite{tosun2016design}. 
 
 The magnetic connectors can also attach to objects made of ferromagnetic
 materials (such as steel).  By taking advantage of this capability, SMORES-EP
 modules can use their magnets to pick up and carry metal objects.
 Provided the attachment surface is flat and smooth, the attachment force
-between a SMORES-EP face and a strongly ferromagnetic object can be as high as
-90N \cite{tosun2016design}.
+between a SMORES-EP face and a strongly ferromagnetic object is similar to that between modules.
 
-Each module has an onboard battery, microcontroller, and 802.11b wireless
+Each module has an onboard battery, STM-32 microcontroller, and 802.11b wireless
 module to send and receive UDP packets.  In this work, clusters of SMORES
 modules were controlled by a central computer running a Python program that
 sends wireless commands to control the four DoF and magnets of each module.
@@ -258,7 +257,9 @@ Battery life is about one hour (depending on motor, magnet, and radio usage),
 and commands to a single module can be received at a rate of about 20hz.
 Wireless networking was provided by a standard off-the-shelf  router, with a
 range of about 100 feet.
-%\TODO{Mention dummy modules.}
+
+The SMORES-EP hardware system also includes passive cubes that modules can connect to, providing lightweight passive structure in SMORES-EP configurations.  Cubes have the same $80mm$ form factor as modules.
+%
 %% SMORES-EP module DoF picture
 \begin{figure}   
 \begin{center}
@@ -269,12 +270,15 @@ range of about 100 feet.
 \end{figure}
 %
 
-\subsection{Sensor Module} % (fold)
+\subsection{Brain Module} % (fold)
 \label{sec:sensor_module}
 %
+SMORES-EP modules have very limited onboard computation, and no sensors that allow them to gather information about their environment.  To allow the robot to operate autonomously in unknown environments, we extend the SMORES-EP hardware system by introducing a brain module equipped with sensors and a computer, shown in Figure~\ref{fig:sensor-module}.
 
-In MSRR systems, sensing and processing capabilities of individual modules are limited by the size and weight constraints of the module form factor. Therefore, the proposed system uses a special sensor module dedicated to sensing and processing equipment, shown in Figure \ref{fig:sensor-module}. The module has no actuation capabilities and is larger than SMORES-EP modules. It is equipped with a front-facing Xtion Pro Live RGB-D sensor which enables the robot to explore and map the environment and recognize objects of interest. A high, downward-facing HD webcam is included to provide a view of the robot itself, which is used for self-reconfiguration. Finally, an UP computing board provides high performance I/O and processing capability in a small form factor. The UP Board used in the proposed system has an Intel Atom 1.92 GHz processor, 4 GB memory, and a 64 GB hard drive. It is network connected via 802.11 wifi. A battery provides power to the Up Board with a lifetime of about 1.5 hours.
+The body of the brain module is a $160\times80\times80mm$ box, roughly the size of two SMORES-EP side-by-side.  The brain module can be configured to provide attachment points on the back, front, or bottom that allow easy connection to SMORES-EP modules or passive cubes.
 
+Computation is provided by an UP computing board \TODO{cite} with an Intel Atom 1.92 GHz processor, 4 GB memory, and a 64 GB hard drive. A USB WiFi adapter provides network connectivity. A front-facing XTION-Pro Live camera \TODO{cite} mounted on top of the brain module body provides RGB-D data, enabling the robot to explore and map its environment and recognize objects of interest.  A thin stem extends $30cm$ above the top of the body, supporting a downward-facing Microsoft Lifecam webcam \TODO{cite} mounted at $40^\circ$ to vertical.  This camera provides a view of a  $1m\times0.75m$ area in front of the sensor module, and is used to track AprilTag fiducials during reconfiguration. A $7.4v$, $3600mAh$ LiPo battery provides about 1.5 hours of runtime.
+%
 % Sensor Module Figure
 \begin{figure}
 \begin{center}
@@ -568,7 +572,7 @@ The system then maps the system proposition specified in the next state to its s
 
 To validate and demonstrate the capabilities of our system, an experiment was run in which a robot composed of SMORES-EP modules completed a complex, high-level task in an unknown environment. Figure \ref{fig:map} shows the environment layout, designed to represent a cluttered office. The high-level task consisted of five sub-tasks of three different types: explore the environment, find and retrieve two objects in the office, and deliver each to a drop-off zone. One object was in the open (a ``free'' environment type), and the other was positioned between two obstacles (a ``tunnel'' environment). Obstacles, environment types, and locations of the objects and drop-off zone were unknown to the robot \textit{a priori}.
 
-Five SMORES-EP modules, one Sensor Module, and three dummy modules were used to compose the robot for performing the task. Steel objects were attached to and carried using the electro-permanent magnets of the SMORES-EP modules.
+Five SMORES-EP modules, one Sensor Module, and three passive cubes were used to compose the robot for performing the task. Steel objects were attached to and carried using the electro-permanent magnets of the SMORES-EP modules.
 The two configurations and five behaviors described in Section \ref{sec:configuration-specifics} were available for selection by the high-level planner for this experiment.
 
 
