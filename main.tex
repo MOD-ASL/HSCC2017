@@ -133,8 +133,7 @@ way in which the task will be solved. The environment is \emph{unknown}, meaning
 that the robot does not have a map of the environment or obstacles before the
 task begins. To our knowledge, this paper represents the first example of a truly autonomous MSRR system accomplishing these kinds of tasks.
 
-
-Our system provides five major capabilities to address these tasks.  The system is built around the SMORES-EP modular robot hardware system (1), but could be adapted to work with other modular robots. Tasks are specified in a high-level mission planner (2).  Perception-driven mapping and object recognition tools (3) allows the robot to explore unknown environments and react to what it finds. Environment characterization tools (4) allow the robot to assess its environment and determine whether it needs to reconfigure to solve a task.  A novel, centralized reconfiguration strategy (5) allows the robot to autonomously change its morphology in response to its environment.
+Our system provides five major capabilities to address these tasks.  The system is built around the SMORES-EP modular robot hardware system (1), but could be adapted to work with other modular robots. Tasks are specified in a high-level mission planner (2).  Perception-driven mapping and object recognition tools (3) allows the robot to explore unknown environments and react to what it finds. Novel environment characterization tools (4) allow the robot to assess its environment and determine whether it needs to reconfigure to solve a task.  A novel, centralized reconfiguration strategy (5) allows the robot to autonomously change its morphology in response to its environment.
 
 Through hardware experiments, we demonstrate the system autonomously completing a high-level object-retrieval task in an unknown environment. This is the first example of a modular robot using perception-driven reconfiguration to intelligently adapt to an \emph{a priori} unknown environment to complete a complex task.
 
@@ -236,7 +235,7 @@ Traditional robotics literature provides numerous examples of robots operating a
 Our system is built around the SMORES-EP robot, but could be adapted to
 work with other hardware platforms. Each module is the size of an \textit{80mm cube}, and has four actuated joints - three continuously rotating faces (left, right, and
 pan)  and one central hinge (tilt) with a \(180^\circ\) range of motion
-(Fig.~\ref{fig:smores-module}). The left, right, and tilt joints have
+(Figure~\ref{fig:smores-module}). The left, right, and tilt joints have
  axes of rotation that are parallel and coincident. A single module can use its
 left and right wheels to drive around as a two-wheel differential drive robot.
 All four faces of the SMORES-EP module have electro-permanent (EP) magnets
@@ -278,13 +277,13 @@ SMORES-EP modules have very limited onboard computation, and no sensors that all
 
 The body of the brain module is a $160\times80\times80mm$ box, roughly the size of two SMORES-EP side-by-side.  The brain module can be configured to provide attachment points on the back, front, or bottom that allow easy connection to SMORES-EP modules or passive cubes.
 
-Computation is provided by an UP computing board with an Intel Atom 1.92 GHz processor, 4 GB memory, and a 64 GB hard drive. A USB WiFi adapter provides network connectivity. A front-facing XTION-Pro Live camera mounted on top of the brain module body provides RGB-D data, enabling the robot to explore and map its environment and recognize objects of interest.  A thin stem extends $30cm$ above the top of the body, supporting a downward-facing Microsoft Lifecam webcam mounted at $40^\circ$ to vertical.  This camera provides a view of a  $1m\times0.75m$ area in front of the brain module, and is used to track AprilTag \cite{olson2011apriltag} fiducials during reconfiguration. A $7.4v$, $3600mAh$ LiPo battery provides about 1.5 hours of up time.
+Computation is provided by an UP computing board with an Intel Atom 1.92 GHz processor, 4 GB memory, and a 64 GB hard drive. A USB WiFi adapter provides network connectivity. A front-facing Asus XTION-Pro Live camera mounted on top of the brain module body provides RGB-D data, enabling the robot to explore and map its environment and recognize objects of interest.  A thin stem extends $30cm$ above the top of the body, supporting a downward-facing Microsoft Lifecam webcam mounted at $40^\circ$ to vertical.  This camera provides a view of a  $1m\times0.75m$ area in front of the brain module, and is used to track AprilTag \cite{olson2011apriltag} fiducials during reconfiguration. A $7.4v$, $3600mAh$ LiPo battery provides about 1.5 hours of up time.
 %
 % Sensor Module Figure
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.3\textwidth]{images/sensor_module.jpg}
-\caption{Brain Module}
+\includegraphics[width=0.3\textwidth]{images/sensor_module2.jpg}
+\caption{Brain Module with labelled components.  UP board and battery are inside body.      }
 \label{fig:sensor-module}
 \end{center}
 \end{figure}
@@ -336,11 +335,10 @@ In this framework, the entire modular robot system is treated as a single robot 
 %
 In this work, we create five library entries for two different configurations,
 listed in Table~\ref{table:1}. 
-The ``Tank'' configuration shown in Fig.~\ref{fig:dropoff} is capable of picking
-up and dropping objects in ``free'' environment.
-\abj{In addition, the ``Tank'' configuration can drive on a flat plain as a
-differential drive robot using the parametric behavior ``Drive'' that follows a given sequence of 2D waypoints.}
-The ``Proboscis'' configuration shown in Fig.~\ref{fig:pink_grab} has
+The ``Tank'' configuration shown in Figure~\ref{fig:dropoff} is capable of picking
+up and dropping objects in ``free'' environment while driving on a flat plain as a
+differential drive robot.
+The ``Proboscis'' configuration shown in Figure~\ref{fig:pink_grab} has
 a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects.
 However, the locomotion ability of this configuration is limited to forward/backward
 motion, making it unsuitable for general navigation.
@@ -413,7 +411,7 @@ If the environment surrounding the object does not meet the criteria for either 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.4\textwidth]{images/characterization.png}
-\caption{\textbf{Tunnel} environment characterization method.}
+\caption{\textbf{Tunnel} environment characterization method. Yellow grid cells are occupied cells, light blue cells are unreachable cells resulting from bloating obstacles.}
 \label{fig:characterization}
 \end{center}
 \end{figure}
@@ -617,7 +615,7 @@ During the experiment, the high-level planner used the library of two configurat
 
 
 
-Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available as an attachment to this paper. The starting location prevented the robot from seeing the objects initially, forcing it to explore the environment to search for them. After a period of exploration the robot discovered the pink object first. The characterization algorithm correctly classified the surrounding environment as a ``tunnel'' type, and accordingly the robot navigated in front of the object and reconfigured to the ``proboscis'' configuration. Once this was done, the object was retrieved and pulled out into the open. The robot then dropped the object, reconfigured back to the ``car'' configuration for navigation to the drop-off zone, and again retrieved the object. The robot then navigated to and dropped off the object at the drop-off zone, which was seen during exploration and recorded in the global map built by the SLAM algorithm. Once done, the robot navigated to the green object which was correctly determined to not require any reconfiguration. No further exploration was required since the green object was discovered while the robot was dropping off the pink object. The robot finished the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows the final volumetric map of the environment explored by the robot as it explored the environment and delivered objects. The robot successfully completed all tasks in the experiment in about 26 minutes. Note that the video shows a human reaching into the field to touch the green object once the robot comes into contact with it. This was due to a error on the field resulting in the object becoming stuck between two floor boards, so a human dislodged it so the robot could grasp it.
+Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available as an attachment to this paper. The starting location prevented the robot from seeing the objects initially, forcing it to explore the environment to search for them. After a period of exploration the robot discovered the pink object first. The characterization algorithm correctly classified the surrounding environment as a ``tunnel'' type, and accordingly the robot navigated in front of the object and reconfigured to the ``proboscis'' configuration. Once this was done, the object was retrieved and pulled out into the open. The robot then dropped the object, reconfigured back to the ``Tank'' configuration for navigation to the drop-off zone, and again retrieved the object. The robot then navigated to and dropped off the object at the drop-off zone, which was seen during exploration and recorded in the global map built by the SLAM algorithm. Once done, the robot navigated to the green object which was correctly determined to not require any reconfiguration. No further exploration was required since the green object was discovered while the robot was dropping off the pink object. The robot finished the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows the final volumetric map of the environment explored by the robot as it explored the environment and delivered objects. The robot successfully completed all tasks in the experiment in about 26 minutes. Note that the video shows a human reaching into the field to touch the green object once the robot comes into contact with it. This was due to a error on the field resulting in the object becoming stuck between two floor boards, so a human dislodged it so the robot could grasp it.
 
 \begin{figure}
 \begin{center}
@@ -640,13 +638,13 @@ The experiment demonstrated that our system can autonomously perform complex hig
 
 In order to hold the required sensing and processing resources, the brain module is significantly larger than a regular module. This imposes limitations on possible configurations and locomotion capabilities of the robot. At the same time, the small computer board used in the brain module results in low computation power. Simple configuration designs and efficient algorithms were used to address these issues. To help computation speed further, high-level processing algorithms such as the high-level planner and exploration algorithm were run from external PCs and networked to the robot via WiFi.
 
-Due to power limitations of modules, robot speed is low which results in a long experiment runtime. In addition, the robot is composed of 6 independent robotic components (5 SMORES-EP modules and 1 brain module) which multiplies the chance of a component having a hardware failure. The long runtime combined with multiplied failure points resulted in an increased risk of error occurrences during the experiment. To compensate, repetitive feedback controllers and checks were implemented during task performance. As the robot navigates toward and retrieves objects, it constantly updates its estimate of the object location as new measurements of the object are received. During reconfiguration, docking modules perform automatic checks and realignment maneuvers several times to ensure they are lined up precisely before connecting to each other. This enables the robot to recover from controller lag and modules dropping velocity commands.
+Due to power limitations of modules, robot speed is low which results in a long experiment runtime. In addition, the robot is composed of 6 independent robotic components (5 SMORES-EP modules and 1 brain module) which multiplies the chance of a component having a hardware failure. The long runtime combined with multiplied failure points resulted in an increased risk of error occurrences during the experiment. To compensate, error checks were implemented during task performance. As the robot navigates toward and retrieves objects, it constantly updates its estimate of the object location as new measurements of the object are received. During reconfiguration, docking modules perform automatic checks and realignment maneuvers several times to ensure they are lined up precisely before connecting to each other. This enables the robot to recover from controller lag and modules dropping velocity commands.
 
 %
 \subsection{Reconfiguration}
 Our method of reconfiguration has advantages compared to existing methods.  Use of an onboard overhead camera to provide fiducial-based localization for reconfiguration is novel.  This centralized strategy provides localization only near the brain module, so the number of modules that can reconfigure at once is limited by the size of the camera view. In order to scale to large numbers of modules, multiple brain modules would need to be used in parallel.
 
-By exploiting high-fidelity centralized localization and the individual mobility of the SMORES-EP modules, we achieve reconfiguration that is robust, and cleanly deployable in the context of a high-level task. In our experiments (Section~\ref{sec:experiments}), we observed that the pre-reconfiguration state required about 20 seconds, each module movement operation required about 45 seconds, and post-reconfiguration required about 10 seconds.
+By exploiting high-fidelity centralized localization and the individual mobility of the SMORES-EP modules, we achieve reconfiguration that is robust, and cleanly deployable in the context of a high-level task. In our experiments (Section~\ref{sec:experiments}), we observed that the pre-reconfiguration state required about 15 seconds, each module movement operation required about 2 minutes, and post-reconfiguration required about 10 seconds.
 %Each reconfiguration action had a success rate over 90\%.
 This compares very favorably with existing methods, in which each reconfiguration action can take on the order of ten minutes \cite{Yim2007},\cite{Murata2006},\cite{Rubenstein2004}.
 %\TODO{Verify exact numbers}
@@ -657,7 +655,7 @@ The abilities of the system and current MSRR technology could be extended in fut
 
 The design of a more diverse library of configurations can be greatly aided by improving strength and versatility in module hardware. Real-world applications, such as search-and-rescue, require robots to climb over obstacles and navigate rough terrain. This requires modules with strong locomotion power and the ability to hold large payloads without breaking inter-module connections.
 
-It is important to consider how the presented system could be adapted to work with other modular robot hardware. Our system relies on a 3D sensor for performing RGB-D SLAM, sufficient on-board processing power for perception and control algorithms, and a robust modular hardware system with a versatile self-reconfiguration ability that doesn't rely on external sensors. As long as another MSRR system provides these features and its own hardware-specific and reconfiguration controllers, our system can be integrated into it for performing high-level tasks.
+It is important to consider how the presented system could be adapted to work with other modular robot hardware. Our system relies on a 3D sensor for performing RGB-D SLAM, sufficient onboard processing power for perception and control algorithms, and a robust modular hardware system with a versatile self-reconfiguration ability that doesn't rely on external sensors. As long as another MSRR system provides these features and its own hardware-specific and reconfiguration controllers, our system can be integrated into it for performing high-level tasks.
 
 To conclude, this paper presents the first MSRR system that uses perception of an unknown environment to reactively perform complex high-level tasks using intelligent reconfiguration. Components of this system include novel controller synthesis, environment characterization, and self-reconfiguration methods. The demonstration of this novel capability is crucial to the success of modular robots as a technology, and takes a step toward the application of modular robots to tasks in the real world.
 %
