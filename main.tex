@@ -337,38 +337,33 @@ In this framework, the entire modular robot system is treated as a single robot 
 In this work, we create five library entries for two different configurations,
 listed in Table~\ref{table:1}. 
 The ``Tank'' configuration shown in Fig.~\ref{fig:dropoff} is capable of picking
-up and dropping objects in ``free'' environment while driving on a flat plain as a
-differential drive robot.
+up and dropping objects in ``free'' environment.
+\abj{In addition, the ``Tank'' configuration can drive on a flat plain as a
+differential drive robot using the parametric behavior ``Drive'' that follows a given sequence of 2D waypoints.}
 The ``Proboscis'' configuration shown in Fig.~\ref{fig:pink_grab} has
 a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects.
 However, the locomotion ability of this configuration is limited to forward/backward
 motion, making it unsuitable for general navigation.
 
-This library-based framework allows us to specify tasks for modular robots at a high level. Environment
-properties $P_e$ specify when a given behavior can be used, and are a function of
-the sensed environment.  In Section~\ref{sec:environment-characterization}, we discuss
-the methods we use to extract environment properties from 3D sensor data. When we
-specify tasks at the high level, we use behavior properties $P_b$ to describe an
-action we want the robot to take without explicitly specifying which configuration
-or behavior to use.
+\abj{We created these behaviors to provide necessary robot capabilities to accomplish the task described in Section~\ref{sec:experiments}, but the library can be easily expanded to include more entries for different tasks with modular robots.
+Since each behavior is restricted with a set of environment properties, in Section~\ref{sec:environment-characterization}, we discuss the methods we use to extract environment properties from 3D sensor data.
+%Environment properties $P_e$ specify when a given behavior can be used, and are a function of the sensed environment. When we specify tasks at the high level, we use behavior properties $P_b$ to describe an action we want the robot to take without explicitly specifying which configuration or behavior to use.
+This library-based framework allows us to specify tasks for modular robots at a high level, by associating abstracted robot actions with robust low-level controllers that execute appropriate robot behaviors based on the sensed environment.}
 
-For example, if a task specification requires the robot to execute a $pickUp$ behavior, our system could select  either the Tank or Proboscis configurations to perform the action, since both have behaviors with $P_b=pickUp$. To make the decision, the system will consider the current environment properties, $P_e$, extracted from sensor data.  In the case that $P_e=tunnel$, only the Proboscis configuration can be used, and the robot will take  reconfigure to form the Proboscis if it is not already in that configuration.
-
-Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
+\abj{For example, if a task specification requires the robot to execute a ``pick up'' behavior, our system could select  either the Tank or Proboscis configurations to perform the action, since both have behaviors property ``pick up''. To make the decision, the system will compare the current environment, extracted from sensor data, with $P_e$. If the environment has the property ``tunnel'', only the Proboscis configuration can be used, and the robot will take  reconfigure to form the Proboscis if it is not already in that configuration.} Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
 %
 \begin{table}
 \centering
 \begin{tabular}{ |c|c|c| } 
  \hline
  \multirow{2}{6em}{Configuration} & Behavior & Environment \\
- & properties & properties \\
+ & properties & characterization \\
  \hline
- Tank & Pick up & Object in ``free'' environment \\\hline
- Tank & Drop & Drop-off zone in ``free'' environment \\\hline
+ Tank & Pick up & ``free'' \\\hline
+ Tank & Drop & ``free'' \\\hline
  Tank & Drive & Flat plain\\ \hline
- Proboscis & Pick up & Object in ``tunnel'' or ``free'' environment \\ \hline
- \multirow{2}{4em}{Proboscis} & \multirow{2}{2em}{Drop} & Drop-off zone in \\
- & & ``tunnel'' or ``free'' environment \\ 
+ Proboscis & Pick up & ``tunnel'' or ``free''\\ \hline
+ Proboscis & Drop &``tunnel'' or ``free'' \\ 
  \hline
 \end{tabular}
 \caption{A library of robot behaviors}
@@ -543,9 +538,7 @@ Given a specification,  LTLMoP will synthesize a robot controller that satisfies
 \subsection{Controller Execution}
 Since the synthesized high-level controller is a discrete finite state automaton, we need to implement it continuously in order to control the robot to satisfy the given task. 
 
-Each environment proposition is mapped to a low-level sensing program that gathers and processes the information from sensor
-
-s in order to characterize the environment state. For example, the propositions ``object'' is mapped to a sensing program offered by exploration component in Section~\ref{sec:exploration} that returns \lt or \lf based on whether the robot can detect a predefined pink or green object with its camera.
+Each environment proposition is mapped to a low-level sensing program that gathers and processes the information from sensors in order to characterize the environment state. For example, the propositions ``object'' is mapped to a sensing program offered by exploration component in Section~\ref{sec:exploration} that returns \lt or \lf based on whether the robot can detect a predefined pink or green object with its camera.
 
 Similarly, each system proposition is mapped to behavior properties that specify how the action should be performed. As explained in Section~\ref{sec:configuration-specifics}, behavior and environment properties determine which library entry should be used to implement a given action.
 For example, to implement the ``pickUp'' proposition in Specification~\ref{spec:experiment}, the system can execute any behavior that has the $Pick up$  behavior property, and which also satisfies the current environment properties.  If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.   
