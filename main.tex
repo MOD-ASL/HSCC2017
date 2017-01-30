@@ -333,23 +333,22 @@ In this framework, the entire modular robot system is treated as a single robot 
 \item $P_e$ is a set of \emph{environment properties} that describe the environment in which this library entry is suitable. 
 \end{itemize} 
 %
+Environment properties $P_e$ specify when a given behavior can be used. When we specify tasks at the high level, we use behavior properties $P_b$ to describe a desired robot action without explicitly specifying a configuration or behavior.
+
+Note that each library entry consists of a configuration with its available behaviors subject to restrictions in the environment. Thus, environment conditions and the robot's perception of the environment play important roles in the design and use of the library. The library must be designed to provide configurations that can perform desired tasks in all environment conditions the robot expects to encounter. During performance of a task, the robot must use perception to characterize its environment in terms of each configuration's capabilities. these characterizations can then be used to choose the appropriate configuration for each portion of the task. This environment characterization method is described in the Section \ref{sec:environment-characterization}.
+
 In this work, we create five library entries for two different configurations,
-listed in Table~\ref{table:1}. 
+listed in Table~\ref{table:1}. This library was created to accomplish the task described in Section~\ref{sec:experiments}, but the library can be expanded to include more entries for other environments and tasks.
+
 The ``Tank'' configuration shown in Figure~\ref{fig:dropoff} is capable of picking
-up and dropping objects in ``free'' environment.
-\abj{In addition, the ``Tank'' configuration can also drive on a flat plain as a
-differential drive robot using a parametric ``Drive'' behavior with a given sequence of 2D waypoints.}
+up and dropping objects in a ``free'' environment (described in Section \ref{sec:environment-characterization}). In addition, the ``Tank'' configuration can locomote on flat terrain. It uses a parameterized differential drive controller to convert a desired velocity vector into motor commands ("Drive" in Table \ref{table:1}).
+
 The ``Proboscis'' configuration shown in Figure~\ref{fig:pink_grab} has
 a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects.
 However, the locomotion ability of this configuration is limited to forward/backward
 motion, making it unsuitable for general navigation.
 
-\abj{We created these behaviors to provide necessary robot capabilities to accomplish the task described in Section~\ref{sec:experiments}, but the library can be easily expanded to include more entries for different tasks with modular robots.
-Since each behavior is restricted with a set of environment properties, in Section~\ref{sec:environment-characterization}, we discuss the methods we use to extract environment properties from 3D sensor data.
-%Environment properties $P_e$ specify when a given behavior can be used, and are a function of the sensed environment. When we specify tasks at the high level, we use behavior properties $P_b$ to describe an action we want the robot to take without explicitly specifying which configuration or behavior to use.
-This library-based framework allows us to specify tasks for modular robots at a high level, by associating abstracted robot actions with robust low-level controllers that execute appropriate robot behaviors based on the sensed environment.}
-
-\abj{For example, if a task specification requires the robot to execute a ``pick up'' behavior, our system could select  either the Tank or Proboscis configurations to perform the action, since both have behaviors property ``pick up''. To make the decision, the system will compare the current environment, extracted from sensor data, with $P_e$. If the environment has the property ``tunnel'', only the Proboscis configuration can be used, and the robot will take  reconfigure to form the Proboscis if it is not already in that configuration.} Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
+This library-based framework allows us to specify tasks for modular robots at a high level, by associating abstracted robot actions with robust low-level controllers that execute appropriate robot behaviors based on the sensed environment. For example, if a task specification requires the robot to execute a ``pick up'' behavior, our system could select either the Tank or Proboscis configurations to perform the action, since both have behaviors property ``pick up''. To make the decision, the system will compare the current environment, extracted from sensor data, with $P_e$. If the environment has the property ``tunnel'', only the Proboscis configuration can be used, and the robot will take  reconfigure to form the Proboscis if it is not already in that configuration. Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
 %
 \begin{table}
 \centering
@@ -360,7 +359,7 @@ This library-based framework allows us to specify tasks for modular robots at a 
  \hline
  Tank & Pick up & ``free'' \\\hline
  Tank & Drop & ``free'' \\\hline
- Tank & Drive & Flat plain\\ \hline
+ Tank & Drive & ``free''\\ \hline
  Proboscis & Pick up & ``tunnel'' or ``free''\\ \hline
  Proboscis & Drop &``tunnel'' or ``free'' \\ 
  \hline
