@@ -336,8 +336,9 @@ In this framework, the entire modular robot system is treated as a single robot 
 In this work, we create five library entries for two different configurations,
 listed in Table~\ref{table:1}. 
 The ``Tank'' configuration shown in Figure~\ref{fig:dropoff} is capable of picking
-up and dropping objects in ``free'' environment while driving on a flat plain as a
-differential drive robot.
+up and dropping objects in ``free'' environment.
+\abj{In addition, the ``Tank'' configuration can also drive on a flat plain as a
+differential drive robot using a parametric ``Drive'' behavior with a given sequence of 2D waypoints.}
 The ``Proboscis'' configuration shown in Figure~\ref{fig:pink_grab} has
 a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects.
 However, the locomotion ability of this configuration is limited to forward/backward
