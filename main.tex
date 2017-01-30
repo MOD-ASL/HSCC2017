@@ -571,15 +571,15 @@ The system then maps the system proposition specified in the next state to its s
 \label{sec:experiments}
 %
 
-We validated and demonstrated our system's capabilities with a real-world experiment in which a robot composed of SMORES-EP modules completed a complex, high-level task in an unknown environment.  The high-level task consisted of three different types of sub-tasks: explore the environment, find and retrieve all objects in the office, and deliver each to a drop-off zone. Figure \ref{fig:map} shows the environment layout used in the experiment, designed to represent a cluttered office. Two objects to be retrieved were used: one was placed in the open (a ``free'' environment type), and another was positioned between two obstacles (a ``tunnel'' environment). Obstacles, environment types, and locations of the objects and drop-off zone were unknown to the robot \textit{a priori}.
+We validated and demonstrated our system's capabilities with a real-world experiment in which a robot composed of SMORES-EP modules completed a complex, high-level task in an unknown environment.  The high-level task consisted of three different types of sub-tasks: explore the environment, find and retrieve all objects in the environment, and deliver each to a drop-off zone. Figure \ref{fig:map} shows the environment layout used in the experiment, designed to represent a cluttered office. Two objects to be retrieved were used: one was placed in the open (a ``free'' environment type), and another was positioned between two obstacles (a ``tunnel'' environment). Obstacles, environment types, and locations of the objects and drop-off zone were unknown to the robot \textit{a priori}.
 
-Five SMORES-EP modules, one Brain Module, and three passive cubes composed the robot for performing the task. The robot grasped objects using modules' electro-permanent magnets to attach to steel plates on the objects.
+Five SMORES-EP modules, one Brain Module, and three passive cubes composed the robot for performing the task. The robot grasped objects using modules' electro-permanent magnets to attach to steel washers on the objects.
 During the experiment, the high-level planner used the library of two configurations and five behaviors described in Section \ref{sec:configuration-specifics}.
 
 % Map
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.4\textwidth]{images/RSSMap.png}
+\includegraphics[width=0.38\textwidth]{images/RSSMap.png}
 \caption{Diagram of experiment environment}
 \label{fig:map}
 \end{center}
