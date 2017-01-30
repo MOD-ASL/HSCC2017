@@ -179,6 +179,7 @@ Finally, Section~\ref{sec:high-level} describes a high-level mission planner tha
 \caption{System Overview Flowchart}
 \label{fig:overview}
 \end{center}
+\vspace{-1em}
 \end{figure} 
 %
 %     ____       __      __           __   _       __           __
@@ -267,6 +268,7 @@ The SMORES-EP hardware system also includes passive cubes that modules can conne
 \end{center}
 \caption{SMORES-EP module}
 \label{fig:smores-module}
+\vspace{-2em}
 \end{figure}
 %
 
@@ -277,7 +279,7 @@ SMORES-EP modules have very limited onboard computation, and no sensors that all
 
 The body of the brain module is a $160\times80\times80mm$ box, roughly the size of two SMORES-EP side-by-side.  The brain module can be configured to provide attachment points on the back, front, or bottom that allow easy connection to SMORES-EP modules or passive cubes.
 
-Computation is provided by an UP computing board with an Intel Atom 1.92 GHz processor, 4 GB memory, and a 64 GB hard drive. A USB WiFi adapter provides network connectivity. A front-facing Asus XTION-Pro Live camera mounted on top of the brain module body provides RGB-D data, enabling the robot to explore and map its environment and recognize objects of interest.  A thin stem extends $30cm$ above the top of the body, supporting a downward-facing Microsoft Lifecam webcam mounted at $40^\circ$ to vertical.  This camera provides a view of a  $1m\times0.75m$ area in front of the brain module, and is used to track AprilTag \cite{olson2011apriltag} fiducials during reconfiguration. A $7.4v$, $3600mAh$ LiPo battery provides about 1.5 hours of up time.
+Computation is provided by an UP computing board with an Intel Atom 1.92 GHz processor, 4 GB memory, and a 64 GB hard drive. A USB WiFi adapter provides network connectivity. A front-facing Asus XTION-Pro Live camera mounted on top of the brain module body provides RGB-D data, enabling the robot to explore and map its environment and recognize objects of interest.  A thin stem extends $30cm$ above the body, supporting a downward-facing Microsoft Lifecam webcam.  This camera provides a view of a  $1m\times0.75m$ area in front of the brain module, and is used to track AprilTag \cite{olson2011apriltag} fiducials for reconfiguration. A $7.4v$, $3600mAh$ LiPo battery provides about 1.5 hours of up time.
 %
 % Sensor Module Figure
 \begin{figure}
@@ -286,6 +288,7 @@ Computation is provided by an UP computing board with an Intel Atom 1.92 GHz pro
 \caption{Brain Module with labelled components.  UP board and battery are inside body.      }
 \label{fig:sensor-module}
 \end{center}
+\vspace{-2em}
 \end{figure}
 
 %     ____                            __  _
@@ -365,6 +368,7 @@ This library-based framework allows us to specify tasks for modular robots at a 
 \end{tabular}
 \caption{A library of robot behaviors}
 \label{table:1}
+\vspace{-1em}
 \end{table}
 
 %
@@ -413,6 +417,7 @@ If the environment surrounding the object does not meet the criteria for either 
 \caption{\textbf{Tunnel} environment characterization method. Yellow grid cells are occupied cells, light blue cells are unreachable cells resulting from bloating obstacles.}
 \label{fig:characterization}
 \end{center}
+\vspace{-2em}
 \end{figure}
 
 %     ____                        _____                        __  _
@@ -569,8 +574,9 @@ During the experiment, the high-level planner used the library of two configurat
 % Map
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.38\textwidth]{images/RSSMap.png}
+\includegraphics[width=0.3\textwidth]{images/RSSMap.png}
 \caption{Diagram of experiment environment}
+\vspace{-2em}
 \label{fig:map}
 \end{center}
 \end{figure}
@@ -609,6 +615,7 @@ During the experiment, the high-level planner used the library of two configurat
     \end{subfigure}
       \caption{Environment characterization types for object retrieval.}
       \label{fig:demo}
+   \vspace{-1em}
    \end{figure*}
 
 
@@ -620,6 +627,7 @@ Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the en
 \begin{center}
 \includegraphics[width=0.4\textwidth]{images/octomap.png}
 \caption{Volumetric map of environment built by visual SLAM}
+\vspace{-2em}
 \label{fig:octomap}
 \end{center}
 \end{figure}
