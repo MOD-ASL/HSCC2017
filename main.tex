@@ -653,7 +653,7 @@ Due to power limitations of modules, robot speed is low which results in a long 
 \subsection{Reconfiguration}
 Our method of reconfiguration has advantages compared to existing methods.  Use of an onboard overhead camera to provide fiducial-based localization for reconfiguration is novel.  This centralized strategy provides localization only near the brain module, so the number of modules that can reconfigure at once is limited by the size of the camera view. In order to scale to large numbers of modules, multiple brain modules would need to be used in parallel.
 
-By exploiting high-fidelity centralized localization and the individual mobility of the SMORES-EP modules, we achieve reconfiguration that is robust, and cleanly deployable in the context of a high-level task. In our experiments (Section~\ref{sec:experiments}), we observed that the pre-reconfiguration state required about 20 seconds, each module movement operation required about 45 seconds, and post-reconfiguration required about 10 seconds.
+By exploiting high-fidelity centralized localization and the individual mobility of the SMORES-EP modules, we achieve reconfiguration that is robust, and cleanly deployable in the context of a high-level task. In our experiments (Section~\ref{sec:experiments}), we observed that the pre-reconfiguration state required about 15 seconds, each module movement operation required about 2 minutes, and post-reconfiguration required about 10 seconds.
 %Each reconfiguration action had a success rate over 90\%.
 This compares very favorably with existing methods, in which each reconfiguration action can take on the order of ten minutes \cite{Yim2007},\cite{Murata2006},\cite{Rubenstein2004}.
 %\TODO{Verify exact numbers}
