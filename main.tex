@@ -337,10 +337,8 @@ In this framework, the entire modular robot system is treated as a single robot 
 %
 Environment properties $P_e$ specify when a given behavior can be used. When we specify tasks at the high level, we use behavior properties $P_b$ to describe a desired robot action without explicitly specifying a configuration or behavior.
 
-Note that each library entry consists of a configuration with its available behaviors subject to restrictions in the environment. Thus, environment conditions and the robot's perception of the environment play important roles in the design and use of the library. The library must be designed to provide configurations that can perform desired tasks in all environment conditions the robot expects to encounter. During performance of a task, the robot must use perception to characterize its environment in terms of each configuration's capabilities. these characterizations can then be used to choose the appropriate configuration for each portion of the task. This environment characterization method is described in the Section \ref{sec:environment-characterization}.
-
 In this work, we create five library entries for two different configurations,
-listed in Table~\ref{table:1}. This library was created to accomplish the task described in Section~\ref{sec:experiments}, but the library can be expanded to include more entries for other environments and tasks.
+listed in Table~\ref{table:1}. This library was created to accomplish the task described in Section~\ref{sec:experiments}, but the library can be expanded to include more entries for other environments and tasks. Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use a perception algorithm described in Section \ref{sec:environment-characterization}.
 
 The ``Tank'' configuration shown in Figure~\ref{fig:dropoff} is capable of picking
 up and dropping objects in a ``free'' environment (described in Section \ref{sec:environment-characterization}). In addition, the ``Tank'' configuration can locomote on flat terrain. It uses a parameterized differential drive controller to convert a desired velocity vector into motor commands ("Drive" in Table \ref{table:1}).
@@ -350,7 +348,7 @@ a long arm in front, and is suitable for reaching between obstacles in a narrow 
 However, the locomotion ability of this configuration is limited to forward/backward
 motion, making it unsuitable for general navigation.
 
-This library-based framework allows us to specify tasks for modular robots at a high level, by associating abstracted robot actions with robust low-level controllers that execute appropriate robot behaviors based on the sensed environment. For example, if a task specification requires the robot to execute a ``pick up'' behavior, our system could select either the Tank or Proboscis configurations to perform the action, since both have behaviors property ``pick up''. To make the decision, the system will compare the current environment, extracted from sensor data, with $P_e$. If the environment has the property ``tunnel'', only the Proboscis configuration can be used, and the robot will take  reconfigure to form the Proboscis if it is not already in that configuration. Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
+This library-based framework allows us to specify tasks for modular robots at a high level, by associating abstract robot actions with robust low-level controllers that execute appropriate robot behaviors based on the sensed environment. For example, if a task specification requires the robot to execute a ``pick up'' behavior, our system could select either the Tank or Proboscis configurations to perform the action, since both have behaviors property ``pick up''. To choose the appropriate configuration to use, the robot uses perception to characterize its environment in terms of the $P_e$ corresponding to each configuration. If the environment has the property ``tunnel'', only the Proboscis configuration can be used, and the robot will take  reconfigure to form the Proboscis if it is not already in that configuration. Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
 %
 \begin{table}
 \centering
@@ -491,15 +489,29 @@ To bring together the actuation, sensing, and reconfiguration capabilities of  t
 LTLMoP allows us to use each component of our system as a low-level atomic controller and specify a wide-range of reactive robotic tasks as a set of high-level instructions using these controllers.
 In this section, we will mainly discuss how we model our system in order to use LTLMoP to automatically generate a high-level controller for our desired robot task.
 
-\subsection{Controller Synthesis}
-We first abstract the system and environment as a set of Boolean propositions.
-For example, the system proposition ``pickUp'' is \lt if the robot is currently picking up an object (and \lf otherwise), and
-the environment proposition ``object'' is \lt if the robot is currently sensing an object of interest (and \lf otherwise).
+We first abstract the robot capabilities into a set of high-level robot actions, and abstract the expected environment as a set of discrete environment properties.
+For example, the robot action ``pickUp'' is \lt if the robot is currently picking up an object (and \lf otherwise), and
+the environment property ``object'' is \lt if the robot is currently sensing an object of interest (and \lf otherwise).
 
-LTLMoP supports a high-level language called Structured English that allows the robot task to be specified in terms of these propositions.
+Each environment property is mapped to a low-level sensing program that gathers and processes the information from sensors in order to characterize the environment state. For example, the propositions ``object'' is mapped to a sensing program offered by exploration component in Section~\ref{sec:exploration} that returns \lt or \lf based on whether the robot can detect a predefined pink or green object with its camera.
+
+Similarly, each robot action is mapped to a low-level robot controller that executes the appropriate robot behavior from the library, based on the sensed environment, as explained in Section~\ref{sec:configuration-specifics}.
+For example, to implement the ``pickUp'' action, the controller can execute any behavior from the library that has the ``Pick up''  behavior property, and which also satisfies the current environment properties.  If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.
+
+Some robot actions, such as ``explore'', ``driveToObject'', and ``driveToDropoff'', requires the robot to navigate around the environment without colliding with obstacles.
+To achieve this, a goal pose is first determined by the controller and sent to a path planning program to generate a collision free path while considering the dynamics of the robot.
+The path is then converted to a sequence of robot velocity vectors and used as the input to control a parametric behavior in the library.
+In this work, we use the ROS navigation package\footnote{http://wiki.ros.org/navigation} to generate paths for a differential drive robot to control the ``Tank'' configuration in the library.
+
+%\subsection{Controller Synthesis}
+%We first abstract the system and environment as a set of Boolean propositions.
+%For example, the system proposition ``pickUp'' is \lt if the robot is currently picking up an object (and \lf otherwise), and
+%the environment proposition ``object'' is \lt if the robot is currently sensing an object of interest (and \lf otherwise).
+
+LTLMoP supports a high-level language called Structured English that allows the robot task to be specified in terms of these robot and environment abstractions.
 For example, Specification~\ref{spec:experiment} shows the high-level instructions from the user that direct the robot to explore a room, search and move any object of interest to a drop-off zone.
-In addition to ``pickUp'', this specification uses the system propositions ``explore'', ``drop'', ``carry'', ``driveToDropoff'' and ``driveToObject,'' each of which represents a different robot action.
-Moreover, environment proposition ``arrived'' is \lt if the robot arrives at its target location, and ``dropoffzone'' is \lt if the robot is currently sensing a drop-off zone.
+In addition to ``pickUp'', this specification uses the robot actions ``explore'', ``drop'', ``carry'', ``driveToDropoff'' and ``driveToObject,''.
+Moreover, environment properties ``arrived'' is \lt if the robot arrives at its target location, and ``dropoffzone'' is \lt if the robot is currently sensing a drop-off zone.
 
 \begin{spec}[h!]
 \caption{Search and move any object of interest to the drop-off zone}
@@ -535,23 +547,26 @@ Moreover, environment proposition ``arrived'' is \lt if the robot arrives at its
 \vspace{-0.4cm}
 \end{spec}
 
-Given a specification,  LTLMoP will synthesize a robot controller that satisfies the given robot task (if one exists). The controller synthesized is in the form of a finite state automaton. Each state is labeled with the values of all system propositions. Each transition between two states is labeled with the value of all environment propositions.
+Given a specification,  LTLMoP will synthesize a robot controller that satisfies the given robot task (if one exists). The controller synthesized is in the form of a finite state automaton.
+Each state specifies a set of high-level robot actions that need to be performed and transitions between states are specified with a set of environment properties.
 
-\subsection{Controller Execution}
-Since the synthesized high-level controller is a discrete finite state automaton, we need to implement it continuously in order to control the robot to satisfy the given task. 
+%\subsection{Controller Execution}
+%Since the synthesized high-level controller is a discrete finite state automaton, we need to implement it continuously in order to control the robot to satisfy the given task. 
 
-Each environment proposition is mapped to a low-level sensing program that gathers and processes the information from sensors in order to characterize the environment state. For example, the propositions ``object'' is mapped to a sensing program offered by exploration component in Section~\ref{sec:exploration} that returns \lt or \lf based on whether the robot can detect a predefined pink or green object with its camera.
+%Each environment proposition is mapped to a low-level sensing program that gathers and processes the information from sensors in order to characterize the environment state. For example, the propositions ``object'' is mapped to a sensing program offered by exploration component in Section~\ref{sec:exploration} that returns \lt or \lf based on whether the robot can detect a predefined pink or green object with its camera.
 
-Similarly, each system proposition is mapped to behavior properties that specify how the action should be performed. As explained in Section~\ref{sec:configuration-specifics}, behavior and environment properties determine which library entry should be used to implement a given action.
-For example, to implement the ``pickUp'' proposition in Specification~\ref{spec:experiment}, the system can execute any behavior that has the $Pick up$  behavior property, and which also satisfies the current environment properties.  If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.   
+%Similarly, each system proposition is mapped to behavior properties that specify how the action should be performed. As explained in Section~\ref{sec:configuration-specifics}, behavior and environment properties determine which library entry should be used to implement a given action.
+%For example, to implement the ``pickUp'' proposition in Specification~\ref{spec:experiment}, the system can execute any behavior that has the $Pick up$  behavior property, and which also satisfies the current environment properties.  If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.   
 
 %Each system proposition is mapped to a low-level control program that commands the robot to perform some behaviors. For example, the proposition ``pickUp'' is mapped to a program that will be executed when ``pickUp'' is \ltnsp. The program command the robot to perform a predefined behavior that will pick up a small magnetic object in front of the robot.
 % In each iteration, first we determine the value of each environment propositions by calling each corresponding sensing program.
 % We then can find the next state in the finite state automaton by taking the transition that matches with the current values of all environment propositions.
 % At last, we execute the corresponding control program based on the value of each system proposition specified in the next state and continue to the next iteration.
 
-Execution of the high-level controller begins at the predefined initial state in the finite state automaton. In each iteration, the values of all environment propositions and and environment properties are determined by calling the corresponding sensing program. Then, we determine the next state in the finite state machine by taking the transition that matches the current value of all environment propositions.
-The system then maps the system proposition specified in the next state to its set of behavior properties, and selects a behavior from the library which satisfies both the behavior properties and current environment properties. If the robot is not currently in a configuration capable of executing the selected behavior, the system commands the robot to reconfigure. Finally, the behavior is executed, and program execution continues on to the next iteration. 
+Since the synthesized high-level controller is a discrete finite state automaton, we need to implement it continuously in order to control the robot to satisfy the given task. 
+Execution of the high-level controller begins at the predefined initial state in the finite state automaton. In each iteration, the values of all environment properties are determined by calling the corresponding sensing program. 
+The next state in the finite state machine is determined by taking the transition that matches the current value of all environment properties.
+High-level robot actions, specified in the next state, are mapped to low-level controllers to select behaviors from the library which satisfy both the behavior properties and current environment properties. If the robot is not currently in a configuration capable of executing the selected behavior, the controller commands the robot to reconfigure. Finally, behavior are executed, and program execution continues on to the next iteration. 
 
 %For example, in Fig.~\ref{fig:automaton} we start in the top state and execute the ``explore'' program.
 %If  the robot senses a pink object, the value of ``pinkObject'' is \lt and therefore the next state is the bottom right state. We then stop the ``explore'' program and execute the ``driveToObject'' program.
