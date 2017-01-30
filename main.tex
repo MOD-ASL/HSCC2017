@@ -566,7 +566,12 @@ The system then maps the system proposition specified in the next state to its s
 \label{sec:experiments}
 %
 
-We validated and demonstrated our system's capabilities with a real-world experiment in which a robot composed of SMORES-EP modules completed a complex, high-level task in an unknown environment.  The high-level task consisted of three different types of sub-tasks: explore the environment, find and retrieve all objects in the environment, and deliver each to a drop-off zone. Figure \ref{fig:map} shows the environment layout used in the experiment, designed to represent a cluttered office. Two objects to be retrieved were used: one was placed in the open (a ``free'' environment type), and another was positioned between two obstacles (a ``tunnel'' environment). Obstacles, environment types, and locations of the objects and drop-off zone were unknown to the robot \textit{a priori}.
+We validated and demonstrated our system's capabilities with a hardware experiment in which a robot composed of SMORES-EP modules completed a complex, high-level task in an unknown environment.
+
+The robot is tasked with cleaning a messy graduate student office.  It is directed to explore the unknown office environment and search for any brightly-colored metal garbage that can be recycled.  Whenever it finds brightly colored metal objects, it should pick them up and bring them to a designated drop-off zone for recycling, which is marked with a blue square on the wall.
+
+The high-level task consisted of three different types of sub-tasks: explore the environment, find and retrieve all metal objects, and deliver each to the drop-off zone. Figure \ref{fig:map} shows the environment layout used in the experiment, designed to represent a messy office. Two colored objects were placed in the environment: a green soda can was placed in the open (a ``free'' environment type), and a pink spool of wire was positioned in a narrow gap between two trash cans (a ``tunnel'' environment). Obstacles, environment types, and locations of the objects and drop-off zone were unknown to the robot \textit{a priori}.  Note that the object colors (pink and green) have no influence on environment characterization: in other words, the robot does not know that the pink object is in a ``tunnel''  before the experiment starts.
+ 
 
 Five SMORES-EP modules, one Brain Module, and three passive cubes composed the robot for performing the task. The robot grasped objects using modules' electro-permanent magnets to attach to steel washers on the objects.
 During the experiment, the high-level planner used the library of two configurations and five behaviors described in Section \ref{sec:configuration-specifics}.
@@ -617,12 +622,16 @@ During the experiment, the high-level planner used the library of two configurat
       \label{fig:demo}
    \vspace{-1em}
    \end{figure*}
+%
+Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available as an attachment to this paper. The robot starts in the ``Tank'' configuration. The starting location prevented the robot from seeing the objects initially, forcing it to explore the environment to search for them. After a period of exploration, the robot locates the pink object. The characterization algorithm correctly classified the surrounding environment as a ``tunnel'' type, and accordingly the robot navigated in front of the object and reconfigured to the ``Proboscis'' configuration. The ``Proboscis'' then uses its long arm to reach into the tunnel and pull the object out into the open.
 
+ The ``Proboscis'' can only drive forwards and backwards (it cannot steer), so the robot needs to reconfigure back to the ``Tank'' to drive the object to the drop-off zone.  To do so, the robot dropped the object,  reconfigured, and picked the object back up. The ``Tank'' then navigated to and dropped off the object at the drop-off zone, which was previously located during exploration and recorded in the global map built by the SLAM algorithm.
 
+ Once done, the robot navigated directly to the green object.  No further exploration was required since the green object was discovered while the robot was dropping off the pink object. The robot correctly determined
+that the green object was in a ``free'' environment, and picked it up without reconfiguring. The robot finished the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows a volumetric map of the environment generated as the robot explored and delivered objects. The robot successfully completed all tasks in the experiment in about 26 minutes. 
 
-
-Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available as an attachment to this paper. The starting location prevented the robot from seeing the objects initially, forcing it to explore the environment to search for them. After a period of exploration the robot discovered the pink object first. The characterization algorithm correctly classified the surrounding environment as a ``tunnel'' type, and accordingly the robot navigated in front of the object and reconfigured to the ``proboscis'' configuration. Once this was done, the object was retrieved and pulled out into the open. The robot then dropped the object, reconfigured back to the ``Tank'' configuration for navigation to the drop-off zone, and again retrieved the object. The robot then navigated to and dropped off the object at the drop-off zone, which was seen during exploration and recorded in the global map built by the SLAM algorithm. Once done, the robot navigated to the green object which was correctly determined to not require any reconfiguration. No further exploration was required since the green object was discovered while the robot was dropping off the pink object. The robot finished the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows the final volumetric map of the environment explored by the robot as it explored the environment and delivered objects. The robot successfully completed all tasks in the experiment in about 26 minutes. Note that the video shows a human reaching into the field to touch the green object once the robot comes into contact with it. This was due to a error on the field resulting in the object becoming stuck between two floor boards, so a human dislodged it so the robot could grasp it.
-
+Note that at one point in the video a human reaches onto the field to dislodge the green object from a crack in the floor.  This was due to a defect in the experimental setup (which is not supposed to have a crack in the floor) and not an error in the robot's performance.
+%
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.4\textwidth]{images/map4.jpg}
@@ -717,3 +726,5 @@ To conclude, this paper presents the first MSRR system that uses perception of a
 
 
  
+  
+
