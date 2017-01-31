@@ -104,7 +104,9 @@
 
 \begin{abstract}
 
-We present a self-reconfigurable modular robot system that can autonomously reconfigure to perform complex, high-level tasks in an unknown environment without external sensing or control. The validity of the system is demonstrated in an office-like environment with manipulation and locomotion tasks. The physical robot is composed of modules that support multiple robot configurations. An onboard 3D sensor provides information about the environment, which is used to perform SLAM in the unknown environment and inform exploration, reconfiguration decision making and feedback control.  A centralized planning algorithm uses the information from the environment and the desired high-level task description to autonomously compose low-level controllers to perform locomotion, reconfiguration, and special actions. A novel, centralized, self-reconfiguration method is used to change robot configurations as needed. This is the first modular robot system that uses perception-driven reconfiguration to intelligently adapt to an \textit{a priori} unknown environment to perform complex tasks
+We present an integrated system that allows self-reconfigurable modular robots to autonomously accomplish perception-informed high-level tasks in an unknown environment, without any external sensing or control.  Through a hardware experiment, we demonstrate that our system is capable of autonomously completing an object retrieval task in an office-like environment.
+
+The physical robot is composed of modules that support multiple robot configurations. An onboard 3D sensor provides information about the environment, which is used to perform SLAM, inform exploration, reconfiguration decision making and feedback control.  A centralized high-level mission planner uses information from the environment and the user-specified task description to autonomously compose low-level controllers to perform locomotion, reconfiguration, other behaviors. A novel, centralized, self-reconfiguration method is used to change robot configurations as needed. This is the first modular robot system that uses perception-driven reconfiguration to intelligently adapt to an \textit{a priori} unknown environment to perform complex tasks.
 
 \end{abstract}
 
@@ -119,7 +121,7 @@ We present a self-reconfigurable modular robot system that can autonomously reco
 \section{Introduction} \label{sec:introduction}
 %
 Modular self-reconfigurable robot (MSRR) systems are composed of a number of simple repeated robot elements (called \emph{modules}) that connect together to form larger robotic structures. These systems can \emph{self-reconfigure}, changing their shape (\emph{i.e.} the connectivity arrangement of the modules) to meet the needs of the task at hand.
-The number of morphologies in these systems typically scale exponentially with the number of identical modules making them highly adaptable for a wide variety of tasks. 
+The number of morphologies in these systems typically scale exponentially with the number of identical modules, making them highly adaptable for a wide variety of tasks. 
 
 Over the past three decades, dozens of modular robot systems have been built \cite{Yim2007a}. Existing literature provides ample evidence of MSRR systems reconfiguring and assuming interesting morphologies, as well as methods for programming, controlling, and simulating modular robots \cite{Yim2007,Jing2016,Yim1994}.
 
