@@ -201,7 +201,7 @@ Finally, Section~\ref{sec:high-level} describes a high-level mission planner tha
 %%%
 Modular robots have long been regarded as having the potential to improve performance in unknown environments (such as search and rescue scenarios), because  self-reconfiguration theoretically gives them the flexibility to respond to whatever they encounter \cite{Yim2007a,yim2003modular}.  However, examples of MSRR actually operating in unknown environments are very limited. We believe our system demonstrates more integrated autonomy in an unknown environment than any existing MSRR system.  Our work is particularly novel because we use perception-driven reconfiguration to address high-level tasks in unknown environments.
 
-To our knowledge, no MSRR system has been used to map a completely unknown environment. The Millibot system has demonstrated the ability to map a partially unknown environment when operating as a swarm \cite{Grabowski2000}. The autonomy of the Millibot swarm is limited: a human operator makes all high-level decisions, and is responsible for navigation using a GUI. Certain members of the swarm are designated as ``beacons,'' and have known locations, making the environment only partially unknown.
+To our knowledge, no MSRR system has been used to map a completely unknown environment. The Millibot system has demonstrated the ability to map a partially unknown environment when operating as a swarm \cite{Grabowski2000}. The autonomy of the Millibot swarm is limited: a human operator makes all high-level decisions, and is responsible for navigation using a GUI. Certain members of the swarm are designated as ``beacons'', and have known locations, making the environment only partially unknown.
 
 % swarm-bots
 The swarm-bots are a MSRR system that has been applied in exploration \cite{Dorigo2005} and collective manipulation \cite{Mondada2005} scenarios.  Like the Millibots, exploration is demonstrated in partially unknown environments, with some members of the swarm acting as ``beacons'' with known location.  In a collective manipulation task, the swarm-bots have limited autonomy, with a human operator specifying the location of the manipulation target and the global sequence of manipulation actions.
@@ -341,14 +341,14 @@ In this work, we create five library entries for two different configurations,
 listed in Table~\ref{table:1}. This library was created to accomplish the task described in Section~\ref{sec:experiments}, but the library can be expanded to include more entries for other environments and tasks. Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use a perception algorithm described in Section \ref{sec:environment-characterization}.
 
 The ``Tank'' configuration shown in Figure~\ref{fig:dropoff} is capable of picking
-up and dropping objects in a ``free'' environment (described in Section \ref{sec:environment-characterization}). In addition, the ``Tank'' configuration can locomote on flat terrain. It uses a parametric differential drive behavior to convert a desired velocity vector into motor commands (``Drive'' in Table \ref{table:1}).
+up and dropping objects in a ``free'' environment (described in Section \ref{sec:environment-characterization}). In addition, the ``Tank'' configuration can locomote on flat terrain. It uses a parametric differential drive behavior to convert a desired velocity vector into motor commands (\textbf{driveTo...} in Table \ref{table:1}).
 
 The ``Proboscis'' configuration shown in Figure~\ref{fig:pink_grab} has
 a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects.
 However, the locomotion ability of this configuration is limited to forward/backward
 motion, making it unsuitable for general navigation.
 
-This library-based framework allows us to specify tasks for modular robots at a high level, by associating abstract robot actions with robust low-level controllers that execute appropriate robot behaviors based on the sensed environment. For example, if a task specification requires the robot to execute a ``pick up'' behavior, our system could select either the Tank or Proboscis configurations to perform the action, since both have behaviors property ``pick up''. To choose the appropriate configuration to use, the robot uses perception to characterize its environment in terms of the $P_e$ corresponding to each configuration. If the environment has the property ``tunnel'', only the Proboscis configuration can be used, and the robot will take  reconfigure to form the Proboscis if it is not already in that configuration. Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
+This library-based framework allows us to specify tasks for modular robots at a high level, by associating abstract robot actions with robust low-level controllers that execute appropriate robot behaviors based on the sensed environment. For example, if a task specification requires the robot to execute a \textbf{pickUp} behavior, our system could select either the Tank or Proboscis configurations to perform the action, since both have behaviors property \textbf{pickUp}. To choose the appropriate configuration to use, the robot uses perception to characterize its environment in terms of the $P_e$ corresponding to each configuration. If the environment has the property ``tunnel'', only the Proboscis configuration can be used, and the robot will take  reconfigure to form the Proboscis if it is not already in that configuration. Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
 %
 \begin{table}
 \centering
@@ -357,11 +357,11 @@ This library-based framework allows us to specify tasks for modular robots at a 
  \multirow{2}{6em}{Configuration} & Behavior & Environment \\
  & properties & characterization \\
  \hline
- Tank & Pick up & ``free'' \\\hline
- Tank & Drop & ``free'' \\\hline
- Tank & Drive & ``free''\\ \hline
- Proboscis & Pick up & ``tunnel'' or ``free''\\ \hline
- Proboscis & Drop &``tunnel'' or ``free'' \\ 
+ Tank & \textbf{pickUp} & ``free'' \\\hline
+ Tank & \textbf{drop} & ``free'' \\\hline
+ Tank & \textbf{driveTo...} & ``free''\\ \hline
+ Proboscis & \textbf{pickUp} & ``tunnel'' or ``free''\\ \hline
+ Proboscis & \textbf{drop} &``tunnel'' or ``free'' \\ 
  \hline
 \end{tabular}
 \caption{A library of robot behaviors}
@@ -381,9 +381,9 @@ As discussed in Section~\ref{sec:configuration-specifics}, the system takes envi
 
 %In order to intelligently choose appropriate configurations when performing tasks, the robot must perceive and characterize its environment into a discrete set of environment types that correspond with configuration capabilities. The proposed system includes a perception component that discretely characterizes the environment for the purpose of retrieving an object. This characterization can then be used by the high-level planner to determine the appropriate configuration and gait for successful object retrieval. 
 
-Currently, the perception suite includes functions to recognize three types of environments relevant to object retrieval tasks, shown in Figure \ref{fig:characters}.  When an object is recognized in the environment, the 3D information about its surroundings is evaluated. If the object's position is higher than a threshold height, the environment is characterized as the ``ledge,'' likely requiring a library entry that can reach up to the top of the ledge to retrieve the object.
-If the object is on the ground, an occupancy grid is created around it, and all grid cells within a robot-radius of obstacles are denoted unreachable (as shown in Figure~\ref{fig:characterization}). The closest reachable point to the object within $20^o$ of the robot's line of sight to the object is selected. If the distance from this point to the object is greater than a threshold value, the environment is characterized as a ``tunnel,'' likely requiring a configuration that is narrow enough to move between the surrounding obstacles to retrieve the object.
-If the environment surrounding the object does not meet the criteria for either a ``ledge'' or ``tunnel,'' it is characterized as ``free.''
+Currently, the perception suite includes functions to recognize three types of environments relevant to object retrieval tasks, shown in Figure \ref{fig:characters}.  When an object is recognized in the environment, the 3D information about its surroundings is evaluated. If the object's position is higher than a threshold height, the environment is characterized as the ``ledge'', likely requiring a library entry that can reach up to the top of the ledge to retrieve the object.
+If the object is on the ground, an occupancy grid is created around it, and all grid cells within a robot-radius of obstacles are denoted unreachable (as shown in Figure~\ref{fig:characterization}). The closest reachable point to the object within $20^o$ of the robot's line of sight to the object is selected. If the distance from this point to the object is greater than a threshold value, the environment is characterized as a ``tunnel'', likely requiring a configuration that is narrow enough to move between the surrounding obstacles to retrieve the object.
+If the environment surrounding the object does not meet the criteria for either a ``ledge'' or ``tunnel'', it is characterized as ``free''.
 %If the environment type is ``tunnel'', the algorithm also selects a navigation waypoint at which the robot can reconfigure before retrieving the object. This waypoint is calculated by extending the closest point farther away from the object to be retrieved (red arrow in Figure \ref{fig:characterization}). This information is passed to the high-level planner for use in controller synthesis.
 %
 % Environment types figure
@@ -486,14 +486,14 @@ LTLMoP supports a high-level language called Structured English that allows the 
 By using the design library (Section~\ref{sec:configuration-specifics})  and environment characterization tools (Section~\ref{sec:environment-characterization}), these high-level statements are mapped to low-level sensing programs and robot controllers.
 To see how this works, consider Specification~\ref{spec:experiment}, which shows  high-level instructions from the user that direct the robot to explore a room, search, and move any object of interest to a drop-off zone.
 
-The user specifies high-level robot actions in terms of behavior properties from the design library.  For example, Line 12 in Specification~\ref{spec:experiment} specifies that under certain conditions, the robot should do \textbf{pickUp}.  As discussed in Section~\ref{sec:configuration-specifics}, our system can choose to do \textbf{pickUp} by executing any behavior from the library which has the behavior property \textbf{pickup}, and which also satisfies the current environment characteristics. If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.  In this way, the system autonomously chooses to implement  \textbf{pickup}  appropriately in response to the sensed environment.
+The user specifies high-level robot actions in terms of behavior properties from the design library.  For example, Line 12 in Specification~\ref{spec:experiment} specifies that under certain conditions, the robot should do \textbf{pickUp}.  As discussed in Section~\ref{sec:configuration-specifics}, our system can choose to do \textbf{pickUp} by executing any behavior from the library which has the behavior property \textbf{pickUp}, and which also satisfies the current environment characteristics. If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.  In this way, the system autonomously chooses to implement  \textbf{pickUp}  appropriately in response to the sensed environment.
 
-Some robot actions, such as ``explore'', ``driveToObject'', and ``driveToDropoff'', requires the robot to navigate in the environment without colliding with obstacles.
+Some robot actions, such as \textbf{driveToExplore}, \textbf{driveToObject}, and \textbf{driveToDropoff}, requires the robot to navigate in the environment without colliding with obstacles.
 To achieve this, a goal pose is first determined by the controller and sent to a path planning program to generate a collision free path while considering the dynamics of the robot.
 The path is then converted to a sequence of robot velocity vectors and used as the input to control a parametric driving behavior in the library.
 In this work, we use the ROS navigation package\footnote{http://wiki.ros.org/navigation} to generate paths for a differential drive robot to control the ``Tank'' configuration in the library.
 
-Propositions related to the state of the environment are evaluated using the perception tools described in Section~\ref{sec:exploration}. For example in Specification~\ref{spec:experiment}, the proposition ``arrived'' is \lt if the robot arrives at its target location, which is determined by consulting the robot's position in the map generated by SLAM. The proposition ``dropoffzone'' is \lt if the robot is currently sensing a drop-off zone, which is determined by consulting both the map and color tracking functions.
+Propositions related to the state of the environment are evaluated using the perception tools described in Section~\ref{sec:exploration}. For example in Specification~\ref{spec:experiment}, the proposition ``arrived'' is \lt if the robot arrives at its target location, which is determined by consulting the robot's position in the map generated by SLAM. The proposition ``dropoffZone'' is \lt if the robot is currently sensing a drop-off zone, which is determined by consulting both the map and color tracking functions.
 
 \begin{spec}[h!]
 \caption{Search and move any object of interest to the drop-off zone}
@@ -509,18 +509,18 @@ Propositions related to the state of the environment are evaluated using the per
 \makeatother
 \hskip-10cm
 \begin{alignat}{2}
-&\text{{\bf carry} is set on {\bf pickup} and reset on {\bf drop}}&& \notag \\
-&\text{if you are not activating ({\bf carry} or {\bf pickup} or {\bf drop}}&& \notag \\
-&\hspace{1cm}\text{or {\bf driveToObject} or {\bf driveToDropoff}) then do {\bf explore}}&& \notag \\
+&\text{{\bf carry} is set on {\bf pickUp} and reset on {\bf drop}}&& \notag \\
+&\text{if you are not activating ({\bf pickUp} or {\bf drop} or {\bf driveToObject}}&& \notag \\
+&\hspace{1cm}\text{or {\bf driveToDropoff} or {\bf carry}) then do {\bf driveToExplore}}&& \notag \\
 &\text{if you are activating {\bf carry} and you are not sensing {\bf dropoffZone}}&& \notag \\
-&\hspace{1cm}\text{then do {\bf explore}}&& \notag \\
+&\hspace{1cm}\text{then do {\bf driveToExplore}}&& \notag \\
 &\text{do {\bf driveToDropoff} if and only if you are activating {\bf carry} }&& \notag \\
 &\hspace{1cm}\text{and you are sensing {\bf dropoffZone}}&& \notag \\
 &\text{do {\bf driveToObject} if and only if you are not activating {\bf carry} }&& \notag \\
 &\hspace{1cm}\text{and you are sensing {\bf object}}&& \notag \\
 &\text{do {\bf drop} if and only if you were activating {\bf driveToDropoff } }&& \notag \\
 &\hspace{1cm}\text{and you are sensing {\bf arrived}}&& \notag \\
-&\text{do {\bf pickup } if and only if you were activating {\bf driveToObject} }&& \notag \\
+&\text{do {\bf pickUp } if and only if you were activating {\bf driveToObject} }&& \notag \\
 &\hspace{1cm}\text{and you are sensing {\bf arrived}}&& \notag \\
 &\text{infinitely often not {\bf carry}}&& \notag
 \end{alignat}
