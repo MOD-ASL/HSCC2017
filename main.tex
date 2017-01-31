@@ -486,7 +486,7 @@ LTLMoP supports a high-level language called Structured English that allows the 
 By using the design library (Section~\ref{sec:configuration-specifics})  and environment characterization tools (Section~\ref{sec:environment-characterization}), these high-level statements are mapped to low-level sensing programs and robot controllers.
 To see how this works, consider Specification~\ref{spec:experiment}, which shows  high-level instructions from the user that direct the robot to explore a room, search, and move any object of interest to a drop-off zone.
 
-The user specifies high-level robot actions in terms of behavior properties from the design library.  For example, Line 12 in Specification~\ref{spec:experiment} specifies that under certain conditions, the robot should do \textbf{pickUp}.  As discussed in Section~\ref{sec:configuration-specifics}, our system can choose to do \textbf{pickUp} by executing any behavior from the library which has the behavior property \textbf{pickUp}, and which also satisfies the current environment characteristics. If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.  In this way, the system autonomously chooses to implement  \textbf{pickUp}  appropriately in response to the sensed environment.
+The user specifies high-level robot actions in terms of behavior properties from the design library.  For example, Line 7 in Specification~\ref{spec:experiment} specifies that under certain conditions, the robot should do \textbf{pickUp}.  As discussed in Section~\ref{sec:configuration-specifics}, our system can choose to do \textbf{pickUp} by executing any behavior from the library which has the behavior property \textbf{pickUp}, and which also satisfies the current environment characteristics. If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.  In this way, the system autonomously chooses to implement  \textbf{pickUp}  appropriately in response to the sensed environment.
 
 Some robot actions, such as \textbf{driveToExplore}, \textbf{driveToObject}, and \textbf{driveToDropoff}, requires the robot to navigate in the environment without colliding with obstacles.
 To achieve this, a goal pose is first determined by the controller and sent to a path planning program to generate a collision free path while considering the dynamics of the robot.
@@ -509,20 +509,20 @@ Propositions related to the state of the environment are evaluated using the per
 \makeatother
 \hskip-10cm
 \begin{alignat}{2}
-&\text{{\bf carry} is set on {\bf pickUp} and reset on {\bf drop}}&& \notag \\
-&\text{if you are not activating ({\bf pickUp} or {\bf drop} or {\bf driveToObject}}&& \notag \\
+&\text{{\bf 1.} {\bf carry} is set on {\bf pickUp} and reset on {\bf drop}}&& \notag \\
+&\text{{\bf 2.} if you are not activating ({\bf pickUp} or {\bf drop} or {\bf driveToObject}}&& \notag \\
 &\hspace{1cm}\text{or {\bf driveToDropoff} or {\bf carry}) then do {\bf driveToExplore}}&& \notag \\
-&\text{if you are activating {\bf carry} and you are not sensing {\bf dropoffZone}}&& \notag \\
-&\hspace{1cm}\text{then do {\bf driveToExplore}}&& \notag \\
-&\text{do {\bf driveToDropoff} if and only if you are activating {\bf carry} }&& \notag \\
+&\text{{\bf 3.} if you are activating {\bf carry} and you are not sensing }&& \notag \\
+&\hspace{1cm}\text{{\bf dropoffZone} then do {\bf driveToExplore}}&& \notag \\
+&\text{{\bf 4.} do {\bf driveToDropoff} if and only if you are activating {\bf carry} }&& \notag \\
 &\hspace{1cm}\text{and you are sensing {\bf dropoffZone}}&& \notag \\
-&\text{do {\bf driveToObject} if and only if you are not activating {\bf carry} }&& \notag \\
+&\text{{\bf 5.} do {\bf driveToObject} if and only if you are not activating {\bf carry} }&& \notag \\
 &\hspace{1cm}\text{and you are sensing {\bf object}}&& \notag \\
-&\text{do {\bf drop} if and only if you were activating {\bf driveToDropoff } }&& \notag \\
+&\text{{\bf 6.} do {\bf drop} if and only if you were activating {\bf driveToDropoff } }&& \notag \\
 &\hspace{1cm}\text{and you are sensing {\bf arrived}}&& \notag \\
-&\text{do {\bf pickUp } if and only if you were activating {\bf driveToObject} }&& \notag \\
+&\text{{\bf 7.} do {\bf pickUp } if and only if you were activating {\bf driveToObject} }&& \notag \\
 &\hspace{1cm}\text{and you are sensing {\bf arrived}}&& \notag \\
-&\text{infinitely often not {\bf carry}}&& \notag
+&\text{{\bf 8.} infinitely often not {\bf carry}}&& \notag
 \end{alignat}
 \end{subequations}
 \end{fleqn}
