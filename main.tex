@@ -529,7 +529,6 @@ Given a specification,  LTLMoP will synthesize a robot controller that satisfies
 Each state specifies a set of high-level robot actions that need to be performed, and transitions between states are specified with a set of environment propositions.
 
 Since the synthesized high-level controller is a discrete finite state automaton, we need to implement it continuously in order to control the robot to satisfy the given task. 
-Execution of the high-level controller begins at the predefined initial state in the finite state automaton. In each iteration, the values of all environment propositions  are determined by calling the corresponding sensing program. Then, we determine the next state in the finite state machine by taking the transition that matches the current value of all environment propositions.
 In the next state, the specified high level behavior properties are mapped to a behavior from the design library which satisfies both the behavior properties and current environment properties.
 %The system then maps the system proposition specified in the next state to its set of behavior properties, and selects a behavior from the design library which satisfies both the behavior properties and current environment properties.
 If the robot is not currently in a configuration capable of executing the selected behavior, the system commands the robot to reconfigure. Finally, the behavior is executed, and the program continues on to the next iteration. 
