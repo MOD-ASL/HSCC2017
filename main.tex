@@ -127,13 +127,13 @@ Over the past three decades, dozens of MSRR systems have been built \cite{Yim200
 
 These capabilities are impressive, and each represents a significant research accomplishment in its own right. However, in order to truly live up to their promise of flexible capability in the real world, MSRR systems must demonstrate autonomy: moving, navigating, interacting with objects, and self-reconfiguring, all in unknown environments and without external localization or control. 
 
-We provide a system capable of \emph{autonomously} accomplishing \emph{high-level
-tasks} in \emph{unknown environments} using \emph{modular self-reconfigurable
-robots}.  A \emph{high-level task} is specified in terms
+We provide a system capable of autonomously accomplishing high-level
+tasks in unknown environments using modular self-reconfigurable
+robots.  A high-level task is specified in terms
 of general objectives, and requires some decision-making regarding the specific
-way in which the task will be solved. The environment is \emph{unknown}, meaning
+way in which the task will be solved. The environment is unknown, meaning
 that the robot does not have a map of the environment or obstacles before the
-task begins. To our knowledge, this paper represents the first example of a truly autonomous MSRR system accomplishing these kinds of tasks.
+task begins. This paper represents the first example of a truly autonomous MSRR system accomplishing these kinds of tasks.
 
 Our system is built around the SMORES-EP modular robot hardware system, but could be adapted to work with other modular robots. Tasks are specified in a high-level mission planner.  Perception-driven mapping and object recognition tools  allows the robot to explore unknown environments and react to what it finds. Novel environment characterization tools allow the robot to assess its environment and determine whether it needs to reconfigure to solve a task.  A novel, centralized reconfiguration strategy allows the robot to autonomously change its morphology in response to its environment.
 
@@ -203,12 +203,12 @@ Finally, Section~\ref{sec:high-level} describes a high-level mission planner tha
 %%%
 Modular robots have long been regarded as having the potential to improve performance in unknown environments (such as search and rescue scenarios), because  self-reconfiguration theoretically gives them the flexibility to respond to whatever they encounter \cite{Yim2007a,yim2003modular}.  However, examples of MSRR actually operating in unknown environments are very limited. We believe our system demonstrates more integrated autonomy in an unknown environment than any existing MSRR system.  Our work is particularly novel because we use perception-driven reconfiguration to address high-level tasks in unknown environments.
 
-To our knowledge, no MSRR system has been used to map a completely unknown environment. The Millibot system has demonstrated the ability to map a partially unknown environment when operating as a swarm \cite{Grabowski2000}. The autonomy of the Millibot swarm is limited: a human operator makes all high-level decisions, and is responsible for navigation using a GUI. Certain members of the swarm are designated as ``beacons'', and have known locations, making the environment only partially unknown.
+The Millibot system demonstrated the ability to map a partially unknown environment when operating as a swarm \cite{Grabowski2000}. The autonomy of the Millibot swarm is limited: a human operator makes all high-level decisions, and is responsible for navigation using a GUI. Certain members of the swarm are designated as ``beacons'', and have known locations, making the environment only partially unknown.
 
 % swarm-bots
-The swarm-bots are a MSRR system that has been applied in exploration \cite{Dorigo2005} and collective manipulation \cite{Mondada2005} scenarios.  Like the Millibots, exploration is demonstrated in partially unknown environments, with some members of the swarm acting as ``beacons'' with known location.  In a collective manipulation task, the swarm-bots have limited autonomy, with a human operator specifying the location of the manipulation target and the global sequence of manipulation actions.
+Swarm-Bots is a MSRR system that has been applied in exploration \cite{Dorigo2005} and collective manipulation \cite{Mondada2005} scenarios.  Like the Millibots, exploration is demonstrated in partially unknown environments, with some members of the swarm acting as ``beacons'' with known location.  In a collective manipulation task, Swarm-Bots have limited autonomy, with a human operator specifying the location of the manipulation target and the global sequence of manipulation actions.
 
-Swarm-bots have demonstrated the capability to use self-assembly to solve low-level tasks, such as crossing a gap \cite{Mondada2004} or ascending a small hill \cite{OGrady2005}.  In these scenarios, low-level sensors (ground proximity sensors and tilt sensors) are used to trigger self-assembly.  In our work, 3D map data is used to characterize the environment, and the system autonomously selects specific morphologies that are appropriate to the task and environment. 
+Swarm-Bots have demonstrated the capability to use self-assembly to solve low-level tasks, such as crossing a gap \cite{Mondada2004} or ascending a small hill \cite{OGrady2005}.  In these scenarios, low-level sensors (ground proximity sensors and tilt sensors) are used to trigger self-assembly.  In our work, 3D map data is used to characterize the environment, and the system autonomously selects specific morphologies that are appropriate to the task and environment. 
 
 %swarmanoid
 The swarmanoid project (successor to the swarm-bots), uses a heterogeneous swarm of ground and flying robots (called ``hand-'', ``foot-'', and ``eye-'' bots) to perform exploration and object retrieval tasks  \cite{Dorigo2013}. Robotic elements of the swarmanoid system connect and disconnect to complete the task, but the decision to take this action is not made autonomously by the robot in response to sensed environment conditions. While the location of the object to be retrieved is unknown, the method for retrieval is known and constant.
@@ -223,7 +223,7 @@ Autonomous reconfiguration has been demonstrated with several other modular robo
 Recent work includes a system which integrate many low-level capabilities of a MSRR system in a design library, and accomplishes high-level user-specified tasks by synthesizing elements of the library into a reactive state-machine \cite{Jing2016}. This system demonstrates autonomy with respect to task-related decision making, but is designed to operate in a fully known environment with external sensing.
 
 % Traditional systems and wrapup statement
-Traditional robotics literature provides numerous examples of robots operating autonomously in unknown environments. Our system goes beyond this existing work, using the unique the self-reconfiguration capabilities of an MSRR system to take autonomy a step further.  The system uses perception of the environment  to inform the choice of robot configuration, allowing the robot to adapt its abilities to surmount challenges arising from \textit{a priori} unknown features in the environment. Through hardware experiments, we demonstrate that autonomous self-reconfiguration allows our system to complete tasks that would have otherwise been impossible.
+Our system goes beyond existing work by using self-reconfiguration capabilities of an MSRR system to take autonomy a step further.  The system uses perception of the environment to inform the choice of robot configuration, allowing the robot to adapt its abilities to surmount challenges arising from \textit{a priori} unknown features in the environment. Through hardware experiments, we demonstrate that autonomous self-reconfiguration allows our system to adapt to the environment to complete complex tasks.
 %     __  __               __
 %    / / / /___ __________/ /      ______ _________
 %   / /_/ / __ `/ ___/ __  / | /| / / __ `/ ___/ _ \
@@ -244,13 +244,7 @@ left and right wheels to drive around as a two-wheel differential drive robot.
 All four faces of the SMORES-EP module have electro-permanent (EP) magnets
 that serve as a high-strength, low-energy connector for self-reconfiguration
 \cite{tosun2016design}.  Any face of one module can connect to any face of
-another, with an attachment force of $90N$ \cite{tosun2016design}. 
-
-The magnetic connectors can also attach to objects made of ferromagnetic
-materials (such as steel).  By taking advantage of this capability, SMORES-EP
-modules can use their magnets to pick up and carry metal objects.
-Provided the attachment surface is flat and smooth, the attachment force
-between a SMORES-EP face and a strongly ferromagnetic object is similar to that between modules.
+another, with an attachment force of $90N$ \cite{tosun2016design}. The magnetic connectors can also attach to objects made of ferromagnetic materials (such as steel), which provides a convenient method for retrieving and transporting metal objects.
 
 Each module has an onboard battery, STM-32 microcontroller, and 802.11b wireless
 module to send and receive UDP packets.  In this work, clusters of SMORES
@@ -286,7 +280,7 @@ Computation is provided by an UP computing board with an Intel Atom 1.92 GHz pro
 % Sensor Module Figure
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.3\textwidth]{images/sensor_module2.jpg}
+\includegraphics[width=0.25\textwidth]{images/sensor_module2.jpg}
 \caption{Brain Module with labelled components.  UP board and battery are inside body.      }
 \label{fig:sensor-module}
 \end{center}
@@ -309,9 +303,9 @@ Computation is provided by an UP computing board with an Intel Atom 1.92 GHz pro
 Exploration of unknown environments is a core functionality of our system. In this section we provide an overview on deploying established methods for perception in the novel context of MSRR in unknown environment.
 %While the methods used are not novel in the broader context of robotics,  this system represents one of the first modular robot systems capable of exploring and operating in totally unknown environments.
 
-To facilitate the use of open source software and enable networking between components, the proposed system is built in a ROS framework\footnote{http://www.ros.org}. Mapping and robot pose are provided by a RGB-D SLAM software package called RTAB-MAP\cite{rtabmap}. A 3D map of the environment is incrementally built and stored in an efficient octree-based volumetric map using Octomap\cite{octomap}.
+To facilitate the use of open source software and enable networking between components, the system is built in a ROS framework\footnote{http://www.ros.org}. Mapping and robot pose are provided by a RGB-D SLAM software package called RTAB-MAP\cite{rtabmap}. A 3D map of the environment is incrementally built and stored in an efficient octree-based volumetric map using Octomap\cite{octomap}.
 
-The system intelligently explores an unknown environment using a new next best view planner for object exploration created by two of the authors\footnote{This work has been newly accepted for journal publication in 2017}. This planner directs the robot to explore its environment in a way that maximizes information gain while avoiding collision with obstacles. The algorithm uses the current volumetric map of the environment and estimates the next reachable sensor viewpoint that will observe the largest volume of undiscovered portions of objects. It also estimates the amount of information (in an entropy-reduction sense) that will be gained from a sensor measurement taken at that viewpoint. To integrate into the proposed system, the exploration algorithm is offered as a service that can be queried by the high-level planner when desired. A volumetric map of the environment and the reachable space of sensor viewpoints in that map must be provided to the algorithm. The algorithm then computes and returns the next best view for the sensor, which the high-level planner can then set as a navigation waypoint.
+The system intelligently explores an unknown environment using a new next best view planner for object exploration created by two of the authors\footnote{This work has been newly accepted for journal publication in 2017}. This planner directs the robot to explore its environment in a way that maximizes information gain while avoiding collision with obstacles. The algorithm uses the current volumetric map of the environment and estimates the next reachable sensor viewpoint that will observe the largest volume of undiscovered portions of objects. To integrate into the proposed system, the exploration algorithm is offered as a service that can be queried by the high-level planner when desired. A volumetric map of the environment and the reachable space of sensor viewpoints in that map are provided as inputs to the algorithm. The algorithm then computes and returns the next best view for the sensor, which the high-level planner can then set as a navigation waypoint.
 
 Note that the reachable space is dependent on the locomotion capabilities of the specific robot configuration. This information is associated with the configuration in the library introduced in Section~\ref{sec:configuration-specifics}.
 
@@ -343,7 +337,7 @@ In this work, we create five library entries for two different configurations,
 listed in Table~\ref{table:1}. This library was created to accomplish an object retrieval task (described in Section~\ref{sec:experiments}), but the library can be expanded to include more entries for other environments and tasks. Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use a perception algorithm described in Section \ref{sec:environment-characterization}.
 
 The ``Tank'' configuration shown in Figure~\ref{fig:dropoff} is capable of picking
-up and dropping objects in a ``free'' environment (described in Section \ref{sec:environment-characterization}). In addition, the ``Tank'' configuration can locomote on flat terrain. It uses a parametric differential drive behavior to convert a desired velocity vector into motor commands (\textbf{driveTo...} in Table \ref{table:1}).
+up and dropping objects in a ``free'' environment (described in Section \ref{sec:environment-characterization}). In addition, the ``Tank'' configuration can locomote on flat terrain. It uses a parametric differential drive behavior to convert a desired velocity vector into motor commands (\textbf{drive} in Table \ref{table:1}).
 
 The ``Proboscis'' configuration shown in Figure~\ref{fig:pink_grab} has
 a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects.
@@ -361,7 +355,7 @@ This library-based framework allows us to specify tasks for modular robots at a 
  \hline
  Tank & \textbf{pickUp} & ``free'' \\\hline
  Tank & \textbf{drop} & ``free'' \\\hline
- Tank & \textbf{drive...} & ``free''\\ \hline
+ Tank & \textbf{drive} & ``free''\\ \hline
  Proboscis & \textbf{pickUp} & ``tunnel'' or ``free''\\ \hline
  Proboscis & \textbf{drop} &``tunnel'' or ``free'' \\ 
  \hline
@@ -535,7 +529,6 @@ Given a specification,  LTLMoP will synthesize a robot controller that satisfies
 Each state specifies a set of high-level robot actions that need to be performed, and transitions between states are specified with a set of environment propositions.
 
 Since the synthesized high-level controller is a discrete finite state automaton, we need to implement it continuously in order to control the robot to satisfy the given task. 
-Execution of the high-level controller begins at the predefined initial state in the finite state automaton. In each iteration, the values of all environment propositions  are determined by calling the corresponding sensing program. Then, we determine the next state in the finite state machine by taking the transition that matches the current value of all environment propositions.
 In the next state, the specified high level behavior properties are mapped to a behavior from the design library which satisfies both the behavior properties and current environment properties.
 %The system then maps the system proposition specified in the next state to its set of behavior properties, and selects a behavior from the design library which satisfies both the behavior properties and current environment properties.
 If the robot is not currently in a configuration capable of executing the selected behavior, the system commands the robot to reconfigure. Finally, the behavior is executed, and the program continues on to the next iteration. 
@@ -611,9 +604,9 @@ During the experiment, the high-level planner used the library of two configurat
    \vspace{-1em}
    \end{figure*}
 %
-Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available as an attachment to this paper. The robot starts in the ``Tank'' configuration. The starting location prevented the robot from seeing the objects initially, forcing it to explore the environment to search for them. After a period of exploration, the robot locates the pink object. The characterization algorithm correctly classified the surrounding environment as a ``tunnel'' type, and accordingly the robot navigated in front of the object and reconfigured to the ``Proboscis'' configuration. The ``Proboscis'' then uses its long arm to reach into the tunnel and pull the object out into the open.
+Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available as an attachment to this paper. The robot starts in the ``Tank'' configuration. The starting location prevented the robot from seeing the objects initially, forcing it to explore the environment to search for them. After a period of exploration, the robot locates the pink object. The characterization algorithm correctly classified the surrounding environment as a ``tunnel'' type, and accordingly the robot navigated in front of the object and reconfigured to the ``Proboscis'' configuration. The ``Proboscis'' then used its long arm to reach into the tunnel and pull the object out into the open.
 
- The ``Proboscis'' can only drive forwards and backwards (it cannot steer), so the robot needs to reconfigure back to the ``Tank'' to drive the object to the drop-off zone.  To do so, the robot dropped the object,  reconfigured, and picked the object back up. The ``Tank'' then navigated to and dropped off the object at the drop-off zone, which was previously located during exploration and recorded in the global map built by the SLAM algorithm.
+ The ``Proboscis'' can only drive forwards and backwards (it cannot steer), so the robot concluded it needed to reconfigure back to the ``Tank'' to drive the object to the drop-off zone.  To do so, the robot dropped the object,  reconfigured, and picked the object back up. The ``Tank'' then navigated to and dropped off the object at the drop-off zone, which was previously located during exploration and recorded in the global map built by the SLAM algorithm.
 
  Once done, the robot navigated directly to the green object.  No further exploration was required since the green object was discovered while the robot was dropping off the pink object. The robot correctly determined
 that the green object was in a ``free'' environment, and picked it up without reconfiguring. The robot finished the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows a volumetric map of the environment generated as the robot explored and delivered objects. The robot successfully completed all tasks in the experiment in about 26 minutes. 
