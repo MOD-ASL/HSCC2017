@@ -153,7 +153,7 @@ Through hardware experiments, we demonstrate the system autonomously completing 
 % \item \textbf{Reconfiguration:} Software and hardware tools enabling robust
 % autonomous reconfiguration with SMORES-EP.
 % \end{enumerate}
-
+%%%%%
 %
 %    _____            __                    ____                        _
 %   / ___/__  _______/ /____  ____ ___     / __ \_   _____  ______   __(_)__ _      __
@@ -246,7 +246,7 @@ that serve as a high-strength, low-energy connector for self-reconfiguration
 \cite{tosun2016design}.  Any face of one module can connect to any face of
 another, with an attachment force of $90N$ \cite{tosun2016design}. The magnetic connectors can also attach to objects made of ferromagnetic materials (such as steel), which provides a convenient method for retrieving and transporting metal objects.
 
-Each module has an onboard battery, STM-32 microcontroller, and 802.11b wireless
+Each module has an onboard battery, STM-32 microcontroller, and 802.11b WiFi
 module to send and receive UDP packets.  In this work, clusters of SMORES
 modules were controlled by a central computer running a Python program that
 sends wireless commands to control the four DoF and magnets of each module.
@@ -275,13 +275,13 @@ SMORES-EP modules have very limited onboard computation, and no sensors that all
 
 The body of the brain module is a $160\times80\times80mm$ box, roughly the size of two SMORES-EP side-by-side.  The brain module can be configured to provide attachment points on the back, front, or bottom that allow easy connection to SMORES-EP modules or passive cubes.
 
-Computation is provided by an UP computing board with an Intel Atom 1.92 GHz processor, 4 GB memory, and a 64 GB hard drive. A USB WiFi adapter provides network connectivity. A front-facing Asus XTION-Pro Live camera mounted on top of the brain module body provides RGB-D data, enabling the robot to explore and map its environment and recognize objects of interest.  A thin stem extends $30cm$ above the body, supporting a downward-facing Microsoft Lifecam webcam.  This camera provides a view of a  $1m\times0.75m$ area in front of the brain module, and is used to track AprilTag \cite{olson2011apriltag} fiducials for reconfiguration. A $7.4v$, $3600mAh$ LiPo battery provides about 1.5 hours of up time.
+Computation is provided by an UP computing board with an Intel Atom 1.92 GHz processor, 4 GB memory, and a 64 GB hard drive. A USB WiFi adapter provides network connectivity. A front-facing Asus Xtion-Pro Live camera mounted on top of the brain module body provides RGB-D data, enabling the robot to explore and map its environment and recognize objects of interest.  A thin stem extends $30cm$ above the body, supporting a downward-facing Microsoft Lifecam webcam.  This camera provides a view of a  $1m\times0.75m$ area in front of the brain module, and is used to track AprilTag \cite{olson2011apriltag} fiducials for reconfiguration. A $7.4v$, $3600mAh$ LiPo battery provides about 1.5 hours of up time.
 %
 % Sensor Module Figure
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.3\textwidth]{images/sensor_module2.jpg}
-\caption{Brain Module with labelled components.  UP board and battery are inside body.      }
+\caption{Brain Module with labelled components.  UP board and battery are inside the body.      }
 \label{fig:sensor-module}
 \end{center}
 \vspace{-2em}
@@ -300,14 +300,14 @@ Computation is provided by an UP computing board with an Intel Atom 1.92 GHz pro
 
 %Since the proposed system performs tasks in unknown environments and conditions, a robust suite of perception algorithms is required to inform control and decision-making. The robot must have the ability to explore and build a map of its environment while avoiding obstacles and tracking its pose. The system must be able to recognize objects and regions of interest related to the desired task. Finally, the system must characterize the environment in terms of configuration capabilities. Features in the environment may restrict which robot configurations can viably perform parts of the high-level task, such as retrieving an object or navigating to a waypoint. The system needs to recognize these features to be able to intelligently choose the appropriate robot configuration for performing the task.
 
-Exploration of unknown environments is a core functionality of our system. In this section we provide an overview on deploying established methods for perception in the novel context of MSRR in unknown environment.
+Exploration of unknown environments is a core functionality of our system. In this section, we describe how we deploy established methods for perception in the novel context of a modular robot operating in an unknown environment.
 %While the methods used are not novel in the broader context of robotics,  this system represents one of the first modular robot systems capable of exploring and operating in totally unknown environments.
 
 To facilitate the use of open source software and enable networking between components, the system is built in a ROS framework\footnote{http://www.ros.org}. Mapping and robot pose are provided by a RGB-D SLAM software package called RTAB-MAP\cite{rtabmap}. A 3D map of the environment is incrementally built and stored in an efficient octree-based volumetric map using Octomap\cite{octomap}.
 
 The system intelligently explores an unknown environment using a new next best view planner for object exploration created by two of the authors\footnote{This work has been newly accepted for journal publication in 2017}. This planner directs the robot to explore its environment in a way that maximizes information gain while avoiding collision with obstacles. The algorithm uses the current volumetric map of the environment and estimates the next reachable sensor viewpoint that will observe the largest volume of undiscovered portions of objects. To integrate into the proposed system, the exploration algorithm is offered as a service that can be queried by the high-level planner when desired. A volumetric map of the environment and the reachable space of sensor viewpoints in that map are provided as inputs to the algorithm. The algorithm then computes and returns the next best view for the sensor, which the high-level planner can then set as a navigation waypoint.
 
-Note that the reachable space is dependent on the locomotion capabilities of the specific robot configuration. This information is associated with the configuration in the library introduced in Section~\ref{sec:configuration-specifics}.
+Note that the reachable space is dependent on the size and locomotion capabilities of the specific robot configuration. This information is associated with the configuration in the library introduced in Section~\ref{sec:configuration-specifics}.
 
 To identify objects of interest to a high-level task, our system provides tools to recognize color blobs and track their location in 3D.  Colors are recognized using CMVision\footnote{CMVision: http://www.cs.cmu.edu/$\sim$jbruce/cmvision/}, and tracked in 3D using depth information from the Xtion sensor\footnote{Lucas Coelho Figueiredo: https://github.com/lucascoelho91/ballFollower}. This information is used to provide environment information to the high-level controller, discussed in Section~\ref{sec:high-level}.  While we currently only provide object recognition by color, more sophisticated methods could easily be included. 
 %
@@ -321,18 +321,19 @@ To identify objects of interest to a high-level task, our system provides tools 
 \section{Library of Configurations and Behaviors}
 \label{sec:configuration-specifics}
 %
-SMORES-EP has the capability to \emph{self-reconfigure}: changing the connected structure of a cluster of modules to assume different shapes and capabilities.  In order to specify tasks for SMORES-EP (or any other self-reconfigurable robot) at a high level, we must abstract the robot in a way that captures the fact that its capabilities are a function of its configuration (connected structure). For the purposes of this work, we rely on a framework first presented in \cite{Jing2016}, which we summarize here.
+SMORES-EP has the capability to self-reconfigure, changing the connected structure of a cluster of modules to assume different shapes and capabilities.  In order to specify tasks for SMORES-EP (or any other self-reconfigurable robot) at a high level, we must abstract the robot in a way that captures the fact that its capabilities are a function of its configuration (connected structure). For the purposes of this work, we rely on a framework first presented in \cite{Jing2016}, which we summarize here.
 
 In this framework, the entire modular robot system is treated as a single robot with capabilities defined by a library. A library entry is defined as $l = (C,B_C,P_e,P_b)$ where:
 \begin{itemize}
 \item $C$ is the robot \emph{configuration}, specified by the connected structure of the modules.
 \item $B_C$ is a \emph{behavior} that $C$ can perform. A behavior is a controller that commands the robot to perform a specific useful action. 
 \item $P_b$ is a set of \emph{behavior properties} that describes what $B_C$ does. 
-\item $P_e$ is a set of \emph{environment properties} that describe the environment in which this library entry is suitable. 
+\item $T_e$ is a set of \emph{environment types} that describe the environments in which this library entry is suitable. 
 \end{itemize} 
 %
-Environment properties $P_e$ specify when a given behavior can be used. When we specify tasks at the high level, we use behavior properties $P_b$ to describe a desired robot action without explicitly specifying a configuration or behavior.
-
+When we specify tasks at the high level, we use behavior properties $P_b$ to describe a desired robot action without explicitly specifying a configuration or behavior.
+Environment types $T_e$ specify the conditions under which a behavior can be used, and are determined through a sensing process described in the next section.
+ 
 In this work, we create five library entries for two different configurations,
 listed in Table~\ref{table:1}. This library was created to accomplish an object retrieval task (described in Section~\ref{sec:experiments}), but the library can be expanded to include more entries for other environments and tasks. Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use a perception algorithm described in Section \ref{sec:environment-characterization}.
 
@@ -344,14 +345,14 @@ a long arm in front, and is suitable for reaching between obstacles in a narrow 
 However, the locomotion ability of this configuration is limited to forward/backward
 motion, making it unsuitable for general navigation.
 
-This library-based framework allows us to specify tasks for modular robots at a high level, by associating abstract robot actions with robust low-level controllers that execute appropriate robot behaviors based on the sensed environment. For example, if a task specification requires the robot to execute a \textbf{pickUp} behavior, our system could select either the Tank or Proboscis configurations to perform the action, since both have behaviors property \textbf{pickUp}. To choose the appropriate configuration to use, the robot uses perception to characterize its environment in terms of the $P_e$ corresponding to each configuration. If the environment has the property ``tunnel'', only the Proboscis configuration can be used, and the robot will take  reconfigure to form the Proboscis if it is not already in that configuration. Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
+This library-based framework allows us to specify tasks for modular robots at a high level, by associating abstract robot actions with robust low-level controllers that execute appropriate robot behaviors based on the sensed environment. For example, if a task specification requires the robot to execute a \textbf{pickUp} behavior, our system could select either the Tank or Proboscis configurations to perform the action, since both have behaviors property \textbf{pickUp}. To choose the appropriate configuration to use, the robot uses perception to characterize its environment in terms of the environment types $T_e$ associated with each configuration. If the environment is of type ``tunnel'', only the Proboscis configuration can be used, and the robot will take  reconfigure to form the Proboscis if it is not already in that configuration. Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
 %
 \begin{table}
 \centering
 \begin{tabular}{ |c|c|c| } 
  \hline
  \multirow{2}{6em}{Configuration} & Behavior & Environment \\
- & properties & characterization \\
+ & properties & Types \\
  \hline
  Tank & \textbf{pickUp} & ``free'' \\\hline
  Tank & \textbf{drop} & ``free'' \\\hline
@@ -373,11 +374,11 @@ This library-based framework allows us to specify tasks for modular robots at a 
 \section{Environment Characterization}
 \label{sec:environment-characterization}
 %
-As discussed in Section~\ref{sec:configuration-specifics}, the system takes environment features into account when selecting an appropriate library entry to complete an action. Our perception suite includes functions that process the 3D information to identify environment properties.
+As discussed in Section~\ref{sec:configuration-specifics}, the system takes environment type into account when selecting an appropriate library entry to complete an action. Our perception suite includes functions that process the 3D information to identify environment types.
 
 %In order to intelligently choose appropriate configurations when performing tasks, the robot must perceive and characterize its environment into a discrete set of environment types that correspond with configuration capabilities. The proposed system includes a perception component that discretely characterizes the environment for the purpose of retrieving an object. This characterization can then be used by the high-level planner to determine the appropriate configuration and gait for successful object retrieval. 
 
-Currently, the perception suite includes functions to recognize three types of environments relevant to object retrieval tasks, shown in Figure \ref{fig:characters}.  When an object is recognized in the environment, the 3D information about its surroundings is evaluated. If the object's position is higher than a threshold height, the environment is characterized as the ``ledge'', likely requiring a library entry that can reach up to the top of the ledge to retrieve the object.
+Currently, the perception suite includes functions to recognize three types of environments relevant to object retrieval tasks, shown in Figure \ref{fig:characters}.  When an object is recognized in the environment, the 3D information about its surroundings is evaluated. If the object's position is higher than a threshold height, the environment is characterized as the ``ledge'' type, likely requiring a library entry that can reach up to the top of the ledge to retrieve the object.
 If the object is on the ground, an occupancy grid is created around it, and all grid cells within a robot-radius of obstacles are denoted unreachable (as shown in Figure~\ref{fig:characterization}). The closest reachable point to the object within $20^o$ of the robot's line of sight to the object is selected. If the distance from this point to the object is greater than a threshold value, the environment is characterized as a ``tunnel'', likely requiring a configuration that is narrow enough to move between the surrounding obstacles to retrieve the object.
 If the environment surrounding the object does not meet the criteria for either a ``ledge'' or ``tunnel'', it is characterized as ``free''.
 %If the environment type is ``tunnel'', the algorithm also selects a navigation waypoint at which the robot can reconfigure before retrieving the object. This waypoint is calculated by extending the closest point farther away from the object to be retrieved (red arrow in Figure \ref{fig:characterization}). This information is passed to the high-level planner for use in controller synthesis.
@@ -472,24 +473,24 @@ Several techniques were developed to ensure reliable connection and disconnectio
 \section{High-Level Planner}
 \label{sec:high-level}
 
-To bring together the actuation, sensing, and reconfiguration capabilities of  the  robot as a complete system for accomplishing  tasks, we employ an existing framework LTLMoP to automatically generate robot controllers from user-specified high-level instructions using formal methods \cite{DBLP:conf/iros/FinucaneJK10,DBLP:journals/trob/Kress-GazitFP09}.
-LTLMoP allows us to use each component of our system as a low-level atomic controller and specify a wide-range of reactive robotic tasks as a set of high-level instructions using these controllers.
+To bring together the actuation, sensing, and reconfiguration capabilities of  the  robot as a complete system for accomplishing  tasks, we employ an existing framework called LTLMoP to automatically generate robot controllers from user-specified high-level instructions using formal methods \cite{DBLP:conf/iros/FinucaneJK10,DBLP:journals/trob/Kress-GazitFP09}.
+LTLMoP allows us to use each component of our system as a low-level atomic controller, and specify a wide-range of reactive robotic tasks as a set of high-level instructions using these controllers.
 In this section, we will mainly discuss how we model our system in order to use LTLMoP to automatically generate a high-level controller for our desired robot task.
 
 We abstract the robot and environment as a set of Boolean propositions.
-For example, the robot action ``pickUp'' is \lt if the robot is currently picking up an object (and \lf otherwise), and the environment proposition ``object'' is \lt if the robot is currently sensing an object of interest (and \lf otherwise).
+For example, the robot action \textbf{pickUp} is \lt if the robot is currently picking up an object (and \lf otherwise), and the environment proposition \textbf{object} is \lt if the robot is currently sensing an object of interest (and \lf otherwise).
 LTLMoP supports a high-level language called Structured English that allows the robot task to be specified in terms of these propositions.
-By using the design library (Section~\ref{sec:configuration-specifics})  and environment characterization tools (Section~\ref{sec:environment-characterization}), these high-level statements are mapped to low-level sensing programs and robot controllers.
+By using the library (Section~\ref{sec:configuration-specifics})  and environment characterization tools (Section~\ref{sec:environment-characterization}), these high-level statements are mapped to low-level sensing programs and robot controllers.
 To see how this works, consider Specification~\ref{spec:experiment}, which shows  high-level instructions from the user that direct the robot to explore a room, search, and move any object of interest to a drop-off zone.
 
-The user specifies high-level robot actions in terms of behavior properties from the design library.  For example, Line 7 in Specification~\ref{spec:experiment} specifies that under certain conditions, the robot should do \textbf{pickUp}.  As discussed in Section~\ref{sec:configuration-specifics}, our system can choose to do \textbf{pickUp} by executing any behavior from the library which has the behavior property \textbf{pickUp}, and which also satisfies the current environment characteristics. If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.  In this way, the system autonomously chooses to implement  \textbf{pickUp}  appropriately in response to the sensed environment.
+The user specifies high-level robot actions in terms of behavior properties from the library.  For example, Line 7 in Specification~\ref{spec:experiment} specifies that under certain conditions, the robot should do \textbf{pickUp}.  As discussed in Section~\ref{sec:configuration-specifics}, our system can choose to do \textbf{pickUp} by executing any behavior from the library which has the behavior property \textbf{pickUp}, and which also satisfies the current environment characteristics. If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.  In this way, the system autonomously chooses to implement  \textbf{pickUp}  appropriately in response to the sensed environment.
 
 Some robot actions, such as \textbf{driveExplore}, \textbf{driveToObject}, and \textbf{driveToDropoff}, requires the robot to navigate in the environment without colliding with obstacles.
 To achieve this, a goal pose is first determined by the controller and sent to a path planning program to generate a collision free path while considering the dynamics of the robot.
 The path is then converted to a sequence of robot velocity vectors and used as the input to control a parametric driving behavior in the library.
 In this work, we use the ROS navigation package\footnote{http://wiki.ros.org/navigation} to generate paths for a differential drive robot to control the ``Tank'' configuration in the library.
 
-Propositions related to the state of the environment are evaluated using the perception tools described in Section~\ref{sec:exploration}. For example in Specification~\ref{spec:experiment}, the proposition ``arrived'' is \lt if the robot arrives at its target location, which is determined by consulting the robot's position in the map generated by SLAM. The proposition ``dropoffZone'' is \lt if the robot is currently sensing a drop-off zone, which is determined by consulting both the map and color tracking functions.
+Propositions related to the state of the environment are evaluated using the perception tools described in Section~\ref{sec:exploration}. For example in Specification~\ref{spec:experiment}, the proposition \textbf{arrived} is \lt if the robot arrives at its target location, which is determined by consulting the robot's position in the map generated by SLAM. The proposition \textbf{dropoffZone} is \lt if the robot is currently sensing a drop-off zone, which is determined by consulting both the map and color tracking functions.
 
 \begin{spec}[h!]
 \caption{Search and move any object of interest to the drop-off zone}
@@ -528,8 +529,9 @@ Propositions related to the state of the environment are evaluated using the per
 Given a specification,  LTLMoP will synthesize a robot controller that satisfies the given  task (if one exists). The controller is synthesized in the form of a finite state automaton.
 Each state specifies a set of high-level robot actions that need to be performed, and transitions between states are specified with a set of environment propositions.
 
-Since the synthesized high-level controller is a discrete finite state automaton, we need to implement it continuously in order to control the robot to satisfy the given task. 
-In the next state, the specified high level behavior properties are mapped to a behavior from the design library which satisfies both the behavior properties and current environment properties.
+Since the synthesized high-level controller is a discrete finite state automaton, we need to implement it continuously in order to control the robot to satisfy the given task.
+Execution of the high-level controller begins at the predefined initial state in the finite state automaton. In each iteration, the values of all environment propositions are determined by calling the corresponding sensing program. Then, we determine the next state in the finite state machine by taking the transition that matches the current value of all environment propositions. 
+In the next state, the specified high level behavior properties are mapped to a behavior from the design library which satisfies both the behavior properties and current environment type.
 %The system then maps the system proposition specified in the next state to its set of behavior properties, and selects a behavior from the design library which satisfies both the behavior properties and current environment properties.
 If the robot is not currently in a configuration capable of executing the selected behavior, the system commands the robot to reconfigure. Finally, the behavior is executed, and the program continues on to the next iteration. 
 
@@ -549,9 +551,9 @@ If the robot is not currently in a configuration capable of executing the select
 
 We validated and demonstrated our system's capabilities with a hardware experiment in which a robot composed of SMORES-EP modules completed a complex, high-level task in an unknown environment.
 
-The robot is tasked with cleaning a messy graduate student office.  It is directed to explore the unknown office environment and search for any brightly-colored metal garbage that can be recycled.  Whenever it finds brightly colored metal objects, it should pick them up and bring them to a designated drop-off zone for recycling, which is marked with a blue square on the wall.
+The robot is tasked with cleaning a messy graduate student office.  It is directed to explore the unknown office environment and search for any brightly-colored metal garbage that can be recycled.  Whenever it finds brightly colored metal objects, it should bring them to a designated drop-off zone for recycling, which is marked with a blue square on the wall.
 
-The high-level task consisted of three different types of sub-tasks: explore the environment, find and retrieve all metal objects, and deliver each to the drop-off zone. Figure \ref{fig:map} shows the environment layout used in the experiment, designed to represent a messy office. Two colored objects were placed in the environment: a green soda can was placed in the open (a ``free'' environment type), and a pink spool of wire was positioned in a narrow gap between two trash cans (a ``tunnel'' environment). Obstacles, environment types, and locations of the objects and drop-off zone were unknown to the robot \textit{a priori}.  Note that the object colors (pink and green) have no influence on environment characterization: in other words, the robot does not know that the pink object is in a ``tunnel''  before the experiment starts.
+The high-level task consists of three different types of sub-tasks: explore the environment, find and retrieve all metal objects, and deliver each to the drop-off zone. Figure \ref{fig:map} shows the environment layout used in the experiment, designed to represent a messy office. Two colored objects were placed in the environment: a green soda can was placed in the open (a ``free'' environment type), and a pink spool of wire was positioned in a narrow gap between two trash cans (a ``tunnel'' environment). Obstacles, environment types, and locations of the objects and drop-off zone were unknown to the robot \textit{a priori}.  Note that the object colors (pink and green) have no influence on environment characterization: in other words, the robot does not know that the pink object is in a ``tunnel''  before the experiment starts.
  
 
 Five SMORES-EP modules, one Brain Module, and three passive cubes composed the robot for performing the task. The robot grasped objects using modules' electro-permanent magnets to attach to steel washers on the objects.
@@ -604,12 +606,12 @@ During the experiment, the high-level planner used the library of two configurat
    \vspace{-1em}
    \end{figure*}
 %
-Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available as an attachment to this paper. The robot starts in the ``Tank'' configuration. The starting location prevented the robot from seeing the objects initially, forcing it to explore the environment to search for them. After a period of exploration, the robot locates the pink object. The characterization algorithm correctly classified the surrounding environment as a ``tunnel'' type, and accordingly the robot navigated in front of the object and reconfigured to the ``Proboscis'' configuration. The ``Proboscis'' then used its long arm to reach into the tunnel and pull the object out into the open.
+Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available as an attachment to this paper. The robot started in the ``Tank'' configuration. The starting location prevented the robot from seeing the objects initially, forcing it to explore the environment to search for them. After a period of exploration, the robot located the pink object. The characterization algorithm correctly classified the surrounding environment as a ``tunnel'' type, and accordingly the robot navigated in front of the object and reconfigured to the ``Proboscis'' configuration. The ``Proboscis'' then used its long arm to reach into the tunnel and pull the object out into the open.
 
- The ``Proboscis'' can only drive forwards and backwards (it cannot steer), so the robot concluded it needed to reconfigure back to the ``Tank'' to drive the object to the drop-off zone.  To do so, the robot dropped the object,  reconfigured, and picked the object back up. The ``Tank'' then navigated to and dropped off the object at the drop-off zone, which was previously located during exploration and recorded in the global map built by the SLAM algorithm.
+ The ``Proboscis'' can only drive forwards and backwards (it cannot steer), so the robot concluded it needed to reconfigure back to the ``Tank'' to drive the object to the drop-off zone.  To do so, the robot dropped the object,  reconfigured, and picked the object back up. The ``Tank'' then navigated to and dropped off the object in the drop-off zone, which was previously located during exploration and recorded in the global map built by the SLAM algorithm.
 
  Once done, the robot navigated directly to the green object.  No further exploration was required since the green object was discovered while the robot was dropping off the pink object. The robot correctly determined
-that the green object was in a ``free'' environment, and picked it up without reconfiguring. The robot finished the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows a volumetric map of the environment generated as the robot explored and delivered objects. The robot successfully completed all tasks in the experiment in about 26 minutes. 
+that the green object was in a ``free'' environment, and picked it up without reconfiguring. The robot finished the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows a volumetric map of the environment generated as the robot explored and delivered objects. The robot successfully completed the experiment in about 26 minutes. 
 
 Note that at one point in the video a human reaches onto the field to dislodge the green object from a crack in the floor.  This was due to a defect in the experimental setup (which is not supposed to have a crack in the floor) and not an error in the robot's performance.
 %
@@ -630,12 +632,12 @@ Note that at one point in the video a human reaches onto the field to dislodge t
 \section{Discussion}
 \label{sec:discussion}
 %
-The experiment demonstrated that our system can autonomously perform complex high-level tasks in an unknown environment. It also revealed several insights on performing high-level tasks with MSRR systems.
+The experiment demonstrated that our system can autonomously perform complex high-level tasks in an unknown environment. It also revealed several insights into performing high-level perception-driven tasks with MSRR systems.
 \subsection{Challenges}
 
-In order to hold the required sensing and processing resources, the brain module is significantly larger than a regular module. This imposes limitations on possible configurations and locomotion capabilities of the robot. At the same time, the small computer board used in the brain module results in low computation power. Simple configuration designs and efficient algorithms were used to address these issues. To help computation speed further, high-level processing algorithms such as the high-level planner and exploration algorithm were run from external PCs and networked to the robot via WiFi.
+In order to hold the required sensing and processing resources, the brain module needs to be significantly larger than a regular module. This imposes limitations on possible configurations and locomotion capabilities of the robot. At the same time, the small computer board used in the brain module results in low computation power. Simple configuration designs and efficient algorithms were used to address these issues. To help computation speed further, high-level processing algorithms such as the high-level planner and exploration algorithm were run from external PCs and networked to the robot via WiFi.
 
-Due to power limitations of modules, robot speed is low which results in a long experiment runtime. In addition, the robot is composed of 6 independent robotic components (5 SMORES-EP modules and 1 brain module) which multiplies the chance of a component having a hardware failure. The long runtime combined with multiplied failure points resulted in an increased risk of error occurrences during the experiment. To compensate, error checks were implemented during task performance. As the robot navigates toward and retrieves objects, it constantly updates its estimate of the object location as new measurements of the object are received. During reconfiguration, docking modules perform automatic checks and realignment maneuvers several times to ensure they are lined up precisely before connecting to each other. This enables the robot to recover from controller lag and modules dropping velocity commands.
+Due to power limitations of the modules the robot moves very slowly, resulting in a long experiment runtime. In addition, the robot is composed of 6 independent robotic components (5 SMORES-EP modules and 1 brain module) which multiplies the chance of a component having a hardware failure. The long runtime combined with multiplied failure points resulted in an increased risk of error occurrences during the experiment. To compensate, error checks were implemented. As the robot navigates toward and retrieves objects, it constantly updates its estimate of the object location as new measurements of the object are received. During reconfiguration, docking modules perform automatic checks and realignment maneuvers several times to ensure they are lined up precisely before connecting to each other. This enables the robot to recover from controller lag and network dropouts.
 
 %
 \subsection{Reconfiguration}
