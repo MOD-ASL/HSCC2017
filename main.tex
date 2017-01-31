@@ -120,10 +120,10 @@ The physical robot is composed of modules that support multiple robot configurat
 
 \section{Introduction} \label{sec:introduction}
 %
-Modular self-reconfigurable robot (MSRR) systems are composed of a number of simple repeated robot elements (called \emph{modules}) that connect together to form larger robotic structures. These systems can \emph{self-reconfigure}, changing their shape (\emph{i.e.} the connectivity arrangement of the modules) to meet the needs of the task at hand.
-The number of morphologies in these systems typically scale exponentially with the number of identical modules, making them highly adaptable for a wide variety of tasks. 
+Modular self-reconfigurable robot (MSRR) systems are composed of a number of simple repeated robot elements (called \emph{modules}) that connect together to form larger robotic structures. These systems can \emph{self-reconfigure}, changing their shape (\emph{i.e.} the connective arrangement of the modules) to meet the needs of the task at hand.
+The number of possible morphologies of these systems typically scales exponentially with the number of identical modules, making them highly adaptable for a wide variety of tasks. 
 
-Over the past three decades, dozens of modular robot systems have been built \cite{Yim2007a}. Existing literature provides ample evidence of MSRR systems reconfiguring and assuming interesting morphologies, as well as methods for programming, controlling, and simulating modular robots \cite{Yim2007,Jing2016,Yim1994}.
+Over the past three decades, dozens of MSRR systems have been built \cite{Yim2007a}. Existing literature provides ample evidence of MSRR systems reconfiguring and assuming interesting morphologies, as well as methods for programming, controlling, and simulating modular robots \cite{Yim2007,Jing2016,Yim1994}.
 
 These capabilities are impressive, and each represents a significant research accomplishment in its own right. However, in order to truly live up to their promise of flexible capability in the real world, MSRR systems must demonstrate autonomy: moving, navigating, interacting with objects, and self-reconfiguring, all in unknown environments and without external localization or control. 
 
@@ -135,7 +135,7 @@ way in which the task will be solved. The environment is \emph{unknown}, meaning
 that the robot does not have a map of the environment or obstacles before the
 task begins. To our knowledge, this paper represents the first example of a truly autonomous MSRR system accomplishing these kinds of tasks.
 
-Our system provides five major capabilities to address these tasks.  The system is built around the SMORES-EP modular robot hardware system, but could be adapted to work with other modular robots. Tasks are specified in a high-level mission planner.  Perception-driven mapping and object recognition tools  allows the robot to explore unknown environments and react to what it finds. Novel environment characterization tools allow the robot to assess its environment and determine whether it needs to reconfigure to solve a task.  A novel, centralized reconfiguration strategy allows the robot to autonomously change its morphology in response to its environment.
+Our system is built around the SMORES-EP modular robot hardware system, but could be adapted to work with other modular robots. Tasks are specified in a high-level mission planner.  Perception-driven mapping and object recognition tools  allows the robot to explore unknown environments and react to what it finds. Novel environment characterization tools allow the robot to assess its environment and determine whether it needs to reconfigure to solve a task.  A novel, centralized reconfiguration strategy allows the robot to autonomously change its morphology in response to its environment.
 
 Through hardware experiments, we demonstrate the system autonomously completing a high-level object-retrieval task in an unknown environment. This is the first example of a modular robot using perception-driven reconfiguration to intelligently adapt to an \emph{a priori} unknown environment to complete a complex task.
 
