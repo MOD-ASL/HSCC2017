@@ -359,7 +359,7 @@ This library-based framework allows us to specify tasks for modular robots at a 
  \hline
  Tank & \textbf{pickUp} & ``free'' \\\hline
  Tank & \textbf{drop} & ``free'' \\\hline
- Tank & \textbf{driveTo...} & ``free''\\ \hline
+ Tank & \textbf{drive...} & ``free''\\ \hline
  Proboscis & \textbf{pickUp} & ``tunnel'' or ``free''\\ \hline
  Proboscis & \textbf{drop} &``tunnel'' or ``free'' \\ 
  \hline
@@ -488,7 +488,7 @@ To see how this works, consider Specification~\ref{spec:experiment}, which shows
 
 The user specifies high-level robot actions in terms of behavior properties from the design library.  For example, Line 7 in Specification~\ref{spec:experiment} specifies that under certain conditions, the robot should do \textbf{pickUp}.  As discussed in Section~\ref{sec:configuration-specifics}, our system can choose to do \textbf{pickUp} by executing any behavior from the library which has the behavior property \textbf{pickUp}, and which also satisfies the current environment characteristics. If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.  In this way, the system autonomously chooses to implement  \textbf{pickUp}  appropriately in response to the sensed environment.
 
-Some robot actions, such as \textbf{driveToExplore}, \textbf{driveToObject}, and \textbf{driveToDropoff}, requires the robot to navigate in the environment without colliding with obstacles.
+Some robot actions, such as \textbf{driveExplore}, \textbf{driveToObject}, and \textbf{driveToDropoff}, requires the robot to navigate in the environment without colliding with obstacles.
 To achieve this, a goal pose is first determined by the controller and sent to a path planning program to generate a collision free path while considering the dynamics of the robot.
 The path is then converted to a sequence of robot velocity vectors and used as the input to control a parametric driving behavior in the library.
 In this work, we use the ROS navigation package\footnote{http://wiki.ros.org/navigation} to generate paths for a differential drive robot to control the ``Tank'' configuration in the library.
@@ -511,9 +511,9 @@ Propositions related to the state of the environment are evaluated using the per
 \begin{alignat}{2}
 &\text{{\bf 1.} {\bf carry} is set on {\bf pickUp} and reset on {\bf drop}}&& \notag \\
 &\text{{\bf 2.} if you are not activating ({\bf pickUp} or {\bf drop} or {\bf driveToObject}}&& \notag \\
-&\hspace{1cm}\text{or {\bf driveToDropoff} or {\bf carry}) then do {\bf driveToExplore}}&& \notag \\
+&\hspace{1cm}\text{or {\bf driveToDropoff} or {\bf carry}) then do {\bf driveExplore}}&& \notag \\
 &\text{{\bf 3.} if you are activating {\bf carry} and you are not sensing }&& \notag \\
-&\hspace{1cm}\text{{\bf dropoffZone} then do {\bf driveToExplore}}&& \notag \\
+&\hspace{1cm}\text{{\bf dropoffZone} then do {\bf driveExplore}}&& \notag \\
 &\text{{\bf 4.} do {\bf driveToDropoff} if and only if you are activating {\bf carry} }&& \notag \\
 &\hspace{1cm}\text{and you are sensing {\bf dropoffZone}}&& \notag \\
 &\text{{\bf 5.} do {\bf driveToObject} if and only if you are not activating {\bf carry} }&& \notag \\
