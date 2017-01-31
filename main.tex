@@ -480,8 +480,9 @@ To bring together the actuation, sensing, and reconfiguration capabilities of  t
 LTLMoP allows us to use each component of our system as a low-level atomic controller and specify a wide-range of reactive robotic tasks as a set of high-level instructions using these controllers.
 In this section, we will mainly discuss how we model our system in order to use LTLMoP to automatically generate a high-level controller for our desired robot task.
 
-LTLMoP supports a high-level language called Structured English that allows the robot task to be specified in terms of Boolean propositions.
-%For example, the robot action ``pickUp'' is \lt if the robot is currently picking up an object (and \lf otherwise), and the environment proposition ``object'' is \lt if the robot is currently sensing an object of interest (and \lf otherwise).
+We abstract the robot and environment as a set of Boolean propositions.
+For example, the robot action ``pickUp'' is \lt if the robot is currently picking up an object (and \lf otherwise), and the environment proposition ``object'' is \lt if the robot is currently sensing an object of interest (and \lf otherwise).
+LTLMoP supports a high-level language called Structured English that allows the robot task to be specified in terms of these propositions.
 By using the design library (Section~\ref{sec:configuration-specifics})  and environment characterization tools (Section~\ref{sec:environment-characterization}), these high-level statements are mapped to low-level sensing programs and robot controllers.
 To see how this works, consider Specification~\ref{spec:experiment}, which shows  high-level instructions from the user that direct the robot to explore a room, search, and move any object of interest to a drop-off zone.
 
@@ -531,10 +532,11 @@ Propositions related to the state of the environment are evaluated using the per
 Given a specification,  LTLMoP will synthesize a robot controller that satisfies the given  task (if one exists). The controller is synthesized in the form of a finite state automaton.
 Each state specifies a set of high-level robot actions that need to be performed, and transitions between states are specified with a set of environment propositions.
 
-
 Since the synthesized high-level controller is a discrete finite state automaton, we need to implement it continuously in order to control the robot to satisfy the given task. 
 Execution of the high-level controller begins at the predefined initial state in the finite state automaton. In each iteration, the values of all environment propositions  are determined by calling the corresponding sensing program. Then, we determine the next state in the finite state machine by taking the transition that matches the current value of all environment propositions.
-The system then maps the system proposition specified in the next state to its set of behavior properties, and selects a behavior from the design library which satisfies both the behavior properties and current environment properties. If the robot is not currently in a configuration capable of executing the selected behavior, the system commands the robot to reconfigure. Finally, the behavior is executed, and the program continues on to the next iteration. 
+In the next state, the specified high level behavior properties are mapped to a behavior from the design library which satisfies both the behavior properties and current environment properties.
+%The system then maps the system proposition specified in the next state to its set of behavior properties, and selects a behavior from the design library which satisfies both the behavior properties and current environment properties.
+If the robot is not currently in a configuration capable of executing the selected behavior, the system commands the robot to reconfigure. Finally, the behavior is executed, and the program continues on to the next iteration. 
 
 %For example, in Fig.~\ref{fig:automaton} we start in the top state and execute the ``explore'' program.
 %If  the robot senses a pink object, the value of ``pinkObject'' is \lt and therefore the next state is the bottom right state. We then stop the ``explore'' program and execute the ``driveToObject'' program.
