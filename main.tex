@@ -16,7 +16,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%   Additional packages:
 
-\usepackage{color}
+\usepackage[dvipsnames,table]{xcolor}
 \usepackage{mathtools}
 \usepackage{amsmath} % assumes amsmath package installed
 \usepackage{amssymb}  % assumes amsmath package installed
@@ -31,6 +31,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%  Macros:
 
+\newcommand{\separator}{ \noindent \rule{\columnwidth}{1pt} }
+\newenvironment{old}{\color{Maroon} \separator \textbf{[\textit{Old:}]} }{\ignorespacesafterend \separator}
+\newenvironment{new}{\color{Blue} \separator \textbf{[\textit{New:}]} }{\ignorespacesafterend \separator}
+\newenvironment{notes}{\color{Gray} \separator}{\ignorespacesafterend \separator}
+
 % For making things invisible during double-blind review. Put "#1" in the
 % the braces to make the text appear later.:
 \newcommand{\doubleBlind}[1]{} 
@@ -40,7 +45,7 @@
 \newcommand{\abj}[1]{\textcolor{blue}{#1}}
 \newcommand{\dbj}[1]{\textcolor{blue}{\sout{#1}}}
 \newcommand{\cbj}[2]{\textcolor{blue}{\sout{#1}}\textcolor{blue}{~#2}}
-\newcommand{\abt}[1]{\textcolor{magenta}{#1}}
+%\newcommand{\abt}[1]{\textcolor{magenta}{#1}}
 % Handy commands
 \newcommand{\lt}{{\tt True }}
 \newcommand{\lf}{{\tt False }}
@@ -632,6 +637,21 @@ Note that at one point in the video a human reaches onto the field to dislodge t
 \section{Discussion}
 \label{sec:discussion}
 %
+\begin{new}
+Our system successfully demonstrates that reconfiguration can be used to achieve high-level tasks unknown environments.  Like most modular robots, the small size and strength of SMORES-EP made carrying sensors a challenge.  In contrast to the distributed sensing approaches used in prior modular work, our decision to use a single centralized sensor module allowed our system to use an RGB-D camera, enabling more sensor-based autonomy than any previous modular robot.  In the experiments, the majority of heavy computation (mapping, navigation, video processing) was done onboard the sensor module.  Some processes were run offboard, primarily for development convenience.  In the future we believe everything could be run onboard with only minor adjustments.
+
+Our reconfiguration method allows SMORES-EP to achieve a wide range of functionality. For previous modular systems, the high cost of reconfiguration (in terms of time and risk of failure) made it difficult to deploy as a practical tool for accomplishing tasks.  In contrast, method is fast and reliable enough for SMORES-EP to undergo multiple transformations and still complete its task in a reasonable amount of time.  This is significant: for the first time, we have demonstrated that the benefits of reconfiguring to complete a task can outweigh the costs in a realistic setting.  Reconfiguring under an onboard camera has limitations: the camera view is limited, and movement in 3D (lattice or chain-style reconfiguration) is not possible.  We believe the practical advantages of our method outweigh these limitations.  In the future, it may be possible to develop more comprehensive reconfiguration techniques.
+
+Our system is vulnerable to small errors - if things go wrong in the course of completing a task, the entire task will likely fail. Table X shows the causes of failure for 24 attempts of Experiment 2 (placing the stamp on the package).  Nearly all failures are due to an error in one of the low-level components the system relies on. 41\% of failures were due to hardware errors, and 37\% were due to errors in low-level software (object recognition, mapping, navigation). These components were designed for research, not real-world deployment, and could be engineered to perform much more reliably in a production setting.
+
+The simulator served as a valuable prototyping tool, but all behaviors required significant fine-tuning in hardware before they would run reliably.  Open-loop behaviors like stair-climbing and reaching up to place the stamp are fairly inflexible with respect to environment conditions, and also vulnerable to hardware errors like poorly calibrated encoders.  Behaviors like exploration and reconfiguration use the sensor module to close the loop, and are significantly less vulnerable to these kinds of errors.  However, these behaviors required much more up-front development effort.
+
+While steps can be taken to increase the reliability of the low-level subsystems, errors can never be eliminated entirely.  In the future, we will explore high-level strategies for error recovery: for example, recognizing that a module has failed and adapting the approach so that task will not fail entirely.
+
+We opted to use simple techniques for navigation, object recognition, and differentiating between environments, which were suitable for our proof-of-concept experiments.  To deploy a similar system in real life, more advanced techniques would need to be used.
+\end{new}
+%
+\begin{old}
 The experiment demonstrated that our system can autonomously perform complex high-level tasks in an unknown environment. It also revealed several insights into performing high-level perception-driven tasks with MSRR systems.
 \subsection{Challenges}
 
@@ -647,6 +667,7 @@ By exploiting high-fidelity centralized localization and the individual mobility
 %Each reconfiguration action had a success rate over 90\%.
 This compares very favorably with existing methods, in which each reconfiguration action can take on the order of ten minutes \cite{Yim2007},\cite{Murata2006},\cite{Rubenstein2004}.
 %\TODO{Verify exact numbers}
+\end{old}
 %
 \subsection{Future Work and Conclusion}
 %
@@ -674,3 +695,5 @@ To conclude, this paper presents the first MSRR system that uses perception of a
 \bibliography{references}
 
 \end{document}
+
+ 
