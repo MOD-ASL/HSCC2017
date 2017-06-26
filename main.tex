@@ -554,12 +554,15 @@ If the robot is not currently in a configuration capable of executing the select
 \label{sec:experiments}
 %
 
-We validated and demonstrated our system's capabilities with a hardware experiment in which a robot composed of SMORES-EP modules completed a complex, high-level task in an unknown environment.
+As mentioned earlier, our work presents the first MSRR system that uses perception and reconfiguration to autonomously perform high-level tasks in unknown environments. We tested this system on multiple, real-world tasks. These experiments accomplish two goals: First, they demonstrate our system's ability to autonomously adapt to multiple unknown environments and to complete different tasks. Second, they provide new observations of challenges with fully autonomous MSRR systems. These observations provide insight on what can be improved in autonomous MSRR systems to make them more robust and versatile.
 
-The robot is tasked with cleaning a messy graduate student office.  It is directed to explore the unknown office environment and search for any brightly-colored metal garbage that can be recycled.  Whenever it finds brightly colored metal objects, it should bring them to a designated drop-off zone for recycling, which is marked with a blue square on the wall.
+Three experiments were run, each time varying the environment and the type of task to be performed. Each experiment required the robot to explore an unknown environment to search for and identify one or more objects of interest, and then complete some manipulation task with those objects.
 
-The high-level task consists of three different types of sub-tasks: explore the environment, find and retrieve all metal objects, and deliver each to the drop-off zone. Figure \ref{fig:map} shows the environment layout used in the experiment, designed to represent a messy office. Two colored objects were placed in the environment: a green soda can was placed in the open (a ``free'' environment type), and a pink spool of wire was positioned in a narrow gap between two trash cans (a ``tunnel'' environment). Obstacles, environment types, and locations of the objects and drop-off zone were unknown to the robot \textit{a priori}.  Note that the object colors (pink and green) have no influence on environment characterization: in other words, the robot does not know that the pink object is in a ``tunnel''  before the experiment starts.
- 
+\subsection{Experiment I}
+
+The first experiment was designed to involve a long and complex task in order to fully demonstrate the robot's exploration, reconfiguration, and manipulation abilities. For this experiment, the robot is tasked with cleaning a messy graduate student office.  It is directed to explore the unknown office environment and search for any brightly-colored metal garbage that can be recycled.  Whenever it finds brightly colored metal objects, it should pick them up and bring them to a designated drop-off zone for recycling, which is marked with a blue square on the wall.
+
+The high-level task consisted of three different types of sub-tasks: explore the environment, find and retrieve all metal objects, and deliver each to the drop-off zone. Figure \ref{fig:map} shows the environment layout used in the experiment, designed to represent a messy office. Two colored objects were placed in the environment: a green soda can was placed in the open (a ``free'' environment type), and a pink spool of wire was positioned in a narrow gap between two trash cans (a ``tunnel'' environment). Obstacles, environment types, and locations of the objects and drop-off zone were unknown to the robot \textit{a priori}.  Note that the object colors (pink and green) have no influence on environment characterization: in other words, the robot does not know that the pink object is in a ``tunnel''  before the experiment starts.
 
 Five SMORES-EP modules, one Brain Module, and three passive cubes composed the robot for performing the task. The robot grasped objects using modules' electro-permanent magnets to attach to steel washers on the objects.
 During the experiment, the high-level planner used the library of two configurations and five behaviors described in Section \ref{sec:configuration-specifics}.
@@ -606,17 +609,17 @@ During the experiment, the high-level planner used the library of two configurat
         %\label{fig:objb}
         \caption{Retrieving green object}
     \end{subfigure}
-      \caption{Snapshots from the Experiment}
+      \caption{Environment characterization types for object retrieval.}
       \label{fig:demo}
    \vspace{-1em}
    \end{figure*}
 %
-Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available as an attachment to this paper. The robot started in the ``Tank'' configuration. The starting location prevented the robot from seeing the objects initially, forcing it to explore the environment to search for them. After a period of exploration, the robot located the pink object. The characterization algorithm correctly classified the surrounding environment as a ``tunnel'' type, and accordingly the robot navigated in front of the object and reconfigured to the ``Proboscis'' configuration. The ``Proboscis'' then used its long arm to reach into the tunnel and pull the object out into the open.
+Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available as an attachment to this paper. The robot starts in the ``Tank'' configuration. The starting location prevented the robot from seeing the objects initially, forcing it to explore the environment to search for them. After a period of exploration, the robot locates the pink object. The characterization algorithm correctly classified the surrounding environment as a ``tunnel'' type, and accordingly the robot navigated in front of the object and reconfigured to the ``Proboscis'' configuration. The ``Proboscis'' then used its long arm to reach into the tunnel and pull the object out into the open.
 
- The ``Proboscis'' can only drive forwards and backwards (it cannot steer), so the robot concluded it needed to reconfigure back to the ``Tank'' to drive the object to the drop-off zone.  To do so, the robot dropped the object,  reconfigured, and picked the object back up. The ``Tank'' then navigated to and dropped off the object in the drop-off zone, which was previously located during exploration and recorded in the global map built by the SLAM algorithm.
+ The ``Proboscis'' can only drive forwards and backwards (it cannot steer), so the robot concluded it needed to reconfigure back to the ``Tank'' to drive the object to the drop-off zone.  To do so, the robot dropped the object,  reconfigured, and picked the object back up. The ``Tank'' then navigated to and dropped off the object at the drop-off zone, which was previously located during exploration and recorded in the global map built by the SLAM algorithm.
 
  Once done, the robot navigated directly to the green object.  No further exploration was required since the green object was discovered while the robot was dropping off the pink object. The robot correctly determined
-that the green object was in a ``free'' environment, and picked it up without reconfiguring. The robot finished the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows a volumetric map of the environment generated as the robot explored and delivered objects. The robot successfully completed the experiment in about 26 minutes. 
+that the green object was in a ``free'' environment, and picked it up without reconfiguring. The robot finished the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows a volumetric map of the environment generated as the robot explored and delivered objects. The robot successfully completed all tasks in the experiment in about 26 minutes. 
 
 Note that at one point in the video a human reaches onto the field to dislodge the green object from a crack in the floor.  This was due to a defect in the experimental setup (which is not supposed to have a crack in the floor) and not an error in the robot's performance.
 %
@@ -628,6 +631,18 @@ Note that at one point in the video a human reaches onto the field to dislodge t
 \label{fig:octomap}
 \end{center}
 \end{figure}
+
+\subsection{Experiment II}
+
+The second and third experiments were designed to demonstrate the breadth of our system's adaptive capabilities. For Experiment II, the robot is given a circuit that needs to be shipped, and is tasked with finding the shipping bin and dropping the circuit off in the bin. A pink sign above the bin denotes the bin's location. The high-level task includes sub-tasks of exploring the unknown environment, locating and characterizing the environment surrounding the mail bin, and delivering the package to the bin.
+
+Figure \ref{fig:mail} shows the environment setup for Experiment II. The full performance of the experiment is included in the video attachment to this paper. Note that the mail bin has stairs in front of it, which the robot must climb in order to drop the circuit into the bin successfully. The robot begins the experiment in the ``scorpion'' configuration. Shortly after beginning exploration of the environment, the robot observes and recognizes the mailbox, and characterizes the environment surrounding it as ``stairs''. Based on this characterization, it determines that the ``snake'' configuration is needed to traverse the stairs. Using the 3D map and characterization of the environment surrounding the mail bin, the robot navigates to a point directly in front of the stairs, faces the bin, and reconfigures to the ``snake'' configuration. It then executes the stair climbing gait to reach the mail bin, and drops the circuit successfully. It then descends the stairs and reconfigures back to the ``scorpion'' configuration to end the mission.
+
+\subsection{Experiment III}
+
+For the final experiment, the robot is given a stamp and is tasked with placing it on a package that needs to be shipped. The high-level task consists of the following sub-tasks: explore the unknown environment, find the package with stamp location denoted by a pink area, and place the stamp on the package. The robot was started in the ``tank'' configuration used in the first experiment.
+
+Figure \ref{fig:stamp} shows the environment setup for Experiment III. Please see the video attachment for the full performance of this experiment. The robot begins exploring the unknown environment, and quickly observes the package to be stamped. It characterizes the environment as the ``ledge" environment using the 3D map created of the environment, and determines that the ``proboscis'' configuration is needed with the ``reaching'' gait to place the stamp on the pink goal area. The robot then navigates to a position directly in front of the package, reconfigures appropriately, and executes the gait to place the stamp correctly on the package to complete the task.
 
 %     ____  _                           _
 %    / __ \(_)___________  ____________(_)___  ____
