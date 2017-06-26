@@ -168,6 +168,31 @@ Through hardware experiments, we demonstrate the system autonomously completing 
 %      /____/
 \subsection{System Overview}
 %
+\begin{new}
+In this work, we aim to develop a robust cyber physical system for controlling MSRR systems to achieve complex robot tasks with high-level task instructions.
+Specifically, we focus on robot tasks where the robot needs to:
+\begin{itemize}
+\item explore an unknown area with obstacles;
+\item locate and interact with target objects as specified by the user;
+\item choose configuration and action based on the detected environment.
+\end{itemize}
+These features are great representations of a large set of challenging robot tasks, which MSRR systems are best suited for.
+
+To conquer these challenges, we combined our novel control and planning algorithms with existing state-of-art open source robotic software.
+With the Robot Operating System (ROS), we are able to seamlessly distribute all components of the system on different computers.
+Our system includes the following main components:
+\begin{itemize}
+\item A perception and exploration planner for robot localization and efficient exploration
+\item An environment characterization component for sensing and recognizing the environment around the robot
+\item A library of robot configurations and behaviors designed for different environment and tasks
+\item A reconfiguration controller for commanding the robot to change its shape
+\item A MSRR system that can sense and interact with the environment
+\item A high-level task planner for connecting all other components together to achieve the given task
+\end{itemize}
+In Section~\ref{sec:components}, we describe in detail on each component and how all of them work as a robust system to control MSRR systems to accomplish complex robot tasks.
+\end{new}
+
+\begin{old}
 Here we provide a brief overview of the entire system.  Figure~\ref{fig:overview} shows a flowchart which serves as a visual companion to this section. 
 
 Our system is built around the SMORES-EP modular robot. Because the modules cannot sense their environment, we extend the SMORES-EP hardware system by introducing a novel brain module, described in Section~\ref{sec:hardware}.
@@ -187,7 +212,8 @@ Finally, Section~\ref{sec:high-level} describes a high-level mission planner tha
 \label{fig:overview}
 \end{center}
 \vspace{-1em}
-\end{figure} 
+\end{figure}
+\end{old} 
 %
 %     ____       __      __           __   _       __           __
 %    / __ \___  / /___ _/ /____  ____/ /  | |     / /___  _____/ /__
