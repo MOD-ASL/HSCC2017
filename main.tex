@@ -125,24 +125,31 @@ The physical robot is composed of modules that support multiple robot configurat
 
 \section{Introduction} \label{sec:introduction}
 %
-Modular self-reconfigurable robot (MSRR) systems are composed of a number of simple repeated robot elements (called \emph{modules}) that connect together to form larger robotic structures. These systems can \emph{self-reconfigure}, changing their shape (\emph{i.e.} the connective arrangement of the modules) to meet the needs of the task at hand.
+Modular self-reconfigurable robot (MSRR) systems are composed of a number of simple repeated robot elements (called \emph{modules}) that connect together to form larger robotic structures. These robots can \emph{self-reconfigure}, changing their shape (\emph{i.e.} the connective arrangement of the modules) to meet the needs of the task at hand.
 The number of possible morphologies of these systems typically scales exponentially with the number of identical modules, making them highly adaptable for a wide variety of tasks. 
 
 Over the past three decades, dozens of MSRR systems have been built \cite{Yim2007a}. Existing literature provides ample evidence of MSRR systems reconfiguring and assuming interesting morphologies, as well as methods for programming, controlling, and simulating modular robots \cite{Yim2007,Jing2016,Yim1994}.
 
-These capabilities are impressive, and each represents a significant research accomplishment in its own right. However, in order to truly live up to their promise of flexible capability in the real world, MSRR systems must demonstrate autonomy: moving, navigating, interacting with objects, and self-reconfiguring, all in unknown environments and without external localization or control. 
+Some of the most challenging problem domains for robots are those in which the robot must autonomously complete a known task in an unknown environment.  Search-and-rescue problems fall into this category: we might want a robot to enter a collapsed building and locate survivors, without known what kind of terrain the robot needs to traverse before actually it actually enters the building.
 
-We provide a system capable of autonomously accomplishing high-level
-tasks in unknown environments using modular self-reconfigurable
-robots.  A high-level task is specified in terms
-of general objectives, and requires some decision-making regarding the specific
-way in which the task will be solved. The environment is unknown, meaning
-that the robot does not have a map of the environment or obstacles before the
-task begins. This paper represents the first example of a truly autonomous MSRR system accomplishing these kinds of tasks.
+The theoretical ability of modular robots to address these known-task-unknown-environment problems by reconfiguring has been frequently cited as an advantage \cite{Yim2007a}, but has never been experimentally demonstrated.  For the first time, we present a system architecture that integrates perception, high-level mission planning, and modular robot hardware, to solve these kinds of problems. In three hardware experiments, we show that our system allows a modular robot to autonomously explore, reconfigure and solve tasks in unknown environments.  These demonstrations fill an experimental gap in the field, showing that reconfiguration can provide an advantage in practice, not just in theory.
 
-Our system is built around the SMORES-EP modular robot hardware system, but could be adapted to work with other modular robots. Tasks are specified in a high-level mission planner.  Perception-driven mapping and object recognition tools  allows the robot to explore unknown environments and react to what it finds. Novel environment characterization tools allow the robot to assess its environment and determine whether it needs to reconfigure to solve a task.  A novel, centralized reconfiguration strategy allows the robot to autonomously change its morphology in response to its environment.
+However, our major contribution is not the experimental results, but rather the system architecture, which provides the general capability to solve known-task-unknown-environment-problems with modular robots.  In this paper, we present the tools we used to achieve this capability (some novel, some existing), and discuss their roles in the system (Section~\ref{sec:}).  Our hardware experiments with the SMORES-EP modular robot serve as a proof-of-concept, demonstrating how the system can address a variety of tasks in different unknown environments (Section~\ref{sec:experiments}).  Finally, we discuss lessons learned during development, and comment on challenges and opportunities for others who might wish to adopt this architecture.
 
-Through hardware experiments, we demonstrate the system autonomously completing a high-level object-retrieval task in an unknown environment. This is the first example of a modular robot using perception-driven reconfiguration to intelligently adapt to an \emph{a priori} unknown environment to complete a complex task.
+
+% These capabilities are impressive, and each represents a significant research accomplishment in its own right. However, in order to truly live up to their promise of flexible capability in the real world, MSRR systems must demonstrate autonomy: moving, navigating, interacting with objects, and self-reconfiguring, all in unknown environments and without external localization or control. 
+
+% We provide a system capable of autonomously accomplishing high-level
+% tasks in unknown environments using modular self-reconfigurable
+% robots.  A high-level task is specified in terms
+% of general objectives, and requires some decision-making regarding the specific
+% way in which the task will be solved. The environment is unknown, meaning
+% that the robot does not have a map of the environment or obstacles before the
+% task begins. This paper represents the first example of a truly autonomous MSRR system accomplishing these kinds of tasks.
+
+%Our system is built around the SMORES-EP modular robot hardware system, but could be adapted to work with other modular robots. Tasks are specified in a high-level mission planner.  Perception-driven mapping and object recognition tools  allows the robot to explore unknown environments and react to what it finds. Novel environment characterization tools allow the robot to assess its environment and determine whether it needs to reconfigure to solve a task.  A novel, centralized reconfiguration strategy allows the robot to autonomously change its morphology in response to its environment.
+
+%Through hardware experiments, we demonstrate the system autonomously completing a high-level object-retrieval task in an unknown environment. This is the first example of a modular robot using perception-driven reconfiguration to intelligently adapt to an \emph{a priori} unknown environment to complete a complex task.
 
 % The system we present provides four major tools:
 
