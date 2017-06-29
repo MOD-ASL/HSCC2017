@@ -382,7 +382,7 @@ If the robot is not currently in a configuration capable of executing the select
 
 %Since the proposed system performs tasks in unknown environments and conditions, a robust suite of perception algorithms is required to inform control and decision-making. The robot must have the ability to explore and build a map of its environment while avoiding obstacles and tracking its pose. The system must be able to recognize objects and regions of interest related to the desired task. Finally, the system must characterize the environment in terms of configuration capabilities. Features in the environment may restrict which robot configurations can viably perform parts of the high-level task, such as retrieving an object or navigating to a waypoint. The system needs to recognize these features to be able to intelligently choose the appropriate robot configuration for performing the task.
 
-In order to inform the high-level planner of pertinent information in the robot's environment, a variety of perception components are used. Mapping and robot pose are provided by an RGB-D SLAM software package called RTAB-MAP\cite{rtabmap}. A 3D map of the environment is incrementally built and stored in an efficient octree-based volumetric map using Octomap\cite{octomap}. To drive exploration of the unknown environment, a Next Best View planner \cite{daudelin} is used. Upon request, it provides waypoints to the high-level planner that maximize expected information collection of unknown regions of the environment. To identify objects of interest in the task, color detection and tracking is used.  Colored objects are recognized using CMVision\footnote{CMVision: http://www.cs.cmu.edu/$\sim$jbruce/cmvision/}, and tracked in 3D using depth information from the onboard 3D sensor\footnote{Lucas Coelho Figueiredo: https://github.com/lucascoelho91/ballFollower}. Although we implement object recognition by color, more sophisticated methods could be included in the same system architecture.
+In order to inform the high-level planner of pertinent information in the robot's environment, a variety of perception components are used. Mapping and robot pose are provided by an RGB-D SLAM software package called RTAB-MAP\cite{rtabmap}. A 3D map of the environment is incrementally built and stored in an efficient octree-based volumetric map using Octomap\cite{octomap}. To drive exploration of the unknown environment, a Next Best View planner \cite{Daudelin2017} is used. Upon request, it provides waypoints to the high-level planner that maximize expected information collection of unknown regions of the environment. To identify objects of interest in the task, color detection and tracking is used.  Colored objects are recognized using CMVision\footnote{CMVision: http://www.cs.cmu.edu/$\sim$jbruce/cmvision/}, and tracked in 3D using depth information from the onboard 3D sensor\footnote{Lucas Coelho Figueiredo: https://github.com/lucascoelho91/ballFollower}. Although we implement object recognition by color, more sophisticated methods could be included in the same system architecture.
 
 To help the high-level planner choose appropriate configurations for a task, an environment characterization algorithm is necessary. This algorithm reasons about regions of interest in the environment to classify them in terms of the abilities of possible robot configurations. For our proof-of-concept, we implemented an algorithm that can differentiate between four environment types relevant to object manipulation, shown in Figure \ref{fig:characters}. 
 
@@ -395,19 +395,25 @@ In addition to characterizing the environment, the algorithm also selects a wayp
 \begin{figure}[t]
       \centering
       \begin{subfigure}[t]{0.15\textwidth}
-        \includegraphics[width=\textwidth]{images/free.png}
+        \includegraphics[width=\textwidth]{images/FreeEnvironment.png}
         %\label{fig:obja}
         \caption{\textbf{``free'}' environment}
-    \end{subfigure}
+    \end{subfigure} \ \ \ \ \ \
     \begin{subfigure}[t]{0.15\textwidth}
-        \includegraphics[width=\textwidth]{images/ledge.png}
-        %\label{fig:objb}
-        \caption{\textbf{``ledge''} environment}
-    \end{subfigure}
-        \begin{subfigure}[t]{0.15\textwidth}
-        \includegraphics[width=\textwidth]{images/tunnel.png}
+        \includegraphics[width=\textwidth]{images/TunnelEnvironment.png}
         %\label{fig:objb}
         \caption{\textbf{``tunnel''} environment}
+    \end{subfigure}
+    
+    \begin{subfigure}[t]{0.15\textwidth}
+        \includegraphics[width=\textwidth]{images/HighFreeEnvironment.png}
+        %\label{fig:objb}
+        \caption{\textbf{``high-free''} environment}
+    \end{subfigure} \ \ \ \ \ \
+    \begin{subfigure}[t]{0.15\textwidth}
+        \includegraphics[width=\textwidth]{images/LedgeEnvironment.png}
+        %\label{fig:objb}
+        \caption{\textbf{``ledge''} environment}
     \end{subfigure}
       \caption{Environment characterization types for object retrieval.}
       \label{fig:characters}
