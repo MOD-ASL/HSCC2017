@@ -640,7 +640,6 @@ Figure \ref{fig:stamp} shows the environment setup for Experiment III. Please se
 \section{Discussion}
 \label{sec:discussion}
 %
-\begin{new}
 Like most modular robots, the small size and strength of SMORES-EP made carrying sensors and additional computation units while performing locomotion, actions and reconfigurations a challenge.  
 In contrast to the distributed sensing approaches used in prior modular work, our decision to use a single centralized sensor module allowed our system to use an RGB-D camera, enabling more sensor-based autonomy, such as Visual SLAM and environment characterization than any previous modular robot.  
 In the experiments, the majority of heavy computation (mapping, navigation, video processing) was done onboard the sensor module.  
@@ -674,25 +673,6 @@ However, these behaviors required much more up-front development effort.
 While steps can be taken to increase the reliability of the low-level subsystems, errors can never be eliminated entirely.  In the future, we will explore high-level strategies for error recovery: for example, recognizing that a module has failed and adapting the approach so that task will not fail entirely.
 
 We opted to use simple techniques for navigation, object recognition, and differentiating between environments, which were suitable for our proof-of-concept experiments.  To deploy a similar system in real life, more advanced techniques would need to be used.
-\end{new}
-%
-\begin{old}
-The experiment demonstrated that our system can autonomously perform complex high-level tasks in an unknown environment. It also revealed several insights into performing high-level perception-driven tasks with MSRR systems.
-\subsection{Challenges}
-
-In order to hold the required sensing and processing resources, the brain module needs to be significantly larger than a regular module. This imposes limitations on possible configurations and locomotion capabilities of the robot. At the same time, the small computer board used in the brain module results in low computation power. Simple configuration designs and efficient algorithms were used to address these issues. To help computation speed further, high-level processing algorithms such as the high-level planner and exploration algorithm were run from external PCs and networked to the robot via WiFi.
-
-Due to power limitations of the modules the robot moves very slowly, resulting in a long experiment runtime. In addition, the robot is composed of 6 independent robotic components (5 SMORES-EP modules and 1 brain module) which multiplies the chance of a component having a hardware failure. The long runtime combined with multiplied failure points resulted in an increased risk of error occurrences during the experiment. To compensate, error checks were implemented. As the robot navigates toward and retrieves objects, it constantly updates its estimate of the object location as new measurements of the object are received. During reconfiguration, docking modules perform automatic checks and realignment maneuvers several times to ensure they are lined up precisely before connecting to each other. This enables the robot to recover from controller lag and network dropouts.
-
-%
-\subsection{Reconfiguration}
-Our method of reconfiguration has advantages compared to existing methods.  Use of an onboard overhead camera to provide fiducial-based localization for reconfiguration is novel.  This centralized strategy provides localization only near the brain module, so the number of modules that can reconfigure at once is limited by the size of the camera view. In order to scale to large numbers of modules, multiple brain modules would need to be used in parallel.
-
-By exploiting high-fidelity centralized localization and the individual mobility of the SMORES-EP modules, we achieve reconfiguration that is robust, and cleanly deployable in the context of a high-level task. In our experiments (Section~\ref{sec:experiments}), we observed that the pre-reconfiguration state required about 15 seconds, each module movement operation required about 2 minutes, and post-reconfiguration required about 10 seconds.
-%Each reconfiguration action had a success rate over 90\%.
-This compares very favorably with existing methods, in which each reconfiguration action can take on the order of ten minutes \cite{Yim2007},\cite{Murata2006},\cite{Rubenstein2004}.
-%\TODO{Verify exact numbers}
-\end{old}
 %
 \subsection{Future Work and Conclusion}
 %
