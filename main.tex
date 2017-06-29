@@ -166,63 +166,7 @@ However, our major contribution is not the experimental results, but rather the 
 % autonomous reconfiguration with SMORES-EP.
 % \end{enumerate}
 %%%%%
-%
-%    _____            __                    ____                        _
-%   / ___/__  _______/ /____  ____ ___     / __ \_   _____  ______   __(_)__ _      __
-%   \__ \/ / / / ___/ __/ _ \/ __ `__ \   / / / / | / / _ \/ ___/ | / / / _ \ | /| / /
-%  ___/ / /_/ (__  ) /_/  __/ / / / / /  / /_/ /| |/ /  __/ /   | |/ / /  __/ |/ |/ /
-% /____/\__, /____/\__/\___/_/ /_/ /_/   \____/ |___/\___/_/    |___/_/\___/|__/|__/
-%      /____/
-\subsection{System Overview}
-%
-%
-\begin{new}
-In this work, we aim to develop a robust cyber physical system for controlling MSRR systems to achieve complex robot tasks with high-level task instructions.
-Specifically, we focus on robot tasks where the robot needs to:
-\begin{itemize}
-\item explore an unknown area with obstacles;
-\item locate and interact with target objects as specified by the user;
-\item choose configuration and action based on the detected environment.
-\end{itemize}
-These features are great representations of a large set of challenging robot tasks, which MSRR systems are best suited for.
 
-To conquer these challenges, we combined our novel control and planning algorithms with existing state-of-art open source robotic software.
-With the Robot Operating System (ROS), we are able to seamlessly distribute all components of the system on different computers.
-Our system includes the following main components:
-\begin{itemize}
-\item A perception and exploration planner for robot localization and efficient exploration
-\item An environment characterization component for sensing and recognizing the environment around the robot
-\item A library of robot configurations and behaviors designed for different environment and tasks
-\item A reconfiguration controller for commanding the robot to change its shape
-\item A MSRR system that can sense and interact with the environment
-\item A high-level task planner for connecting all other components together to achieve the given task
-\end{itemize}
-In Section~\ref{sec:components}, we describe in detail on each component and how all of them work as a robust system to control MSRR systems to accomplish complex robot tasks.
-\end{new}
-
-\begin{old}
-Here we provide a brief overview of the entire system.  Figure~\ref{fig:overview} shows a flowchart which serves as a visual companion to this section. 
-
-Our system is built around the SMORES-EP modular robot. Because the modules cannot sense their environment, we extend the SMORES-EP hardware system by introducing a novel brain module, described in Section~\ref{sec:hardware}.
-
-Perception-informed exploration is essential to completing tasks in unknown environments.  Section~\ref{sec:exploration} presents a suite of tools that allows the robot to map and explore its environment and identify objects of interest. 
-
-The advantage of modular self-reconfigurable robots lies in their ability to assume different configurations in response to their environment.  In Section~\ref{sec:configuration-specifics}, we describe the library-based framework used to generate appropriate configurations (shapes) and behaviors (controllers) for a given task, and in Section~\ref{sec:environment-characterization}, we discuss the methods we use to characterize environments, so that appropriate configurations can be automatically chosen.  In Section~\ref{sec:reconfiguration}, we present a novel centralized reconfiguration method for SMORES-EP.  These three components of the system allow the robot to autonomously assess its environment and reconfigure in order to complete a task.
-
-Finally, Section~\ref{sec:high-level} describes a high-level mission planner that allows tasks to be specified in the form of logical statements which map conditions to actions.  Section~\ref{sec:experiments} demonstrates how the system can be used to complete a realistic object retrieval task in an unknown environment with full autonomy. 
-%
-% System Overview Figure
-\begin{figure}
-\begin{center}
-%\includegraphics[width=0.4\textwidth]{images/overview.png}
-\includegraphics[width=\columnwidth]{images/RSS17FlowchartV4.png}
-\caption{System Overview Flowchart}
-\label{fig:overview}
-\end{center}
-\vspace{-1em}
-\end{figure}
-\end{old} 
-%
 %     ____       __      __           __   _       __           __
 %    / __ \___  / /___ _/ /____  ____/ /  | |     / /___  _____/ /__
 %   / /_/ / _ \/ / __ `/ __/ _ \/ __  /   | | /| / / __ \/ ___/ //_/
@@ -263,16 +207,39 @@ Recent work includes a system which integrate many low-level capabilities of a M
 
 % Traditional systems and wrapup statement
 Our system goes beyond existing work by using self-reconfiguration capabilities of an MSRR system to take autonomy a step further.  The system uses perception of the environment to inform the choice of robot configuration, allowing the robot to adapt its abilities to surmount challenges arising from \textit{a priori} unknown features in the environment. Through hardware experiments, we demonstrate that autonomous self-reconfiguration allows our system to adapt to the environment to complete complex tasks.
+
+\section{System Components}
+
+Our system combines existing hardware and open source software with novel algorithms to create a complete autonomous MSRR system. The system is designed to perform object manipulation and transportation tasks in unknown environments. A significant novel contribution of this system is its ability to recognize and adapt to the environment mid-mission, in order to complete tasks even when the ``initial robot'' (in its starting configuration) is unable to complete the task in the presence of obstacles and constraints discovered in the environment.
+
+Our system accomplishes these goals with the architecture illustrated in Figure \ref{fig:overview}. In this architecture, perception and exploration algorithms reason about sensor data to create maps of the environment for navigation and exploration. They also characterize the environment in terms of pertinent task information and the capabilities of possible robot configurations. A library is maintained that stores possible robot configurations with their corresponding characteristics and possible behaviors. The high-level planner then directs mission performance. It takes a high-level task description and directs robot actions by matching environmental constraints to appropriate configurations and behaviors from the Library. Finally, reconfiguration controllers enable the robot to switch between configurations as the high-level planner directs.
+
+Following is a description of each of these components and our implementation in our system. Since our system represents the first work in this area, we incorporate many of our implementations with relatively simple methods. This enables our system to serve as a proof-of-concept to demonstrate that the aforementioned tasks can be performed and to study challenges that may be faced in expanding such systems to perform wider varieties of tasks with high robustness. To facilitate the use of open source software and enable networking between components, the system is built in a ROS framework\footnote{http://www.ros.org}.
+
+%
+% System Overview Figure
+\begin{figure}
+\begin{center}
+%\includegraphics[width=0.4\textwidth]{images/overview.png}
+\includegraphics[width=\columnwidth]{images/RSS17FlowchartV4.png}
+\caption{System Overview Flowchart}
+\label{fig:overview}
+\end{center}
+\vspace{-1em}
+\end{figure}
+
+%
+
 %     __  __               __
 %    / / / /___ __________/ /      ______ _________
 %   / /_/ / __ `/ ___/ __  / | /| / / __ `/ ___/ _ \
 %  / __  / /_/ / /  / /_/ /| |/ |/ / /_/ / /  /  __/
 % /_/ /_/\__,_/_/   \__,_/ |__/|__/\__,_/_/   \___/
 
-\section{Hardware} % (fold)
+\subsection{Hardware} % (fold)
 \label{sec:hardware}
 %
-\subsection{SMORES-EP Modular Robot} \label{sec:smores}
+%\subsection{SMORES-EP Modular Robot} \label{sec:smores}
 %
 Our system is built around the SMORES-EP robot, but could be adapted to
 work with other hardware platforms. Each module is the size of an \textit{80mm cube}, and has four actuated joints - three continuously rotating faces (left, right, and
@@ -307,7 +274,7 @@ The SMORES-EP hardware system also includes passive cubes that modules can conne
 \end{figure}
 %
 
-\subsection{Brain Module} % (fold)
+%\subsection{Brain Module} % (fold)
 \label{sec:sensor_module}
 %
 SMORES-EP modules have very limited onboard computation, and no sensors that allow them to gather information about their environment.  To allow the robot to operate autonomously in unknown environments, we extend the SMORES-EP hardware system by introducing a brain module equipped with sensors and a computer, shown in Figure~\ref{fig:sensor-module}.
@@ -326,181 +293,6 @@ Computation is provided by an UP computing board with an Intel Atom 1.92 GHz pro
 \vspace{-2em}
 \end{figure}
 
-%     ____                            __  _
-%    / __ \___  _____________  ____  / /_(_)___  ____
-%   / /_/ / _ \/ ___/ ___/ _ \/ __ \/ __/ / __ \/ __ \
-%  / ____/  __/ /  / /__/  __/ /_/ / /_/ / /_/ / / / /
-% /_/    \___/_/   \___/\___/ .___/\__/_/\____/_/ /_/
-%                          /_/
-\section{Mapping and Exploration}
-\label{sec:exploration}
-%
-%Our system provides a robust suite of perception algorithms to inform control and decision-making in unknown environments.  This suite of tools serves three major functions.  First, it enables exploration, allowing the robot to map its environment, localize, and avoid obstacles.  Second, it provides the capability to recognize objects and regions of interest related to the desired task.  Third, it provides functions that characterize environment properties, providing information that allows appropriate configurations and behaviors to be selected from the design library.
-
-%Since the proposed system performs tasks in unknown environments and conditions, a robust suite of perception algorithms is required to inform control and decision-making. The robot must have the ability to explore and build a map of its environment while avoiding obstacles and tracking its pose. The system must be able to recognize objects and regions of interest related to the desired task. Finally, the system must characterize the environment in terms of configuration capabilities. Features in the environment may restrict which robot configurations can viably perform parts of the high-level task, such as retrieving an object or navigating to a waypoint. The system needs to recognize these features to be able to intelligently choose the appropriate robot configuration for performing the task.
-
-Exploration of unknown environments is a core functionality of our system. In this section, we describe how we deploy established methods for perception in the novel context of a modular robot operating in an unknown environment.
-%While the methods used are not novel in the broader context of robotics,  this system represents one of the first modular robot systems capable of exploring and operating in totally unknown environments.
-
-To facilitate the use of open source software and enable networking between components, the system is built in a ROS framework\footnote{http://www.ros.org}. Mapping and robot pose are provided by a RGB-D SLAM software package called RTAB-MAP\cite{rtabmap}. A 3D map of the environment is incrementally built and stored in an efficient octree-based volumetric map using Octomap\cite{octomap}.
-
-The system intelligently explores an unknown environment using a new next best view planner for object exploration created by two of the authors\footnote{This work has been newly accepted for journal publication in 2017}. This planner directs the robot to explore its environment in a way that maximizes information gain while avoiding collision with obstacles. The algorithm uses the current volumetric map of the environment and estimates the next reachable sensor viewpoint that will observe the largest volume of undiscovered portions of objects. To integrate into the proposed system, the exploration algorithm is offered as a service that can be queried by the high-level planner when desired. A volumetric map of the environment and the reachable space of sensor viewpoints in that map are provided as inputs to the algorithm. The algorithm then computes and returns the next best view for the sensor, which the high-level planner can then set as a navigation waypoint.
-
-Note that the reachable space is dependent on the size and locomotion capabilities of the specific robot configuration. This information is associated with the configuration in the library introduced in Section~\ref{sec:configuration-specifics}.
-
-To identify objects of interest to a high-level task, our system provides tools to recognize color blobs and track their location in 3D.  Colors are recognized using CMVision\footnote{CMVision: http://www.cs.cmu.edu/$\sim$jbruce/cmvision/}, and tracked in 3D using depth information from the Xtion sensor\footnote{Lucas Coelho Figueiredo: https://github.com/lucascoelho91/ballFollower}. This information is used to provide environment information to the high-level controller, discussed in Section~\ref{sec:high-level}.  While we currently only provide object recognition by color, more sophisticated methods could easily be included. 
-%
-
-%    ______            _____          _____                 _ _____
-%   / ____/___  ____  / __(_)___ _   / ___/____  ___  _____(_) __(_)_________
-%  / /   / __ \/ __ \/ /_/ / __ `/   \__ \/ __ \/ _ \/ ___/ / /_/ / ___/ ___/
-% / /___/ /_/ / / / / __/ / /_/ /   ___/ / /_/ /  __/ /__/ / __/ / /__(__  )
-% \____/\____/_/ /_/_/ /_/\__, /   /____/ .___/\___/\___/_/_/ /_/\___/____/
-%                        /____/        /_/
-\section{Library of Configurations and Behaviors}
-\label{sec:configuration-specifics}
-%
-SMORES-EP has the capability to self-reconfigure, changing the connected structure of a cluster of modules to assume different shapes and capabilities.  In order to specify tasks for SMORES-EP (or any other self-reconfigurable robot) at a high level, we must abstract the robot in a way that captures the fact that its capabilities are a function of its configuration (connected structure). For the purposes of this work, we rely on a framework first presented in \cite{Jing2016}, which we summarize here.
-
-In this framework, the entire modular robot system is treated as a single robot with capabilities defined by a library. A library entry is defined as $l = (C,B_C,P_e,P_b)$ where:
-\begin{itemize}
-\item $C$ is the robot \emph{configuration}, specified by the connected structure of the modules.
-\item $B_C$ is a \emph{behavior} that $C$ can perform. A behavior is a controller that commands the robot to perform a specific useful action. 
-\item $P_b$ is a set of \emph{behavior properties} that describes what $B_C$ does. 
-\item $T_e$ is a set of \emph{environment types} that describe the environments in which this library entry is suitable. 
-\end{itemize} 
-%
-When we specify tasks at the high level, we use behavior properties $P_b$ to describe a desired robot action without explicitly specifying a configuration or behavior.
-Environment types $T_e$ specify the conditions under which a behavior can be used, and are determined through a sensing process described in the next section.
- 
-In this work, we create five library entries for two different configurations,
-listed in Table~\ref{table:1}. This library was created to accomplish an object retrieval task (described in Section~\ref{sec:experiments}), but the library can be expanded to include more entries for other environments and tasks. Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use a perception algorithm described in Section \ref{sec:environment-characterization}.
-
-The ``Tank'' configuration shown in Figure~\ref{fig:dropoff} is capable of picking
-up and dropping objects in a ``free'' environment (described in Section \ref{sec:environment-characterization}). In addition, the ``Tank'' configuration can locomote on flat terrain. It uses a parametric differential drive behavior to convert a desired velocity vector into motor commands (\textbf{drive} in Table \ref{table:1}).
-
-The ``Proboscis'' configuration shown in Figure~\ref{fig:pink_grab} has
-a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects.
-However, the locomotion ability of this configuration is limited to forward/backward
-motion, making it unsuitable for general navigation.
-
-This library-based framework allows us to specify tasks for modular robots at a high level, by associating abstract robot actions with robust low-level controllers that execute appropriate robot behaviors based on the sensed environment. For example, if a task specification requires the robot to execute a \textbf{pickUp} behavior, our system could select either the Tank or Proboscis configurations to perform the action, since both have behaviors property \textbf{pickUp}. To choose the appropriate configuration to use, the robot uses perception to characterize its environment in terms of the environment types $T_e$ associated with each configuration. If the environment is of type ``tunnel'', only the Proboscis configuration can be used, and the robot will take  reconfigure to form the Proboscis if it is not already in that configuration. Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
-%
-\begin{table}
-\centering
-\begin{tabular}{ |c|c|c| } 
- \hline
- \multirow{2}{6em}{Configuration} & Behavior & Environment \\
- & properties & Types \\
- \hline
- Tank & \textbf{pickUp} & ``free'' \\\hline
- Tank & \textbf{drop} & ``free'' \\\hline
- Tank & \textbf{drive} & ``free''\\ \hline
- Proboscis & \textbf{pickUp} & ``tunnel'' or ``free''\\ \hline
- Proboscis & \textbf{drop} &``tunnel'' or ``free'' \\ 
- \hline
-\end{tabular}
-\caption{A library of robot behaviors}
-\label{table:1}
-\vspace{-1em}
-\end{table}
-
-%
-% subsection sensor_module (end)
-% section hardware (end)
-%
-
-\section{Environment Characterization}
-\label{sec:environment-characterization}
-%
-As discussed in Section~\ref{sec:configuration-specifics}, the system takes environment type into account when selecting an appropriate library entry to complete an action. Our perception suite includes functions that process the 3D information to identify environment types.
-
-%In order to intelligently choose appropriate configurations when performing tasks, the robot must perceive and characterize its environment into a discrete set of environment types that correspond with configuration capabilities. The proposed system includes a perception component that discretely characterizes the environment for the purpose of retrieving an object. This characterization can then be used by the high-level planner to determine the appropriate configuration and gait for successful object retrieval. 
-
-Currently, the perception suite includes functions to recognize three types of environments relevant to object retrieval tasks, shown in Figure \ref{fig:characters}.  When an object is recognized in the environment, the 3D information about its surroundings is evaluated. If the object's position is higher than a threshold height, the environment is characterized as the ``ledge'' type, likely requiring a library entry that can reach up to the top of the ledge to retrieve the object.
-If the object is on the ground, an occupancy grid is created around it, and all grid cells within a robot-radius of obstacles are denoted unreachable (as shown in Figure~\ref{fig:characterization}). The closest reachable point to the object within $20^o$ of the robot's line of sight to the object is selected. If the distance from this point to the object is greater than a threshold value, the environment is characterized as a ``tunnel'', likely requiring a configuration that is narrow enough to move between the surrounding obstacles to retrieve the object.
-If the environment surrounding the object does not meet the criteria for either a ``ledge'' or ``tunnel'', it is characterized as ``free''.
-%If the environment type is ``tunnel'', the algorithm also selects a navigation waypoint at which the robot can reconfigure before retrieving the object. This waypoint is calculated by extending the closest point farther away from the object to be retrieved (red arrow in Figure \ref{fig:characterization}). This information is passed to the high-level planner for use in controller synthesis.
-%
-% Environment types figure
-\begin{figure}[t]
-      \centering
-      \begin{subfigure}[t]{0.15\textwidth}
-        \includegraphics[width=\textwidth]{images/free.png}
-        %\label{fig:obja}
-        \caption{\textbf{``free'}' environment}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.15\textwidth}
-        \includegraphics[width=\textwidth]{images/ledge.png}
-        %\label{fig:objb}
-        \caption{\textbf{``ledge''} environment}
-    \end{subfigure}
-        \begin{subfigure}[t]{0.15\textwidth}
-        \includegraphics[width=\textwidth]{images/tunnel.png}
-        %\label{fig:objb}
-        \caption{\textbf{``tunnel''} environment}
-    \end{subfigure}
-      \caption{Environment characterization types for object retrieval.}
-      \label{fig:characters}
-   \end{figure}
-%
-% Characterization method figure
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.4\textwidth]{images/characterization.png}
-\caption{\textbf{Tunnel} environment characterization method. Yellow grid cells are occupied cells, light blue cells are unreachable cells resulting from bloating obstacles.}
-\label{fig:characterization}
-\end{center}
-\vspace{-2em}
-\end{figure}
-
-%     ____                        _____                        __  _
-%    / __ \___  _________  ____  / __(_)___ ___  ___________ _/ /_(_)___  ____
-%   / /_/ / _ \/ ___/ __ \/ __ \/ /_/ / __ `/ / / / ___/ __ `/ __/ / __ \/ __ \
-%  / _, _/  __/ /__/ /_/ / / / / __/ / /_/ / /_/ / /  / /_/ / /_/ / /_/ / / / /
-% /_/ |_|\___/\___/\____/_/ /_/_/ /_/\__, /\__,_/_/   \__,_/\__/_/\____/_/ /_/
-%                                   /____/
-\section{Reconfiguration}
-\label{sec:reconfiguration}
-%
-Reconfiguration refers to the process of changing the connective topology of an MSRR system's modules in order to change its morphology.  SMORES-EP is capable of all three classes of modular self-reconfiguration (chain, lattice, and mobile reconfiguration) \cite{Davey2012,yim2003modular}.  For the purposes of this work, we have developed tools for mobile reconfiguration with SMORES-EP, taking advantage of the fact that individual modules can drive on flat surfaces as described in Section \ref{sec:hardware}.
-
-Determining the relative positions of modules during mobile self-reconfiguration is an important challenge. As discussed in Section~\ref{sec:related-work}, past systems have relied on offboard global positioning systems \cite{Paulos2015} or distributed approaches, in which sensors are mounted on each disconnected set of modules \cite{Yim2007}.  Our localization method is centralized, using an RGB camera carried by the robot to track AprilTag fiducials mounted to individual modules.  As discussed in Section~\ref{sec:hardware}, the camera provides a view of a $1m\times0.75m$ area on the ground in front of the brain module.  Within this area (which we call the \emph{reconfiguration zone}), any module equipped with an AprilTag marker can detach from the cluster, drive to another location, and reattach to the cluster, provided that both of its wheels were in contact with the ground in its starting position.% \TODO{Get accurate number for height and FoV.}
-
-\subsection{Reconfiguration Procedure}
-Given an initial configuration and a goal configuration, our reconfiguration controller commands a set of modules to disconnect, move and reconnect in order to form the new topology of the goal configuration. The process consists of three stages: i) Pre-reconfiguration, ii) Module Movement, iii) Post-reconfiguration.
-
-\paragraph{Pre-reconfiguration} In the pre-reconfiguration stage, the robot takes actions to establish the conditions needed for reconfiguration.  It begins by confirming that the reconfiguration zone is a flat surface free of obstacles (other than the modules themselves).  If the robot is carrying an object, it drops the object outside of the reconfiguration zone. It then  sets its joint angles so that all modules that need to detach have both of their wheels on the ground, ready to drive. Once these conditions are established, module movement begins.
-
-\paragraph{Module Movement} During this stage, the topology of the cluster changes as a sequence of module movement operations are performed.  Each operation changes the topology of the cluster by detaching a module from the cluster, driving, and re-attaching at its new location in the goal configuration, as shown in Figure~\ref{fig:reconf}.
-
-In order to transform from an initial configuration to a goal configuration, a feasible reconfiguration plan (sequence of module movement operations) must be supplied before reconfiguration begins.  Each configuration in the library has an associated set of reconfiguration plans that allows it to transform to other configurations in the library.  Currently, reconfiguration plans are created by hand.  In the future, existing assembly planning algorithms (\cite{Werfel2007,Seo2013}) could be adapted to generate reconfiguration plans automatically.
-
-% We denote a module movement operation as $MP=\left(m, m_d, m_a, f_m^d, f_m^a, f_{m_d}, f_{m_a}, \sigma \right)$ where:
-% \begin{itemize}
-% \item $m$ is the module whose location will be changed in this module operation.
-% \item $m_d$ is the module that connects with $m$ before the operation.
-% \item $m_a$ is the module that connects with $m$ after the operation. Notice $m_d$ and $m_a$ can be the same module. 
-% \item The face $f_m^d$ of module $m$ connects with the face $f_{m_d}$ of module $m_d$ before the operation.
-% \item The face $f_m^a$ of module $m$ connects with the face $f_{m_a}$ of module $m_a$ after the operation. Notice $f_m^d$ and $f_m^a$ can be the same face. In this work, we assume $f_m^a$ can only be the front or the back face of the module $m$.
-% \item $\sigma$ is the path that module $m$ will follow during the operation.
-% \end{itemize}
-
-To travel from its initial location to its final location, a module uses its left and right wheels to move by differential-drive.  Because the reconfiguration zone is free of obstacles, collision-free paths can be pre-computed and stored as part of the reconfiguration plan.  Paths can also be computed at runtime if desired.  AprilTag localization allows the robot to follow the path.
-
-Several techniques were developed to ensure reliable connection and disconnection during reconfiguration.  When a module disconnects from the cluster, the electro-permanent magnets on the connected faces are turned off.  To guarantee a clean break of the magnetic connection, the disconnecting module bends its tilt joint up and down, mechanically separating itself from the cluster. During docking, accurate alignment is crucial to the strength of the magnetic connection \cite{tosun2016design}.  For this reason, rather than driving directly to its final docking location, a module instead drives to a pre-docking waypoint directly in front of its docking location.  At the waypoint, the module spins in place slowly until its heading is perfectly aligned with the dock point, and then drives in straight to attach. To guarantee a good connection, the module intentionally overdrives its dock point, pushing itself into the cluster while firing its magnets.
-%
-\begin{figure}[t]
-\begin{center}
-  \includegraphics[width=0.32\columnwidth]{images/reconf_detach.jpg}
-  \includegraphics[width=0.32\columnwidth]{images/reconf_waypoint.jpg}
-  \includegraphics[width=0.32\columnwidth]{images/reconf_attach.jpg}
-  \caption{Module movement during reconfiguration. (1) Left module detaches from cluster. (2) Module drives to waypoint, and spins to establish perfect heading. (2) Module drives straight in to dock point, and reattaches.}
-  \label{fig:reconf}
-\end{center}
-\end{figure}
-
-\paragraph{Post-reconfiguration} Once all module movement operations have completed and the goal topology is formed, the robot sets its joints to appropriate angles for the goal configuration to begin performing desired behaviors, and if necessary, the robot picks up any objects it dropped. This completes the reconfiguration process. 
 %
 %     __  ___       __          __                   __
 %    / / / (_)___ _/ /_        / /   ___ _   _____  / /
@@ -509,10 +301,10 @@ Several techniques were developed to ensure reliable connection and disconnectio
 % /_/ /_/_/\__, /_/ /_/     /_____/\___/|___/\___/_/
 %         /____/
 %%
-\section{High-Level Planner}
+\subsection{High-Level Planner}
 \label{sec:high-level}
 
-To bring together the actuation, sensing, and reconfiguration capabilities of  the  robot as a complete system for accomplishing  tasks, we employ an existing framework called LTLMoP to automatically generate robot controllers from user-specified high-level instructions using formal methods \cite{DBLP:conf/iros/FinucaneJK10,DBLP:journals/trob/Kress-GazitFP09}.
+The high-level planner acts as the main, centralized controller that directs robot actions and performance. We employ an existing framework called LTLMoP to automatically generate robot controllers from user-specified high-level instructions using formal methods \cite{DBLP:conf/iros/FinucaneJK10,DBLP:journals/trob/Kress-GazitFP09}.
 LTLMoP allows us to use each component of our system as a low-level atomic controller, and specify a wide-range of reactive robotic tasks as a set of high-level instructions using these controllers.
 In this section, we will mainly discuss how we model our system in order to use LTLMoP to automatically generate a high-level controller for our desired robot task.
 
@@ -576,6 +368,162 @@ If the robot is not currently in a configuration capable of executing the select
 
 %For example, in Fig.~\ref{fig:automaton} we start in the top state and execute the ``explore'' program.
 %If  the robot senses a pink object, the value of ``pinkObject'' is \lt and therefore the next state is the bottom right state. We then stop the ``explore'' program and execute the ``driveToObject'' program.
+
+%     ____                            __  _
+%    / __ \___  _____________  ____  / /_(_)___  ____
+%   / /_/ / _ \/ ___/ ___/ _ \/ __ \/ __/ / __ \/ __ \
+%  / ____/  __/ /  / /__/  __/ /_/ / /_/ / /_/ / / / /
+% /_/    \___/_/   \___/\___/ .___/\__/_/\____/_/ /_/
+%                          /_/
+\subsection{Perception and Planning for Information}
+\label{sec:exploration}
+%
+%Our system provides a robust suite of perception algorithms to inform control and decision-making in unknown environments.  This suite of tools serves three major functions.  First, it enables exploration, allowing the robot to map its environment, localize, and avoid obstacles.  Second, it provides the capability to recognize objects and regions of interest related to the desired task.  Third, it provides functions that characterize environment properties, providing information that allows appropriate configurations and behaviors to be selected from the design library.
+
+%Since the proposed system performs tasks in unknown environments and conditions, a robust suite of perception algorithms is required to inform control and decision-making. The robot must have the ability to explore and build a map of its environment while avoiding obstacles and tracking its pose. The system must be able to recognize objects and regions of interest related to the desired task. Finally, the system must characterize the environment in terms of configuration capabilities. Features in the environment may restrict which robot configurations can viably perform parts of the high-level task, such as retrieving an object or navigating to a waypoint. The system needs to recognize these features to be able to intelligently choose the appropriate robot configuration for performing the task.
+
+In order to inform the high-level planner of pertinent information in the robot's environment, a variety of perception components are used. Mapping and robot pose are provided by an RGB-D SLAM software package called RTAB-MAP\cite{rtabmap}. A 3D map of the environment is incrementally built and stored in an efficient octree-based volumetric map using Octomap\cite{octomap}. To drive exploration of the unknown environment, a Next Best View planner \cite{daudelin} is used. Upon request, it provides waypoints to the high-level planner that maximize expected information collection of unknown regions of the environment. To identify objects of interest in the task, color detection and tracking is used.  Colored objects are recognized using CMVision\footnote{CMVision: http://www.cs.cmu.edu/$\sim$jbruce/cmvision/}, and tracked in 3D using depth information from the onboard 3D sensor\footnote{Lucas Coelho Figueiredo: https://github.com/lucascoelho91/ballFollower}. Although we implement object recognition by color, more sophisticated methods could be included in the same system architecture.
+
+To help the high-level planner choose appropriate configurations for a task, an environment characterization algorithm is necessary. This algorithm reasons about regions of interest in the environment to classify them in terms of the abilities of possible robot configurations. For our proof-of-concept, we implemented an algorithm that can differentiate between four environment types relevant to object manipulation, shown in Figure \ref{fig:characters}. 
+
+When an object is recognized in the environment, the 3D information about its surroundings is evaluated. An occupancy grid is created around the object location, and all grid cells within a robot-radius of obstacles are denoted unreachable (as shown in Figure~\ref{fig:characterization}). The closest reachable point to the object within $20^o$ of the robot's line of sight to the object is selected. If the distance from this point to the object is greater than a threshold value and the object is on the ground, the environment is characterized as a ``tunnel'', likely requiring a configuration that is narrow enough to move between the surrounding obstacles to retrieve the object. If above the ground, the environment is characterized as a ``ledge'' environment, requiring a robot that can climb to reach the object. If the closest reachable point is under the threshold value, the environment is classified as either a ``free'' or ``high free'' environment, depending on the height of the colored object.
+
+In addition to characterizing the environment, the algorithm also selects a waypoint based on the characterization for the robot to position itself for reconfiguration and performing the object manipulation task.
+
+%
+% Environment types figure
+\begin{figure}[t]
+      \centering
+      \begin{subfigure}[t]{0.15\textwidth}
+        \includegraphics[width=\textwidth]{images/free.png}
+        %\label{fig:obja}
+        \caption{\textbf{``free'}' environment}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.15\textwidth}
+        \includegraphics[width=\textwidth]{images/ledge.png}
+        %\label{fig:objb}
+        \caption{\textbf{``ledge''} environment}
+    \end{subfigure}
+        \begin{subfigure}[t]{0.15\textwidth}
+        \includegraphics[width=\textwidth]{images/tunnel.png}
+        %\label{fig:objb}
+        \caption{\textbf{``tunnel''} environment}
+    \end{subfigure}
+      \caption{Environment characterization types for object retrieval.}
+      \label{fig:characters}
+   \end{figure}
+%
+% Characterization method figure
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.4\textwidth]{images/characterization.png}
+\caption{An example of a \textbf{tunnel} environment characterization. Yellow grid cells are occupied, light blue cells are unreachable resulting from bloating obstacles.}
+\label{fig:characterization}
+\end{center}
+\vspace{-2em}
+\end{figure}
+
+%    ______            _____          _____                 _ _____
+%   / ____/___  ____  / __(_)___ _   / ___/____  ___  _____(_) __(_)_________
+%  / /   / __ \/ __ \/ /_/ / __ `/   \__ \/ __ \/ _ \/ ___/ / /_/ / ___/ ___/
+% / /___/ /_/ / / / / __/ / /_/ /   ___/ / /_/ /  __/ /__/ / __/ / /__(__  )
+% \____/\____/_/ /_/_/ /_/\__, /   /____/ .___/\___/\___/_/_/ /_/\___/____/
+%                        /____/        /_/
+\subsection{Library of Configurations and Behaviors}
+\label{sec:configuration-specifics}
+%
+In order to adapt to environmental constraints, a repository of achievable robot configurations and gaits is needed along with descriptions of their abilities that can be used to match the environmental constraints. The high-level planner can then match environment characterizations from the perception components with the configuration and behavior that can perform the task in the environment. In our system, we use a library of configurations and behaviors. This library abstracts the robot in a way that captures the fact that its capabilities are a function of its configuration (connected structure). For the purposes of this work, we rely on a framework first presented in \cite{Jing2016}, which we summarize here.
+
+In this framework, the entire modular robot system is treated as a single robot with capabilities defined by a library. A library entry is defined as $l = (C,B_C,P_e,P_b)$ where:
+\begin{itemize}
+\item $C$ is the robot \emph{configuration}, specified by the connected structure of the modules.
+\item $B_C$ is a \emph{behavior} that $C$ can perform. A behavior is a controller that commands the robot to perform a specific useful action. 
+\item $P_b$ is a set of \emph{behavior properties} that describes what $B_C$ does. 
+\item $T_e$ is a set of \emph{environment types} that describe the environments in which this library entry is suitable. 
+\end{itemize} 
+%
+When we specify tasks at the high level, we use behavior properties $P_b$ to describe a desired robot action without explicitly specifying a configuration or behavior.
+Environment types $T_e$ specify the conditions under which a behavior can be used, and are determined through a sensing process described in the next section.
+ 
+In this work, we create five library entries for two different configurations,
+listed in Table~\ref{table:1}. This library was created to accomplish an object retrieval task (described in Section~\ref{sec:experiments}), but the library can be expanded to include more entries for other environments and tasks. Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use a perception algorithm described in Section \ref{sec:environment-characterization}.
+
+The ``Tank'' configuration shown in Figure~\ref{fig:dropoff} is capable of picking
+up and dropping objects in a ``free'' environment (described in Section \ref{sec:environment-characterization}). In addition, the ``Tank'' configuration can locomote on flat terrain. It uses a parametric differential drive behavior to convert a desired velocity vector into motor commands (\textbf{drive} in Table \ref{table:1}).
+
+The ``Proboscis'' configuration shown in Figure~\ref{fig:pink_grab} has
+a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects.
+However, the locomotion ability of this configuration is limited to forward/backward
+motion, making it unsuitable for general navigation.
+
+This library-based framework allows us to specify tasks for modular robots at a high level, by associating abstract robot actions with robust low-level controllers that execute appropriate robot behaviors based on the sensed environment. For example, if a task specification requires the robot to execute a \textbf{pickUp} behavior, our system could select either the Tank or Proboscis configurations to perform the action, since both have behaviors property \textbf{pickUp}. To choose the appropriate configuration to use, the robot uses perception to characterize its environment in terms of the environment types $T_e$ associated with each configuration. If the environment is of type ``tunnel'', only the Proboscis configuration can be used, and the robot will take  reconfigure to form the Proboscis if it is not already in that configuration. Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
+%
+\begin{table}
+\centering
+\begin{tabular}{ |c|c|c| } 
+ \hline
+ \multirow{2}{6em}{Configuration} & Behavior & Environment \\
+ & properties & Types \\
+ \hline
+ Tank & \textbf{pickUp} & ``free'' \\\hline
+ Tank & \textbf{drop} & ``free'' \\\hline
+ Tank & \textbf{drive} & ``free''\\ \hline
+ Proboscis & \textbf{pickUp} & ``tunnel'' or ``free''\\ \hline
+ Proboscis & \textbf{drop} &``tunnel'' or ``free'' \\ 
+ \hline
+\end{tabular}
+\caption{A library of robot behaviors}
+\label{table:1}
+\vspace{-1em}
+\end{table}
+
+%     ____                        _____                        __  _
+%    / __ \___  _________  ____  / __(_)___ ___  ___________ _/ /_(_)___  ____
+%   / /_/ / _ \/ ___/ __ \/ __ \/ /_/ / __ `/ / / / ___/ __ `/ __/ / __ \/ __ \
+%  / _, _/  __/ /__/ /_/ / / / / __/ / /_/ / /_/ / /  / /_/ / /_/ / /_/ / / / /
+% /_/ |_|\___/\___/\____/_/ /_/_/ /_/\__, /\__,_/_/   \__,_/\__/_/\____/_/ /_/
+%                                   /____/
+\subsection{Reconfiguration}
+\label{sec:reconfiguration}
+%
+When the high-level planner decides to use a new robot configuration during a task, a method is needed to change the robot to the desired new morphology. Reconfiguration is the process of changing the connective topology of an MSRR system's modules in order to change its morphology.  SMORES-EP is capable of all three classes of modular self-reconfiguration (chain, lattice, and mobile reconfiguration) \cite{Davey2012,yim2003modular}.  For the purposes of this work, we have developed tools for mobile reconfiguration with SMORES-EP, taking advantage of the fact that individual modules can drive on flat surfaces as described in Section \ref{sec:hardware}.
+
+Determining the relative positions of modules during mobile self-reconfiguration is an important challenge. As discussed in Section~\ref{sec:related-work}, past systems have relied on offboard global positioning systems \cite{Paulos2015} or distributed approaches, in which sensors are mounted on each disconnected set of modules \cite{Yim2007}.  Our localization method is centralized, using an RGB camera carried by the robot to track AprilTag fiducials mounted to individual modules.  As discussed in Section~\ref{sec:hardware}, the camera provides a view of a $1m\times0.75m$ area on the ground in front of the brain module.  Within this area (which we call the \emph{reconfiguration zone}), any module equipped with an AprilTag marker can detach from the cluster, drive to another location, and reattach to the cluster, provided that both of its wheels were in contact with the ground in its starting position.% \TODO{Get accurate number for height and FoV.}
+
+%\subsection{Reconfiguration Procedure}
+Given an initial configuration and a goal configuration, our reconfiguration controller commands a set of modules to disconnect, move and reconnect in order to form the new topology of the goal configuration. The process consists of three stages: i) Pre-reconfiguration, ii) Module Movement, iii) Post-reconfiguration.
+
+\paragraph{Pre-reconfiguration} In the pre-reconfiguration stage, the robot takes actions to establish the conditions needed for reconfiguration.  It begins by confirming that the reconfiguration zone is a flat surface free of obstacles (other than the modules themselves).  If the robot is carrying an object, it drops the object outside of the reconfiguration zone. It then  sets its joint angles so that all modules that need to detach have both of their wheels on the ground, ready to drive. Once these conditions are established, module movement begins.
+
+\paragraph{Module Movement} During this stage, the topology of the cluster changes as a sequence of module movement operations are performed.  Each operation changes the topology of the cluster by detaching a module from the cluster, driving, and re-attaching at its new location in the goal configuration, as shown in Figure~\ref{fig:reconf}.
+
+In order to transform from an initial configuration to a goal configuration, a feasible reconfiguration plan (sequence of module movement operations) must be supplied before reconfiguration begins.  Each configuration in the library has an associated set of reconfiguration plans that allows it to transform to other configurations in the library.  Currently, reconfiguration plans are created by hand.  In the future, existing assembly planning algorithms (\cite{Werfel2007,Seo2013}) could be adapted to generate reconfiguration plans automatically.
+
+% We denote a module movement operation as $MP=\left(m, m_d, m_a, f_m^d, f_m^a, f_{m_d}, f_{m_a}, \sigma \right)$ where:
+% \begin{itemize}
+% \item $m$ is the module whose location will be changed in this module operation.
+% \item $m_d$ is the module that connects with $m$ before the operation.
+% \item $m_a$ is the module that connects with $m$ after the operation. Notice $m_d$ and $m_a$ can be the same module. 
+% \item The face $f_m^d$ of module $m$ connects with the face $f_{m_d}$ of module $m_d$ before the operation.
+% \item The face $f_m^a$ of module $m$ connects with the face $f_{m_a}$ of module $m_a$ after the operation. Notice $f_m^d$ and $f_m^a$ can be the same face. In this work, we assume $f_m^a$ can only be the front or the back face of the module $m$.
+% \item $\sigma$ is the path that module $m$ will follow during the operation.
+% \end{itemize}
+
+To travel from its initial location to its final location, a module uses its left and right wheels to move by differential-drive.  Because the reconfiguration zone is free of obstacles, collision-free paths can be pre-computed and stored as part of the reconfiguration plan.  Paths can also be computed at runtime if desired.  AprilTag localization allows the robot to follow the path.
+
+Several techniques were developed to ensure reliable connection and disconnection during reconfiguration.  When a module disconnects from the cluster, the electro-permanent magnets on the connected faces are turned off.  To guarantee a clean break of the magnetic connection, the disconnecting module bends its tilt joint up and down, mechanically separating itself from the cluster. During docking, accurate alignment is crucial to the strength of the magnetic connection \cite{tosun2016design}.  For this reason, rather than driving directly to its final docking location, a module instead drives to a pre-docking waypoint directly in front of its docking location.  At the waypoint, the module spins in place slowly until its heading is perfectly aligned with the dock point, and then drives in straight to attach. To guarantee a good connection, the module intentionally overdrives its dock point, pushing itself into the cluster while firing its magnets.
+%
+\begin{figure}[t]
+\begin{center}
+  \includegraphics[width=0.32\columnwidth]{images/reconf_detach.jpg}
+  \includegraphics[width=0.32\columnwidth]{images/reconf_waypoint.jpg}
+  \includegraphics[width=0.32\columnwidth]{images/reconf_attach.jpg}
+  \caption{Module movement during reconfiguration. (1) Left module detaches from cluster. (2) Module drives to waypoint, and spins to establish perfect heading. (2) Module drives straight in to dock point, and reattaches.}
+  \label{fig:reconf}
+\end{center}
+\end{figure}
+
+\paragraph{Post-reconfiguration} Once all module movement operations have completed and the goal topology is formed, the robot sets its joints to appropriate angles for the goal configuration to begin performing desired behaviors, and if necessary, the robot picks up any objects it dropped. This completes the reconfiguration process. 
 
 
 %     ______                     _                      __
