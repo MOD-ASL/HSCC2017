@@ -304,7 +304,7 @@ Computation is provided by an UP computing board with an Intel Atom 1.92 GHz pro
 \subsection{High-Level Planner}
 \label{sec:high-level}
 
-The high-level planner acts as the main, centralized controller that directs robot actions and performance. We employ an existing framework called LTLMoP to automatically generate robot controllers from user-specified high-level instructions using formal methods \cite{DBLP:conf/iros/FinucaneJK10,DBLP:journals/trob/Kress-GazitFP09}.
+The high-level planner acts as the main, centralized controller that directs robot motion and actions based on the given tasks. We employ an existing framework called LTLMoP to automatically generate robot controllers from user-specified high-level instructions using formal methods \cite{DBLP:conf/iros/FinucaneJK10,DBLP:journals/trob/Kress-GazitFP09}.
 LTLMoP allows us to use each component of our system as a low-level atomic controller, and specify a wide-range of reactive robotic tasks as a set of high-level instructions using these controllers.
 In this section, we will mainly discuss how we model our system in order to use LTLMoP to automatically generate a high-level controller for our desired robot task.
 
@@ -438,7 +438,8 @@ In addition to characterizing the environment, the algorithm also selects a wayp
 \subsection{Library of Configurations and Behaviors}
 \label{sec:configuration-specifics}
 %
-In order to adapt to environmental constraints, a repository of achievable robot configurations and gaits is needed along with descriptions of their abilities that can be used to match the environmental constraints. The high-level planner can then match environment characterizations from the perception components with the configuration and behavior that can perform the task in the environment. In our system, we use a library of configurations and behaviors. This library abstracts the robot in a way that captures the fact that its capabilities are a function of its configuration (connected structure). For the purposes of this work, we rely on a framework first presented in \cite{Jing2016}, which we summarize here.
+In order to adapt to environmental constraints, a library of user designed robot configurations and behaviors is needed along with descriptions of their abilities that can be used to match the environmental constraints. The high-level planner can then match environment characterizations from the perception components with the configuration and behavior that can perform the task in the environment. %In our system, we use a library of configurations and behaviors. This library abstracts the robot in a way that captures the fact that its capabilities are a function of its configuration (connected structure). 
+For the purposes of this work, we rely on a framework first presented in \cite{Jing2016}, which we summarize here.
 
 In this framework, the entire modular robot system is treated as a single robot with capabilities defined by a library. A library entry is defined as $l = (C,B_C,P_e,P_b)$ where:
 \begin{itemize}
@@ -652,7 +653,7 @@ decision to use a  centralized sensing architecture  allowed the robot to carry 
 camera) enabling sophisticated capabilities like Visual SLAM and environment characterization. As a result, our implementation has more sensor-based autonomy than any previous modular robot.
 
 Our implementation relies in part on external computation and wireless network access, but this is not a fundamental system requirement.   In fact,  in our implementation the majority of  heavy computation (mapping, navigation, video
-processing) was done onboard the sensor module, with a few processes (\TODO{list}) run offboard, primarily for development convenience.  
+processing) was done onboard on the sensor module, with a few processes (\TODO{list} high-level planner, reconfiguration planner, and next-best-view planner) run offboard, primarily for development convenience.  
 In the future we believe everything could be run onboard with only minor adjustments.
 %
 \subsection{Capability}
@@ -670,7 +671,7 @@ object recognition, and differentiating between environments, which were suitabl
 for our proof-of-concept experiments.  To deploy a similar system in real life, more
 advanced techniques would need to be used.
 
-The architecture of our system is somewhat abstract, so evaluating its capabilities in a concrete way is difficult. Fundamentally, it is quite general, and in theory capable of addressing a very broad range of tasks. However, there are some limitations on the kinds of problems it can solve.  Assuming a single, centralized sensor module provides some practical advantages, but prevents the system from addressing tasks that require distributed sensing.  Using a library of configurations and gaits requires that problems be abstracted in a discrete way, which may be limiting for certain tasks.  \TODO{are there more limitations?} 
+The architecture of our system is somewhat abstract, so evaluating its capabilities in a concrete way is difficult. Fundamentally, it is quite general, and in theory capable of addressing a very broad range of tasks. However, there are some limitations on the kinds of problems it can solve.  Assuming a single, centralized sensor module provides some practical advantages, but prevents the system from addressing tasks that require distributed sensing.  Using a library of configurations and behaviors requires that problems be abstracted in a discrete way, which may be limiting for certain tasks.  \TODO{are there more limitations?} {\color{red} small size robot limits the scale of tasks. open loop controller limits the complexity/robustness of the action} 
 %
 \subsection{Reconfigurability}
 %
