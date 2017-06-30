@@ -109,7 +109,7 @@ Cornell University\\
 
 \begin{abstract}
 
-We present an integrated system that allows self-reconfigurable modular robots to autonomously accomplish perception-informed high-level tasks in an unknown environment, without any external sensing or control.  Through a hardware experiment, we demonstrate that our system is capable of autonomously completing an object retrieval task in an office-like environment.
+We present an integrated system that allows self-reconfigurable modular robots to autonomously accomplish perception-informed high-level tasks in an unknown environment, without any external sensing or control.  By performing three hardware experiments, we demonstrate that our system is capable of autonomously completing different object manipulation tasks in different environments without human changes to the system.
 
 The physical robot is composed of modules that support multiple robot configurations. An onboard 3D sensor provides information about the environment, which is used to perform SLAM, inform exploration, reconfiguration decision making and feedback control.  A centralized high-level mission planner uses information from the environment and the user-specified task description to autonomously compose low-level controllers to perform locomotion, reconfiguration, other behaviors. A novel, centralized, self-reconfiguration method is used to change robot configurations as needed. This is the first modular robot system that uses perception-driven reconfiguration to intelligently adapt to an \textit{a priori} unknown environment to perform complex tasks.
 
@@ -386,7 +386,7 @@ In order to inform the high-level planner of pertinent information in the robot'
 
 To help the high-level planner choose appropriate configurations for a task, an environment characterization algorithm is necessary. This algorithm reasons about regions of interest in the environment to classify them in terms of the abilities of possible robot configurations. For our proof-of-concept, we implemented an algorithm that can differentiate between four environment types relevant to object manipulation, shown in Figure \ref{fig:characters}. 
 
-When an object is recognized in the environment, the 3D information about its surroundings is evaluated. An occupancy grid is created around the object location, and all grid cells within a robot-radius of obstacles are denoted unreachable (as shown in Figure~\ref{fig:characterization}). The closest reachable point to the object within $20^o$ of the robot's line of sight to the object is selected. If the distance from this point to the object is greater than a threshold value and the object is on the ground, the environment is characterized as a ``tunnel'', likely requiring a configuration that is narrow enough to move between the surrounding obstacles to retrieve the object. If above the ground, the environment is characterized as a ``ledge'' environment, requiring a robot that can climb to reach the object. If the closest reachable point is under the threshold value, the environment is classified as either a ``free'' or ``high free'' environment, depending on the height of the colored object.
+When an object is recognized in the environment, the 3D information about its surroundings is evaluated. An occupancy grid is created around the object location, and all grid cells within a robot-radius of obstacles are denoted unreachable (as shown in Figure~\ref{fig:characterization}). The closest reachable point to the object within $20^o$ of the robot's line of sight to the object is selected. If the distance from this point to the object is greater than a threshold value and the object is on the ground, the environment is characterized as a ``tunnel'', likely requiring a configuration that is narrow enough to move between the surrounding obstacles to retrieve the object. If above the ground, the environment is characterized as a ``stairs'' environment, requiring a robot that can climb to reach the object. If the closest reachable point is under the threshold value, the environment is classified as either a ``free'' or ``sign'' environment, depending on the height of the colored object.
 
 In addition to characterizing the environment, the algorithm also selects a waypoint based on the characterization for the robot to position itself for reconfiguration and performing the object manipulation task.
 
@@ -408,14 +408,14 @@ In addition to characterizing the environment, the algorithm also selects a wayp
     \begin{subfigure}[t]{0.15\textwidth}
         \includegraphics[width=\textwidth]{images/HighFreeEnvironment.png}
         %\label{fig:objb}
-        \caption{\textbf{``high-free''} environment}
+        \caption{\textbf{``sign''} environment}
     \end{subfigure} \ \ \ \ \ \
     \begin{subfigure}[t]{0.15\textwidth}
         \includegraphics[width=\textwidth]{images/LedgeEnvironment.png}
         %\label{fig:objb}
-        \caption{\textbf{``ledge''} environment}
+        \caption{\textbf{``stairs''} environment}
     \end{subfigure}
-      \caption{Environment characterization types for object retrieval.}
+      \caption{Environment characterization types.}
       \label{fig:characters}
    \end{figure}
 %
@@ -560,7 +560,7 @@ During the experiment, the high-level planner used the library of two configurat
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.3\textwidth]{images/RSSMap.png}
-\caption{Diagram of experiment environment}
+\caption{Diagram of Experiment I environment}
 \vspace{-2em}
 \label{fig:map}
 \end{center}
@@ -598,7 +598,7 @@ During the experiment, the high-level planner used the library of two configurat
         %\label{fig:objb}
         \caption{Retrieving green object}
     \end{subfigure}
-      \caption{Environment characterization types for object retrieval.}
+      \caption{Phases of Experiment I.}
       \label{fig:demo}
    \vspace{-1em}
    \end{figure*}
@@ -625,13 +625,40 @@ Note that at one point in the video a human reaches onto the field to dislodge t
 
 The second and third experiments were designed to demonstrate the breadth of our system's adaptive capabilities. As such, these two experiments included the same high-level task specification that is different from the task in Experiment I. However, differing environments between Experiment II and Experiment III force the robot to adapt differently to perform each experiment. For Experiment II, the robot is given a circuit that needs to be shipped, and is tasked with finding the shipping bin in which to place the circuit. A pink sign above the bin denotes the bin's location. The high-level task includes sub-tasks of exploring the unknown environment, locating and characterizing the environment surrounding the mail bin, and delivering the package to the bin.
 
-Figure \ref{fig:mail} shows the environment setup for Experiment II. The full performance of the experiment is included in the video attachment to this paper. Note that the mail bin has stairs in front of it, which the robot must climb in order to drop the circuit into the bin successfully. The robot begins the experiment in the ``scorpion'' configuration. Shortly after beginning exploration of the environment, the robot observes and recognizes the mailbox, and characterizes the environment surrounding it as ``high-free''. Based on this characterization, it determines that the ``snake'' configuration is needed to traverse the stairs. Using the 3D map and characterization of the environment surrounding the mail bin, the robot navigates to a point directly in front of the stairs, faces the bin, and reconfigures to the ``snake'' configuration. It then executes the stair climbing gait to reach the mail bin, and drops the circuit successfully. It then descends the stairs and reconfigures back to the ``scorpion'' configuration to end the mission.
+Figure \ref{fig:exps}a shows the environment setup for Experiment II. The full performance of the experiment is included in the video attachment to this paper. Note that the mail bin has stairs in front of it, which the robot must climb in order to drop the circuit into the bin successfully. The robot begins the experiment in the ``scorpion'' configuration. Shortly after beginning exploration of the environment, the robot observes and recognizes the mailbox, and characterizes the environment surrounding it as ``high-free''. Based on this characterization, it determines that the ``snake'' configuration is needed to traverse the stairs. Using the 3D map and characterization of the environment surrounding the mail bin, the robot navigates to a point directly in front of the stairs, faces the bin, and reconfigures to the ``snake'' configuration. It then executes the stair climbing gait to reach the mail bin, and drops the circuit successfully. It then descends the stairs and reconfigures back to the ``scorpion'' configuration to end the mission.
+
+\begin{figure}[t]
+      \centering
+      \begin{subfigure}[t]{0.24\textwidth}
+        \includegraphics[width=\textwidth]{images/stairs_explore_overhead.jpg}
+        %\label{fig:obja}
+        \caption{Experiment II environment}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.24\textwidth}
+        \includegraphics[width=\textwidth]{images/stairs_climb.jpg}
+        %\label{fig:objb}
+        \caption{Successful circuit delivery}
+    \end{subfigure}
+    
+    \begin{subfigure}[t]{0.24\textwidth}
+        \includegraphics[width=\textwidth]{images/stamp_explore_overhead.jpg}
+        %\label{fig:objb}
+        \caption{Experiment III environment}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.24\textwidth}
+        \includegraphics[width=\textwidth]{images/stamp_placing.jpg}
+        %\label{fig:objb}
+        \caption{Successful stamp placement}
+    \end{subfigure}
+      \caption{Experiments II and III.}
+      \label{fig:exps}
+   \end{figure}
 
 \subsection{Experiment III}
 
 For the final experiment, the robot is given a stamp and is tasked with placing it on a package that needs to be shipped. The high-level task has the same specification as in Experiment II, which for its environment includes the following sub-tasks: explore the unknown environment, find the package with stamp location denoted by a pink area, and place the stamp on the package. The robot was started in the ``tank'' configuration used in the first experiment.
 
-Figure \ref{fig:stamp} shows the environment setup for Experiment III. Please see the video attachment for the full performance of this experiment. The robot begins exploring the unknown environment, and quickly observes the package to be stamped. It characterizes the environment as the ``ledge" environment using the 3D map created of the environment, and determines that the ``proboscis'' configuration is needed with the ``reaching'' gait to place the stamp on the pink goal area. The robot then navigates to a position directly in front of the package, reconfigures appropriately, and executes the gait to place the stamp correctly on the package to complete the task.
+Figure \ref{fig:exps}c shows the environment setup for Experiment III. Please see the video attachment for the full performance of this experiment. The robot begins exploring the unknown environment, and quickly observes the package to be stamped. It characterizes the environment as the ``stairs" environment using the 3D map created of the environment, and determines that the ``proboscis'' configuration is needed with the ``reaching'' gait to place the stamp on the pink goal area. The robot then navigates to a position directly in front of the package, reconfigures appropriately, and executes the gait to place the stamp correctly on the package to complete the task.
 
 %     ____  _                           _
 %    / __ \(_)___________  ____________(_)___  ____
@@ -671,7 +698,9 @@ object recognition, and differentiating between environments, which were suitabl
 for our proof-of-concept experiments.  To deploy a similar system in real life, more
 advanced techniques would need to be used.
 
-The architecture of our system is somewhat abstract, so evaluating its capabilities in a concrete way is difficult. Fundamentally, it is quite general, and in theory capable of addressing a very broad range of tasks. However, there are some limitations on the kinds of problems it can solve.  Assuming a single, centralized sensor module provides some practical advantages, but prevents the system from addressing tasks that require distributed sensing.  Using a library of configurations and behaviors requires that problems be abstracted in a discrete way, which may be limiting for certain tasks.  \TODO{are there more limitations?} {\color{red} small size robot limits the scale of tasks. open loop controller limits the complexity/robustness of the action} 
+Since the architecture of our system is quite general, it allows for a broad range of capabilities subject to a few limitations. The architecture assumes an \textit{a priori} unknown environment to be explored using a single, centralized sensing module. The structure of the high-level planner (\TODO{Is this accurate Jim?}) requires open loop controllers for low-level behaviors, which may limit the complexity and robustness of behaviors. Another observation is that the library of configurations has a discretized structure. This means that a discrete configuration/behavior set must be provided for each action desired. This also means that implementation for environment characterization must assume a discrete set of possible environment types that correspond to configuration/behavior abilities. The characterization algorithm must then be able to differentiate between each type in the set to enable the high-level planner to match environments to appropriate configurations/behaviors. Thus, the ability of a given system implementation depends largely on the size and abilities of the populated library and environment characterization method.
+
+%The architecture of our system is somewhat abstract, so evaluating its capabilities in a concrete way is difficult. Fundamentally, it is quite general, and in theory capable of addressing a very broad range of tasks. However, there are some limitations on the kinds of problems it can solve.  Assuming a single, centralized sensor module provides some practical advantages, but prevents the system from addressing tasks that require distributed sensing.  Using a library of configurations and behaviors requires that problems be abstracted in a discrete way, which may be limiting for certain tasks.  \TODO{are there more limitations?} {\color{red} small size robot limits the scale of tasks. open loop controller limits the complexity/robustness of the action} 
 %
 \subsection{Reconfigurability}
 %
@@ -711,7 +740,7 @@ Lack of robustness is  a weakness of the system architecture.  The high-level pl
 \subsection{Future Work and Conclusion}
 %
 %{\color{red} Generality-library}
-The abilities of the system and current MSRR technology could be extended in future work.  Our experiment utilizes a library of two configurations, and our perception system recognizes only three environment types (ledge, tunnel, and free).  To further develop the ability of MSRR systems to adapt to their environment, a larger library of configurations and gait controllers could be designed, along with a more powerful environment characterization algorithm.
+The abilities of the system and current MSRR technology could be extended in future work.  Our experiment utilizes a library of two configurations, and our perception system recognizes four environment types (stairs, tunnel, sign, and free).  To further develop the ability of MSRR systems to adapt to their environment, a larger library of configurations and gait controllers could be designed, along with a more powerful environment characterization algorithm.
 
 %{\color{red} Capability-hardware}
 The design of a more diverse library of configurations can be greatly aided by improving strength and versatility in module hardware. Real-world applications, such as search-and-rescue, require robots to climb over obstacles and navigate rough terrain. This requires modules with strong locomotion power and the ability to hold large payloads without breaking inter-module connections.
