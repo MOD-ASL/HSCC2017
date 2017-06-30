@@ -639,47 +639,83 @@ Figure \ref{fig:stamp} shows the environment setup for Experiment III. Please se
 % /_____/_/____/\___/\__,_/____/____/_/\____/_/ /_/
 \section{Discussion}
 \label{sec:discussion}
+We evaluate our system with respect to four criteria: \textit{autonomy}, \textit{capability}, \textit{reconfigurability}, and \textit{robustness}.
+In all four areas, we evaluate both the  system \textit{architecture}, which is more general, and the system \textit{implementation}, which was actually used in our experiments.
 %
-Like most modular robots, the small size and strength of SMORES-EP made carrying sensors and additional computation units while performing locomotion, actions and reconfigurations a challenge.  
-In contrast to the distributed sensing approaches used in prior modular work, our decision to use a single centralized sensor module allowed our system to use an RGB-D camera, enabling more sensor-based autonomy, such as Visual SLAM and environment characterization than any previous modular robot.  
-In the experiments, the majority of heavy computation (mapping, navigation, video processing) was done onboard the sensor module.  
-Some processes were run offboard, primarily for development convenience.  
+\subsection{Autonomy}
+%
+\textit{How independent is the robot?  To what degree can it operate without external external computation, sensing, power, or other help?}
+
+Autonomy was a major goal of this project, and an area in which the system architecture and implementation are both successful. Like most modular robots, the small size and strength of SMORES-EP made carrying
+sensors and  computers  a challenge. Feasibility of implementation influenced our choice of system architecture: in contrast to the distributed sensing approaches used in prior modular work, our
+decision to use a  centralized sensing architecture  allowed the robot to carry a  single, powerful sensor (the RGB-D
+camera) enabling sophisticated capabilities like Visual SLAM and environment characterization. As a result, our implementation has more sensor-based autonomy than any previous modular robot.
+
+Our implementation relies in part on external computation and wireless network access, but this is not a fundamental system requirement.   In fact,  in our implementation the majority of  heavy computation (mapping, navigation, video
+processing) was done onboard the sensor module, with a few processes (\TODO{list}) run offboard, primarily for development convenience.  
 In the future we believe everything could be run onboard with only minor adjustments.
+%
+\subsection{Capability}
+%
+\textit{  How capable is the implementation, in terms of solving real tasks? How general is the system architecture (does it place any limitations on
+the kinds of tasks this system can address)? }
 
-Our system successfully demonstrates that MSRR systems can be used to achieve high-level tasks in unknown environments.
-Compared with conventional robot systems, reconfiguration makes our systems be able to adapt to a wide range of environment with smaller robot size. 
-%Our reconfiguration method allows SMORES-EP to achieve a wide range of functionality. 
-For previous modular systems, the high cost of reconfiguration (in terms of time and risk of failure) made it difficult to deploy as a practical tool for accomplishing tasks.  
-In contrast, our method is fast and reliable enough for SMORES-EP to undergo multiple transformations and still complete its task in a reasonable amount of time.  
-This is significant: for the first time, we have demonstrated that the benefits of reconfiguring to complete a task can outweigh the costs in a realistic setting.  
-Reconfiguring under an onboard camera has limitations: the camera view is limited, and movement in 3D (lattice or chain-style reconfiguration) is not possible. 
-In addition, our method requires high precision on alignment between modules, which is the major reason of failure in our experiments. 
-We believe the practical advantages of our method outweigh these limitations.  
-In the future, it may be possible to develop more comprehensive reconfiguration techniques.
+Our experiments demonstrate that our system implementation can autonomously sense, think, and act to several different goals in unknown environments.  The three scenarios were selected to showcase a range of different functionalities: movement over flat ground, fitting into tight spaces, reaching up high, and climbing over rough terrain, and manipulating objects.  This broad range of functionality is impressive for such a small robot, and is only accessible to SMORES-EP by reconfiguring between different morphologies.
 
-Our system is vulnerable to small errors - if things go wrong in the course of completing a task, the entire task will likely fail. 
+The high-level planner, environment characterization tools, and reconfiguration subsystems work together to make the system flexible and reactive.
+At the high level, experiments two and three are the same \textit{task:} deliver an object at a point of interest.  However, after characterizing the environment, the system determines that vastly different behaviors are required to complete the task, and in both cases, that reconfiguration is needed before the appropriate behavior can be performed. Similarly, in experiment 1 there is no high-level distinction between the green and pink objects - the robot is simply asked to \textit{retrieve} all objects it finds.  The sensed environment once again dictates the choice of behavior: the simple problem is solved in a simple way (green object), and the more difficult problem is solved in a more sophisticate way (pink object).
+
+We opted to use simple techniques for navigation,
+object recognition, and differentiating between environments, which were suitable
+for our proof-of-concept experiments.  To deploy a similar system in real life, more
+advanced techniques would need to be used.
+
+The architecture of our system is somewhat abstract, so evaluating its capabilities in a concrete way is difficult. Fundamentally, it is quite general, and in theory capable of addressing a very broad range of tasks. However, there are some limitations on the kinds of problems it can solve.  Assuming a single, centralized sensor module provides some practical advantages, but prevents the system from addressing tasks that require distributed sensing.  Using a library of configurations and gaits requires that problems be abstracted in a discrete way, which may be limiting for certain tasks.  \TODO{are there more limitations?} 
+%
+\subsection{Reconfigurability}
+%
+\textit{How good is the system at reconfiguring?  How useful is reconfiguration?}
+
+In general, our system architecture is not tied to a specific method of reconfiguration.  However, the centralized sensing architecture drove our decision to implement reconfiguration in a centralized way as well. High-fidelity centralized sensing during reconfiguration, provided by AprilTags, allowed our implementation to reconfigure quickly and reliably enough to undergo multiple transformations in the process of completing a task.  In contrast, for previous modular systems, the high cost of reconfiguration (in terms of time
+and risk of failure) would make them difficult to deploy as a practical tool for accomplishing
+tasks. This is significant: for the first time, we have demonstrated that the benefits of
+reconfiguring to complete a task can outweigh the costs in a realistic setting.
+
+Our centralized implementation of reconfiguration has limitations. Since modules can only move in 2D within the camera view,  some reconfigurations are not possible.  For example,  the ``Tank'' cannot reconfigure into the ``Snake'' using  our implementation, because the camera cannot see the back wheels of the ``Tank.''  Consequently, if the robot had started out as the ``Tank'' at the beginning of Task 3, it would not have been able to complete its task.
+
+In the context of the entire system, we believe the benefits of our centralized reconfiguration implementation outweigh its limitations.  In comparison with previous modular systems, we have sacrificed some reconfiguration \textit{flexibility}  to achieve more \textit{capability} and \textit{autonomy} in the total system. 
+%
+\subsection{Robustness}
+%
+\textit{How well does the system respond to disturbances or violated assumptions?}
+
+Our implementation is vulnerable to small errors - if things go wrong in the course of completing a task, the entire task will likely fail. 
 Table X shows the causes of failure for 24 attempts of Experiment 2 (placing the stamp on the package).  
 Nearly all failures are due to an error in one of the low-level components the system relies on. 
 41\% of failures were due to hardware errors, and 37\% were due to errors in low-level software (object recognition, mapping, navigation). 
-These components were designed for research, not real-world deployment, and could be engineered to perform much more reliably in a production setting. 
-Moreover, the high-level planner assumes all components are reliable and robust. 
-As a result, if any low-level component fails, the high-level planner might behave unexpected and the entire task may fail.
+These components were designed for research, not real-world deployment, and could be engineered to perform much more reliably in a production setting.
 
-The simulator served as a valuable prototyping tool, but all behaviors required significant fine-tuning in hardware before they would run reliably.  
-Open-loop behaviors like stair-climbing and reaching up to place the stamp are fairly inflexible with respect to environment conditions, and also vulnerable to hardware errors like poorly calibrated encoders.  
-Behaviors like exploration and reconfiguration use the sensor module to close the loop, and are significantly less vulnerable to these kinds of errors.  
+The simulator served as a valuable prototyping tool, but all behaviors required significant
+fine-tuning in hardware
+before they would run reliably.  
+Open-loop behaviors like stair-climbing and reaching up to place the stamp are fairly
+inflexible with respect to environment conditions, and also vulnerable to hardware
+errors like poorly calibrated encoders.  
+Behaviors like exploration and reconfiguration use the sensor module to close the
+loop, and are significantly less vulnerable to these kinds of errors.  
 However, these behaviors required much more up-front development effort.
 
-While steps can be taken to increase the reliability of the low-level subsystems, errors can never be eliminated entirely.  In the future, we will explore high-level strategies for error recovery: for example, recognizing that a module has failed and adapting the approach so that task will not fail entirely.
-
-We opted to use simple techniques for navigation, object recognition, and differentiating between environments, which were suitable for our proof-of-concept experiments.  To deploy a similar system in real life, more advanced techniques would need to be used.
+Lack of robustness is  a weakness of the system architecture.  The high-level planner assumes all underlying components are reliable and robust, so if any low-level component fails, the high-level planner might behave unexpected and the entire task may fail. In the future, we will explore high-level strategies for error recovery: for example, recognizing that a module has failed and adapting the approach so that task will not fail entirely.
 %
 \subsection{Future Work and Conclusion}
 %
+%{\color{red} Generality-library}
 The abilities of the system and current MSRR technology could be extended in future work.  Our experiment utilizes a library of two configurations, and our perception system recognizes only three environment types (ledge, tunnel, and free).  To further develop the ability of MSRR systems to adapt to their environment, a larger library of configurations and gait controllers could be designed, along with a more powerful environment characterization algorithm.
 
+%{\color{red} Capability-hardware}
 The design of a more diverse library of configurations can be greatly aided by improving strength and versatility in module hardware. Real-world applications, such as search-and-rescue, require robots to climb over obstacles and navigate rough terrain. This requires modules with strong locomotion power and the ability to hold large payloads without breaking inter-module connections.
 
+%{\color{red} Generality-hardware}
 It is important to consider how the presented system could be adapted to work with other modular robot hardware. Our system relies on a 3D sensor for performing RGB-D SLAM, sufficient onboard processing power for perception and control algorithms, and a robust modular hardware system with a versatile self-reconfiguration ability that doesn't rely on external sensors. As long as another MSRR system provides these features and its own hardware-specific and reconfiguration controllers, our system can be integrated into it for performing high-level tasks.
 
 To conclude, this paper presents the first MSRR system that uses perception of an unknown environment to reactively perform complex high-level tasks using intelligent reconfiguration. Components of this system include novel controller synthesis, environment characterization, and self-reconfiguration methods. The demonstration of this novel capability is crucial to the success of modular robots as a technology, and takes a step toward the application of modular robots to tasks in the real world.
