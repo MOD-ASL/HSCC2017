@@ -241,47 +241,54 @@ Following is a description of each of these components and our implementation in
 %
 %\subsection{SMORES-EP Modular Robot} \label{sec:smores}
 %
-Our system is built around the SMORES-EP robot, but could be adapted to
-work with other hardware platforms. Each module is the size of an \textit{80mm cube}, and has four actuated joints - three continuously rotating faces (left, right, and
-pan)  and one central hinge (tilt) with a \(180^\circ\) range of motion
-(Figure~\ref{fig:smores-module}). The left, right, and tilt joints have
- axes of rotation that are parallel and coincident. A single module can use its
-left and right wheels to drive around as a two-wheel differential drive robot.
-All four faces of the SMORES-EP module have electro-permanent (EP) magnets
-that serve as a high-strength, low-energy connector for self-reconfiguration
-\cite{tosun2016design}.  Any face of one module can connect to any face of
-another, with an attachment force of $90N$ \cite{tosun2016design}. The magnetic connectors can also attach to objects made of ferromagnetic materials (such as steel), which provides a convenient method for retrieving and transporting metal objects.
 
-Each module has an onboard battery, STM-32 microcontroller, and 802.11b WiFi
-module to send and receive UDP packets.  In this work, clusters of SMORES
+Our system is built around the SMORES-EP robot \cite{tosun2016design},
+\cite{tosun2017paintpots}, but could be adapted to
+work with other hardware platforms. Each module is the size of an \textit{80mm cube}
+and has four actuated joints, including two wheels that can be
+used for differential drive on flat ground.  The modules are equipped
+with electro-permanent magents that allow any face of one module to connect to
+any face of another, allowing the robot to self-reconfigure. The magnetic faces
+can also be used to attach to objects made of ferromagnetic materials (like steel). 
+EP magnets require very little energy to connect and disconnect, and no energy to maintain their
+holding force \cite{tosun2016design}.
+
+Each module has an onboard battery, microcontroller, and WiFi
+module to send and receive messages.  In this work, clusters of SMORES
 modules were controlled by a central computer running a Python program that
-sends wireless commands to control the four DoF and magnets of each module.
-Battery life is about one hour (depending on motor, magnet, and radio usage),
-and commands to a single module can be received at a rate of about 20hz.
-Wireless networking was provided by a standard off-the-shelf  router, with a
-range of about 100 feet.
+sends WiFi commands to control the four DoF and magnets of each module.
+Battery life is about one hour (depending on motor, magnet, and radio usage).
+%, and commands to a single module can be received at a rate of about 20hz.
+%Wireless networking was provided by a standard off-the-shelf  router, with a
+%range of about 100 feet.
 
-The SMORES-EP hardware system also includes passive cubes that modules can connect to, providing lightweight passive structure in SMORES-EP configurations.  Cubes have the same $80mm$ form factor as modules.
+%The SMORES-EP hardware system also includes passive cubes that modules can connect to, providing lightweight passive structure in SMORES-EP configurations.  Cubes have the same $80mm$ form factor as modules.
+
 %
 %% SMORES-EP module DoF picture
-\begin{figure}   
-\begin{center}
-\includegraphics[height=1.5in]{images/smores_dof.pdf}
-\end{center}
-\caption{SMORES-EP module}
-\label{fig:smores-module}
-\vspace{-2em}
-\end{figure}
+%\begin{figure}   
+%\begin{center}
+%\includegraphics[height=1.5in]{images/smores_dof.pdf}
+%\end{center}
+%\caption{SMORES-EP module}
+%\label{fig:smores-module}
+%\vspace{-2em}
+%\end{figure}
 %
 
 %\subsection{Brain Module} % (fold)
 \label{sec:sensor_module}
 %
+SMORES-EP modules have no sensors that allow them to gather information about
+their environment. 
+
+\begin{old}
 SMORES-EP modules have very limited onboard computation, and no sensors that allow them to gather information about their environment.  To allow the robot to operate autonomously in unknown environments, we extend the SMORES-EP hardware system by introducing a brain module equipped with sensors and a computer, shown in Figure~\ref{fig:sensor-module}.
 
 The body of the brain module is a $160\times80\times80mm$ box, roughly the size of two SMORES-EP side-by-side.  The brain module can be configured to provide attachment points on the back, front, or bottom that allow easy connection to SMORES-EP modules or passive cubes.
 
 Computation is provided by an UP computing board with an Intel Atom 1.92 GHz processor, 4 GB memory, and a 64 GB hard drive. A USB WiFi adapter provides network connectivity. A front-facing Asus Xtion-Pro Live camera mounted on top of the brain module body provides RGB-D data, enabling the robot to explore and map its environment and recognize objects of interest.  A thin stem extends $30cm$ above the body, supporting a downward-facing Microsoft Lifecam webcam.  This camera provides a view of a  $1m\times0.75m$ area in front of the brain module, and is used to track AprilTag \cite{olson2011apriltag} fiducials for reconfiguration. A $7.4v$, $3600mAh$ LiPo battery provides about 1.5 hours of up time.
+\end{old}
 %
 % Sensor Module Figure
 \begin{figure}
