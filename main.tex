@@ -350,7 +350,7 @@ The high-level planner allows us to use each component of our system as a low-le
 We abstract the robot and environment as a set of Boolean propositions.
 For example, the robot action \textbf{pickUp} is \lt if the robot is currently picking up an object (and \lf otherwise) and the environment proposition \textbf{pinkItem} is \lt if the robot is currently sensing a pink item (and \lf otherwise).
 LTLMoP supports a high-level language called Structured English that allows the robot task to be specified in terms of these propositions.
-By using the library (Section~\ref{sec:configuration-specifics})  and environment characterization tools (Section~\ref{sec:environment-characterization}), these high-level statements are mapped to low-level sensing programs and robot controllers.
+By using the library (Section~\ref{sec:configuration-specifics})  and environment characterization tools (Section~\ref{sec:exploration}), these high-level statements are mapped to low-level sensing programs and robot controllers.
 %To see how this works, consider Specification~\ref{spec:experiment}, which shows  high-level instructions from the user that direct the robot to explore a room, search, and move any object of interest to a drop-off zone.
 The user specifies high-level robot actions in terms of behavior properties from the library. As discussed in Section~\ref{sec:configuration-specifics}, our system can choose to do a pick up action by executing any behavior from the library which has the behavior property \textbf{pickUp}, and which also satisfies the current environment characteristics. If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.  In this way, the system autonomously chooses to implement  \textbf{pickUp}  appropriately in response to the sensed environment.
 Propositions related to the state of the environment are evaluated using the perception tools described in Section~\ref{sec:exploration}. For example \textbf{pinkItem} is \lt if the robot is currently sensing a pink item, which is determined by consulting the color tracking functions.
@@ -499,15 +499,15 @@ Our implementation relies on a framework first presented in \cite{Jing2016}, whi
 When we specify tasks at the high level, we use behavior properties $P_b$ to describe a desired robot action without explicitly specifying a configuration or behavior.
 Environment types $T_e$ specify the conditions under which a behavior can be used, and are determined through a sensing process described in the next section.
  
-(\TODO{Do we need to add more entries? or should we remove the following paragraphs for space})
-In this work, we create five library entries for two different configurations,
-listed in Table~\ref{table:1}. This library was created to accomplish an object retrieval task (described in Section~\ref{sec:experiments}), but the library can be expanded to include more entries for other environments and tasks. Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use a perception algorithm described in Section \ref{sec:environment-characterization}.
+In this work, we create ten library entries for four different configurations,
+listed in Table~\ref{table:1}.
+This library was created to enables the robot to explore and interact with the environment and objects, but the library can be expanded to include more entries for other environments and tasks. Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use the perception algorithm described in Section \ref{sec:exploration}. Here we discuss two configurations and their capabilities in details.
 
 The ``Tank'' configuration shown in Figure~\ref{fig:dropoff} is capable of picking
-up and dropping objects in a ``free'' environment (described in Section \ref{sec:environment-characterization}). In addition, the ``Tank'' configuration can locomote on flat terrain. It uses a parametric differential drive behavior to convert a desired velocity vector into motor commands (\textbf{drive} in Table \ref{table:1}).
+up and dropping objects in a ``free'' environment. In addition, the ``Tank'' configuration can locomote on flat terrain. It uses a parametric differential drive behavior to convert a desired velocity vector into motor commands (\textbf{drive} in Table \ref{table:1}).
 
 The ``Proboscis'' configuration shown in Figure~\ref{fig:pink_grab} has
-a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects.
+a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects or reaching up in a ``sign'' environment to drop items.
 However, the locomotion ability of this configuration is limited to forward/backward
 motion, making it unsuitable for general navigation.
 
@@ -524,7 +524,12 @@ This library-based framework allows us to specify tasks for modular robots at a 
  Tank & \textbf{drop} & ``free'' \\\hline
  Tank & \textbf{drive} & ``free''\\ \hline
  Proboscis & \textbf{pickUp} & ``tunnel'' or ``free''\\ \hline
- Proboscis & \textbf{drop} &``tunnel'' or ``free'' \\ 
+ Proboscis & \textbf{drop} &``tunnel'' or ``free'' \\ \hline
+ Proboscis & \textbf{placeStamp} & ``sign''\\ \hline
+ Scorpion & \textbf{drive} & ``free''\\ \hline
+ Snake & \textbf{climbUp} & ``stairs''\\ \hline
+ Snake & \textbf{climbDown} & ``stairs''\\ \hline
+ Snake & \textbf{drop} & ``stairs'' or ``free''\\
  \hline
 \end{tabular}
 \caption{A library of robot behaviors}
