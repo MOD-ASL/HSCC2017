@@ -307,9 +307,9 @@ Computation is provided by an UP computing board with an Intel Atom 1.92 GHz
 processor, 4 GB memory, and a 64 GB hard drive. A USB WiFi adapter provides
 network connectivity. A front-facing Orbecc Astra Mini camera provides RGB-D
 data, enabling the robot to explore and map its environment and recognize
-objects of interest.  A thin stem extends $30cm$ above the body, supporting a
-downward-facing webcam. This camera provides a view of a  $1m\times0.75m$ area
-in front of the brain module, and is used to track AprilTag
+objects of interest.  A thin stem extends $40cm$ above the body, supporting a
+downward-facing webcam. This camera provide a view of a  $0.75m\times0.5m$ area
+in front of the brain module, and is used to track AprilTa
 \cite{olson2011apriltag} fiducials for reconfiguration. A $7.4v$, $2200mAh$ LiPo
 battery provides about one hour of running time.
 
@@ -323,7 +323,7 @@ move it to the sensing section.}
 % Sensor Module Figure
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.3\textwidth]{images/sensor_module2.jpg}
+\includegraphics[width=0.3\textwidth]{images/sensor_module_new_labelled.jpg}
 \caption{Brain Module with labelled components.  UP board and battery are inside the body. \TODO{Change picture to new sensor.}}
 \label{fig:sensor-module}
 \end{center}
@@ -547,7 +547,7 @@ SMORES-EP is capable of all three classes of modular self-reconfiguration (chain
 
 Determining the relative positions of modules during mobile self-reconfiguration is an important challenge. 
 %As discussed in Section~\ref{sec:related-work}, past systems have relied on offboard global positioning systems \cite{Paulos2015} or distributed approaches, in which sensors are mounted on each disconnected set of modules \cite{Yim2007}.  
-Our localization method is centralized, using an RGB camera carried by the robot to track AprilTag fiducials mounted to individual modules.  As discussed in Section~\ref{sec:hardware}, the camera provides a view of a $1m\times0.75m$ \TODO{is this still correct?} area on the ground in front of the brain module.  
+Our localization method is centralized, using an RGB camera carried by the robot to track AprilTag fiducials mounted to individual modules.  As discussed in Section~\ref{sec:hardware}, the camera provides a view of a $0.75m\times0.5m$ area on the ground in front of the brain module.  
 Within this area, our system provides pose for any module equipped with an AprilTag marker to perform reconfiguration. 
 %Within this area (which we call the \emph{reconfiguration zone}), any module equipped with an AprilTag marker can detach from the cluster, drive to another location, and reattach to the cluster, provided that both of its wheels were in contact with the ground in its starting position.% \TODO{Get accurate number for height and FoV.}
 
@@ -820,8 +820,8 @@ ROS drop messages & 1 & 4.2\% \\
 Human Error & 4 & 16.7\% \\ 
 \hline
 \end{tabular}
+\caption{foo}
 \label{table:data}
-\caption{\small{}} 
 \end{table}
 
 Our implementation is vulnerable to small errors - if things go wrong in the course of completing a task, the entire task will likely fail. 
@@ -871,6 +871,7 @@ To conclude, this paper presents the first MSRR system that uses perception of a
 \bibliography{references}
 
 \end{document}
+
 
 
 
