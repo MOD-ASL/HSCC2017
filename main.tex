@@ -767,7 +767,7 @@ In theory, the system architecture places no fundamental limitations on the kind
 %{\color{red}(Interacting:)}
 The three scenarios in our experiments were selected to showcase a range of different ways SMORES-EP can interact with environments and objects: movement over flat ground, fitting into tight spaces, reaching up high, and climbing over rough terrain, and manipulating objects.  This broad range of functionality is impressive for such a small robot, and is only accessible to SMORES-EP by reconfiguring between different morphologies.
 
-In general, the range of ways in which the robot may interact with its environment is determined by the contents of the design library, which would ideally contain a large number of configurations and behaviors suitable for a diverse set of tasks. That fact that our architecture relies upon a discrete representation of behaviors could mean that a very large library of configurations and behaviors would be required to make the system useful in a real-world setting. \TODO{Expand on this, and maybe comment on algorithmic scaling to large library here?}.
+In general, the range of ways in which the robot may interact with its environment is determined by the contents of the design library, which would ideally contain a large number of configurations and behaviors suitable for a diverse set of tasks. That fact that our architecture relies upon a discrete representation of behaviors could mean that a very large library of configurations and behaviors would be required to make the system useful in a real-world setting. \TODO{Expand on this, and maybe comment on algorithmic scaling to large library here?}. {\color{red} However, larger library would require more descriptive attributes and increase the time needed for generating the robot controller.}
 
 % \begin{old}
 % %
@@ -820,12 +820,12 @@ ROS drop messages & 1 & 4.2\% \\
 Human Error & 4 & 16.7\% \\ 
 \hline
 \end{tabular}
-\label{table:table}
+\label{table:data}
 \caption{\small{}} 
 \end{table}
 
 Our implementation is vulnerable to small errors - if things go wrong in the course of completing a task, the entire task will likely fail. 
-Table X shows the causes of failure for 24 attempts of Experiment 2 (placing the stamp on the package).  
+Table~\ref{table:data} shows the causes of failure for 24 attempts of Experiment 2 (placing the stamp on the package).  
 Nearly all failures are due to an error in one of the low-level components the system relies on. 
 41\% of failures were due to hardware errors, and 37\% were due to errors in low-level software (object recognition, mapping, navigation). 
 These components were designed for research, not real-world deployment, and could be engineered to perform much more reliably in a production setting.
