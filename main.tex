@@ -191,9 +191,9 @@ However, our major contribution is not the experimental results, but rather the 
 
 
 % swarm-bots
-Swarm-Bots is a MSRR system that has been applied in exploration \cite{Dorigo2005} and collective manipulation \cite{Mondada2005} scenarios.  Like the Millibots, exploration is demonstrated in partially unknown environments, with some members of the swarm acting as ``beacons'' with known location.  In a collective manipulation task, Swarm-Bots have limited autonomy, with a human operator specifying the location of the manipulation target and the global sequence of manipulation actions.
+Swarm-Bots is a MSRR system that has been applied in exploration \cite{Dorigo2005} and collective manipulation \cite{Mondada2005} scenarios.  Exploration is demonstrated in partially unknown environments, with some members of the swarm acting as ``beacons'' with known location.  In a collective manipulation task, Swarm-Bots have limited autonomy, with a human operator specifying the location of the manipulation target and the global sequence of manipulation actions.
 
-Swarm-Bots have demonstrated the capability to use self-assembly to solve low-level tasks, such as crossing a gap \cite{Mondada2004} or ascending a small hill \cite{OGrady2005}.  In these scenarios, low-level sensors (ground proximity sensors and tilt sensors) are used to trigger self-assembly.  In our work, 3D map data is used to characterize the environment, and the system autonomously selects specific morphologies that are appropriate to the task and environment. 
+Swarm-Bots have demonstrated the capability to use self-assembly to solve low-level tasks, such as crossing a gap \cite{gross2006autonomous} or ascending a small hill \cite{o2010self}.  In these scenarios, ground proximity sensors and tilt sensors are used to trigger self-assembly.  In our work, 3D map data is used to characterize the environment, and the system autonomously selects specific morphologies that are appropriate to the task and environment. 
 
 %swarmanoid
 The swarmanoid project (successor to the swarm-bots), uses a heterogeneous swarm of ground and flying robots (called ``hand-'', ``foot-'', and ``eye-'' bots) to perform exploration and object retrieval tasks  \cite{Dorigo2013}. Robotic elements of the swarmanoid system connect and disconnect to complete the task, but the decision to take this action is not made autonomously by the robot in response to sensed environment conditions. While the location of the object to be retrieved is unknown, the method for retrieval is known and constant.
@@ -213,16 +213,16 @@ Recent work includes a system which integrate many low-level capabilities of a M
 \section{System Architecture and Implementation}
 %
 Our system enables modular robots to autonomously complete known tasks in unknown environments.   Given a high-level specification of the desired task, the system enables the robot to move around the environment, gather information, and appropriately interact with the environment and objects in order to achieve the task objectives.
-The system is reactive: it decides what action to perform based on the sensed environment, and may choose different actions to complete the same task in different environments.
+The system is reactive: actions are selected based on the sensed environment, and different actions may be selected to complete the same task in different environments.
 Furthermore, it is the first system that will autonomously reconfigure the robot whenever it determines that a different configuration is needed to complete the task in the current environment.
 
 The system architecture is shown in Figure~\ref{fig:overview}.
-The hardware consists of a set of \textbf{Robot Modules} (which can move, and connect to one another) and a single \textbf{Sensor Module} (which includes environment sensors and a computer).
+The physical robot consists of a set of \textbf{Robot Modules} (which can move, and connect to one another) and a single \textbf{Sensor Module} (which includes environment sensors and a computer).
 The \textbf{High-Level Planner} allows tasks to be specified at a high level using a formal language, which is compiled into a provably-correct state machine controller.
 %Users do not specify which configurations and behaviors should be used to complete the task, but rather describe the required functionality. For example, the user might request that the robot perform a drive action in a tunnel environment labeled with the property max height = 3.
-The \textbf{Perception and Exploration} component builds a map of the environment, and directs the robot to move and explore. 
-As it explores, the \textbf{Environment Characterization} component identifies features of the environment relevant to the high-level task, transforming raw sensor data into discrete attributes.
-Based on the task requirements and sensed environment, the high-level planner will select an appropriate behavior for the robot from the \textbf{Library}.
+The \textbf{Perception and Exploration} subsystem builds a map of the environment, and directs the robot to move and explore. 
+As it explores, the \textbf{Environment Characterization} subsystem identifies features of the environment relevant to the high-level task, transforming raw sensor data into discrete attributes.
+Based on the task requirements and sensed environment, the high-level planner select an appropriate behaviors for the robot from the \textbf{Library}.
 If the current configuration of the robot cannot execute the desired behavior, the high-level planner will command the \textbf{Reconfiguration subsystem} to transform the robot into a configuration that can execute the behavior.
 
 The following sections discuss the role of each component within the general system architecture, and provide details of the specific implementation used in our experiments. Inter-process communication between the many software components in our implementation is provided by ROS\footnote{http://www.ros.org}.  
@@ -260,9 +260,9 @@ The following sections discuss the role of each component within the general sys
 %\subsection{SMORES-EP Modular Robot} \label{sec:smores}
 %
 
-Our system is built around the SMORES-EP robot \cite{tosun2016design},
-\cite{tosun2017paintpots}, but could be adapted to
-work with other hardware platforms. Each module is the size of an \textit{80mm cube}
+Our system implementation is built around the SMORES-EP robot \cite{tosun2016design},
+\cite{tosun2017paintpots}, but the system architecture could
+be used with any modular robot capable of self-reconfiguration. Each SMORES-EP module is the size of an \textit{80mm cube}
 and has four actuated joints, including two wheels that can be
 used for differential drive on flat ground.  The modules are equipped
 with electro-permanent magents that allow any face of one module to connect to
@@ -297,13 +297,12 @@ Battery life is about one hour (depending on motor, magnet, and radio usage).
 %\subsection{Brain Module} % (fold)
 \label{sec:sensor_module}
 %
-SMORES-EP modules have no sensors that allow them to gather information about
-their environment. To enable autonomous operation, we extend the SMORES-EP
-hardware by introducing a \textit{sensor module}, shown in
-Figure~\ref{fig:sensor-module}.  The body of the brain module is \TODO{get
-dimensions}, and has thin steel plates on its front and back that allow modules
+Our system architecture assumes there is a single \textit{sensor module}, containing sensors and a computer, that is carried by a cluster of modules.
+%SMORES-EP modules have no sensors that allow them to gather information about their environment. To enable autonomous operation, we extend the SMORES-EP hardware by introducing a \textit{sensor module}, shown in Figure~\ref{fig:sensor-module}.
+The sensor module used in our experiments was designed to work well with SMORES-EP, and is shown in Figure~\ref{fig:sensor-module}.
+The body of the sensor module is \TODO{get
+dimensions}, and has thin steel plates on its front and back that allow SMORES-EP modules
 to connect to it.
-
 Computation is provided by an UP computing board with an Intel Atom 1.92 GHz
 processor, 4 GB memory, and a 64 GB hard drive. A USB WiFi adapter provides
 network connectivity. A front-facing Orbecc Astra Mini camera provides RGB-D
@@ -312,7 +311,7 @@ objects of interest.  A thin stem extends $30cm$ above the body, supporting a
 downward-facing webcam. This camera provides a view of a  $1m\times0.75m$ area
 in front of the brain module, and is used to track AprilTag
 \cite{olson2011apriltag} fiducials for reconfiguration. A $7.4v$, $2200mAh$ LiPo
-battery provides about one hour of up time.
+battery provides about one hour of running time.
 
 The decision to use a single centralized sensor module, rather than many sensors
 distributed among all the modules, is an important aspect of our system
@@ -341,7 +340,9 @@ move it to the sensing section.}
 \subsection{High-Level Planner}
 \label{sec:high-level}
 
-The high-level planner acts as the main, centralized controller that directs robot motion and actions based on the given tasks. We employ an existing framework called LTLMoP to automatically generate robot controllers from user-specified high-level instructions using formal methods \cite{DBLP:conf/iros/FinucaneJK10,DBLP:journals/trob/Kress-GazitFP09}.
+In our architecture, the high-level planner subsystem provides a framework for users to specify tasks  at a high level using a formal language, and acts as the main, centralized controller that directs robot motion and actions based on the given tasks.\TODO{Jim, expand on / correct this. What aspects of the high level planner are general requirements of our architecture, and what aspects are specific to our implementation?}
+
+Our implementation employs an existing framework called LTLMoP to automatically generate robot controllers from user-specified high-level instructions using formal methods \cite{DBLP:conf/iros/FinucaneJK10,DBLP:journals/trob/Kress-GazitFP09}.
 LTLMoP allows us to use each component of our system as a low-level atomic controller, and specify a wide-range of reactive robotic tasks as a set of high-level instructions using these controllers.
 In this section, we will mainly discuss how we model our system in order to use LTLMoP to automatically generate a high-level controller for our desired robot task.
 
@@ -419,9 +420,11 @@ If the robot is not currently in a configuration capable of executing the select
 
 %Since the proposed system performs tasks in unknown environments and conditions, a robust suite of perception algorithms is required to inform control and decision-making. The robot must have the ability to explore and build a map of its environment while avoiding obstacles and tracking its pose. The system must be able to recognize objects and regions of interest related to the desired task. Finally, the system must characterize the environment in terms of configuration capabilities. Features in the environment may restrict which robot configurations can viably perform parts of the high-level task, such as retrieving an object or navigating to a waypoint. The system needs to recognize these features to be able to intelligently choose the appropriate robot configuration for performing the task.
 
-In order to inform the high-level planner of pertinent information in the robot's environment, a variety of perception components are used. Mapping and robot pose are provided by an RGB-D SLAM software package called RTAB-MAP\cite{rtabmap}. A 3D map of the environment is incrementally built and stored in an efficient octree-based volumetric map using Octomap\cite{octomap}. To drive exploration of the unknown environment, a Next Best View planner \cite{Daudelin2017} is used. Upon request, it provides waypoints to the high-level planner that maximize expected information collection of unknown regions of the environment. To identify objects of interest in the task, color detection and tracking is used.  Colored objects are recognized using CMVision\footnote{CMVision: http://www.cs.cmu.edu/$\sim$jbruce/cmvision/}, and tracked in 3D using depth information from the onboard 3D sensor\footnote{Lucas Coelho Figueiredo: https://github.com/lucascoelho91/ballFollower}. Although we implement object recognition by color, more sophisticated methods could be included in the same system architecture.
+The perception and exploration subsystem interprets sensor data to allow the robot to map and explore the environment. At a minimum, our architecture requires this subsystem to be capable of SLAM, waypoint selection for exploration, path planning, and some form of object recognition. \TODO{Jonathan, is this correct?}
 
-To help the high-level planner choose appropriate configurations for a task, an environment characterization algorithm is necessary. This algorithm reasons about regions of interest in the environment to classify them in terms of the abilities of possible robot configurations. For our proof-of-concept, we implemented an algorithm that can differentiate between four environment types relevant to object manipulation, shown in Figure \ref{fig:characters}. 
+In our implementation mapping and robot pose are provided by an RGB-D SLAM software package called RTAB-MAP\cite{rtabmap}. A 3D map of the environment is incrementally built and stored in an efficient octree-based volumetric map using Octomap\cite{octomap}. To drive exploration of the unknown environment, a Next Best View planner \cite{Daudelin2017} is used. Upon request, it provides waypoints to the high-level planner that maximize expected information collection of unknown regions of the environment. To identify objects of interest in the task, color detection and tracking is used.  Colored objects are recognized using CMVision\footnote{CMVision: http://www.cs.cmu.edu/$\sim$jbruce/cmvision/}, and tracked in 3D using depth information from the onboard 3D sensor\footnote{Lucas Coelho Figueiredo: https://github.com/lucascoelho91/ballFollower}. Although we implement object recognition by color, more sophisticated methods could be included in the same system architecture.
+
+To enable the high-level planner to choose appropriate configurations for a task, our framework requires an environment characterization algorithm. This algorithm reasons about regions of interest in the environment to classify them in terms of the abilities of possible robot configurations. For our proof-of-concept, we implemented an algorithm that can differentiate between four environment types relevant to object manipulation, shown in Figure \ref{fig:characters}. 
 
 When an object is recognized in the environment, the 3D information about its surroundings is evaluated. An occupancy grid is created around the object location, and all grid cells within a robot-radius of obstacles are denoted unreachable (as shown in Figure~\ref{fig:characterization}). The closest reachable point to the object within $20^o$ of the robot's line of sight to the object is selected. If the distance from this point to the object is greater than a threshold value and the object is on the ground, the environment is characterized as a ``tunnel'', likely requiring a configuration that is narrow enough to move between the surrounding obstacles to retrieve the object. If above the ground, the environment is characterized as a ``stairs'' environment, requiring a robot that can climb to reach the object. If the closest reachable point is under the threshold value, the environment is classified as either a ``free'' or ``sign'' environment, depending on the height of the colored object.
 
@@ -475,10 +478,9 @@ In addition to characterizing the environment, the algorithm also selects a wayp
 \subsection{Library of Configurations and Behaviors}
 \label{sec:configuration-specifics}
 %
-In order to adapt to environmental constraints, a library of user designed robot configurations and behaviors is needed along with descriptions of their abilities that can be used to match the environmental constraints. The high-level planner can then match environment characterizations from the perception components with the configuration and behavior that can perform the task in the environment. %In our system, we use a library of configurations and behaviors. This library abstracts the robot in a way that captures the fact that its capabilities are a function of its configuration (connected structure). 
-For the purposes of this work, we rely on a framework first presented in \cite{Jing2016}, which we summarize here.
+In our architecture, the full set of capabilities of the modular robot is encoded in   a library of robot configurations and behaviors.  Each entry is labelled with  attributes that describe what it does, as well as the environment conditions under which it may be used. This allows the high-level planner  to match environment characterizations from\ the perception subsystem with the configuration and behavior that can perform the task in the current environment.
 
-In this framework, the entire modular robot system is treated as a single robot with capabilities defined by a library. A library entry is defined as $l = (C,B_C,P_e,P_b)$ where:
+Our implementation relies on a framework first presented in \cite{Jing2016}, which we summarize here. In this framework, the entire modular robot system is treated as a single robot with capabilities defined by a library. A library entry is defined as $l = (C,B_C,P_e,P_b)$ where:
 \begin{itemize}
 \item $C$ is the robot \emph{configuration}, specified by the connected structure of the modules.
 \item $B_C$ is a \emph{behavior} that $C$ can perform. A behavior is a controller that commands the robot to perform a specific useful action. 
@@ -530,7 +532,9 @@ This library-based framework allows us to specify tasks for modular robots at a 
 \subsection{Reconfiguration}
 \label{sec:reconfiguration}
 %
-When the high-level planner decides to use a new robot configuration during a task, a method is needed to change the robot to the desired new morphology. Reconfiguration is the process of changing the connective topology of an MSRR system's modules in order to change its morphology.  SMORES-EP is capable of all three classes of modular self-reconfiguration (chain, lattice, and mobile reconfiguration) \cite{Davey2012,yim2003modular}.  For the purposes of this work, we have developed tools for mobile reconfiguration with SMORES-EP, taking advantage of the fact that individual modules can drive on flat surfaces as described in Section \ref{sec:hardware}.
+When the high-level planner decides to use a new configuration during a task, the robot must reconfigure. Our system architecture allows any method for reconfiguration, provided that it requires no external sensing.  
+
+SMORES-EP is capable of all three classes of modular self-reconfiguration (chain, lattice, and mobile reconfiguration) \cite{Davey2012,yim2003modular}.  We have implemented tools for mobile reconfiguration with SMORES-EP, taking advantage of the fact that individual modules can drive on flat surfaces as described in Section \ref{sec:hardware}.
 
 Determining the relative positions of modules during mobile self-reconfiguration is an important challenge. As discussed in Section~\ref{sec:related-work}, past systems have relied on offboard global positioning systems \cite{Paulos2015} or distributed approaches, in which sensors are mounted on each disconnected set of modules \cite{Yim2007}.  Our localization method is centralized, using an RGB camera carried by the robot to track AprilTag fiducials mounted to individual modules.  As discussed in Section~\ref{sec:hardware}, the camera provides a view of a $1m\times0.75m$ area on the ground in front of the brain module.  Within this area (which we call the \emph{reconfiguration zone}), any module equipped with an AprilTag marker can detach from the cluster, drive to another location, and reattach to the cluster, provided that both of its wheels were in contact with the ground in its starting position.% \TODO{Get accurate number for height and FoV.}
 
@@ -580,7 +584,7 @@ Several techniques were developed to ensure reliable connection and disconnectio
 \label{sec:experiments}
 %
 
-As mentioned earlier, our work presents the first MSRR system that uses perception and reconfiguration to autonomously perform high-level tasks in unknown environments. We tested this system on multiple, real-world tasks. These experiments accomplish two goals: First, they demonstrate our system's ability to autonomously adapt to multiple unknown environments and to complete different tasks. Second, they provide new observations of challenges with fully autonomous MSRR systems. These observations provide insight on what can be improved in autonomous MSRR systems to make them more robust and versatile.
+As mentioned earlier, our work presents the first MSRR system that uses perception and reconfiguration to autonomously perform high-level tasks in unknown environments. We tested our system implementation on multiple, real-world tasks. These experiments accomplish two goals: First, they demonstrate our system's ability to autonomously adapt to multiple unknown environments and to complete different tasks. Second, they provide new observations of challenges with fully autonomous MSRR systems. These observations provide insight on what can be improved in autonomous MSRR systems to make them more robust and versatile.
 
 Three experiments were run, each time varying the environment and the type of task to be performed. Each experiment required the robot to explore an unknown environment to search for and identify one or more objects of interest, and then complete some manipulation task with those objects.
 
@@ -847,5 +851,6 @@ To conclude, this paper presents the first MSRR system that uses perception of a
 \bibliography{references}
 
 \end{document}
+
 
 
