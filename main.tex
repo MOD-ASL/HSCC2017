@@ -1,3 +1,4 @@
+%
                                                                    % RSS 2016 High Level Control of Modular Robots
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%                    Included packages                 %%%
@@ -110,7 +111,7 @@ Cornell University\\
 
 \begin{abstract}
 
-We present an integrated system that allows self-reconfigurable modular robots to autonomously perform high-level tasks in unknown environments, using perception and reconfiguration to recognize and adapt to environment obstacles and constraints.  By performing three hardware experiments, we demonstrate that our system is capable of autonomously completing different object manipulation tasks in different environments without human changes to the system.
+We present an integrated system architecture that allows self-reconfigurable modular robots to autonomously perform high-level tasks in unknown environments, using perception and reconfiguration to recognize and adapt to environment obstacles and constraints.  By performing three hardware experiments, we demonstrate that our implementation of the system is capable of autonomously completing different object manipulation tasks in different environments without human changes to the system.
 
 The physical robot is composed of modules that support multiple robot configurations. An onboard 3D sensor provides information about the environment and informs exploration, reconfiguration decision making and feedback control.  A centralized high-level mission planner uses information from the environment and the user-specified task description to autonomously compose low-level controllers to perform locomotion, reconfiguration, other behaviors. A novel, centralized, self-reconfiguration method is used to change robot configurations as needed. This is the first modular robot system that uses perception-driven reconfiguration to intelligently adapt to \textit{a priori} unknown environments to perform complex tasks.
 
@@ -299,8 +300,7 @@ Battery life is about one hour (depending on motor, magnet, and radio usage).
 Our system architecture assumes there is a single \textit{sensor module}, containing sensors and a computer, that is carried by a cluster of modules.
 %SMORES-EP modules have no sensors that allow them to gather information about their environment. To enable autonomous operation, we extend the SMORES-EP hardware by introducing a \textit{sensor module}, shown in Figure~\ref{fig:sensor-module}.
 The sensor module used in our experiments was designed to work well with SMORES-EP, and is shown in Figure~\ref{fig:sensor-module}.
-The body of the sensor module is \TODO{get
-dimensions}, and has thin steel plates on its front and back that allow SMORES-EP modules
+The body of the sensor module is a \(90mm \times 70mm \times 70mm\) box with thin steel plates on its front and back that allow SMORES-EP modules
 to connect to it.
 Computation is provided by an UP computing board with an Intel Atom 1.92 GHz
 processor, 4 GB memory, and a 64 GB hard drive. A USB WiFi adapter provides
@@ -334,10 +334,10 @@ battery provides about one hour of running time.
 \label{sec:high-level}
 
 In our architecture, the high-level planner subsystem provides a framework for users to specify tasks  at a high level using a formal language, and acts as the main, centralized controller that directs robot motion and actions based on the given tasks.
-In order to act as the central controller and communicate with other system components, the high-level planner needs to treat each component of our system as a low-level atomic controller.
-At system level, the sensing components gather and process environment information for the high-level planner, which then makes decisions based on the given robot tasks by invoking appropriate low-level controllers.
+In order to do so, the high-level planner needs to treat each component of our system as a low-level atomic controller.
+At system level, the sensing components gather and process environment information for the high-level planner, which then take actions based on the given robot tasks by invoking appropriate low-level controllers.
 
-In our system, the robot and environment status is abstracted as a set of Boolean propositions.
+The robot and environment status are abstracted as a set of Boolean propositions.
 For example, the robot action \textbf{pickUp} is \lt if the robot is currently picking up an object (and \lf otherwise) and the environment proposition \textbf{pinkItem} is \lt if the robot is currently sensing a pink item (and \lf otherwise).
 A wide range of reactive robotic tasks can be specified in terms of these propositions.
 By using a library of robot configurations and behaviors as well as environment characterization tools, these high-level statements are mapped to low-level sensing programs and robot controllers.
@@ -418,7 +418,7 @@ In the next state, the specified high level behavior properties are mapped to a 
 
 %Since the proposed system performs tasks in unknown environments and conditions, a robust suite of perception algorithms is required to inform control and decision-making. The robot must have the ability to explore and build a map of its environment while avoiding obstacles and tracking its pose. The system must be able to recognize objects and regions of interest related to the desired task. Finally, the system must characterize the environment in terms of configuration capabilities. Features in the environment may restrict which robot configurations can viably perform parts of the high-level task, such as retrieving an object or navigating to a waypoint. The system needs to recognize these features to be able to intelligently choose the appropriate robot configuration for performing the task.
 
-The perception and exploration subsystem interprets sensor data to explore and understand its environment and inform robot behavior and adaptation. The architecture of this subsystem requires algorithms to perform SLAM, provide navigation goals for exploration, recognize objects of interest, and characterize the environment in terms of robot configuration abilities.
+The perception and exploration subsystem interprets sensor data to explore and understand the environment and inform robot behavior and adaptation. The architecture of this subsystem requires algorithms to perform SLAM, provide navigation goals for exploration, recognize objects of interest, and characterize the environment in terms of robot configuration abilities.
 
 In our implementation, mapping and robot pose are provided by an RGB-D SLAM software package called RTAB-MAP\cite{rtabmap}. A 3D map of the environment is incrementally built and stored in an efficient octree-based volumetric map using Octomap\cite{octomap}. To drive exploration of the unknown environment, a Next Best View planner \cite{Daudelin2017} is used. Upon request, it provides waypoints to the high-level planner that maximize expected information collection of unknown regions of the environment. To identify objects of interest in the task, color detection and tracking is used.  Colored objects are recognized using CMVision\footnote{CMVision: http://www.cs.cmu.edu/$\sim$jbruce/cmvision/}, and tracked in 3D using depth information from the onboard 3D sensor\footnote{Lucas Coelho Figueiredo: https://github.com/lucascoelho91/ballFollower}. Although we implement object recognition by color, more sophisticated methods could be included in the same system architecture.
 
@@ -478,7 +478,8 @@ In addition to characterizing the environment, the algorithm also selects a wayp
 %
 In our architecture, the full set of capabilities of the modular robot is encoded in a library of robot configurations and behaviors.  Each entry is labeled with  attributes that describe what it does, as well as the environment conditions under which it may be used. This allows the high-level planner  to match environment characterizations from\ the perception subsystem with the configuration and behavior that can perform the task in the current environment.
 
-Our implementation relies on a framework first presented in \cite{Jing2016}, which we summarize here. In this framework, the entire modular robot system is treated as a single robot with capabilities defined by a library. A library entry is defined as $l = (C,B_C,P_e,P_b)$ where:
+Our implementation relies on a framework first presented in \cite{Jing2016}, which we summarize here.
+In this framework, a library entry is defined as $l = (C,B_C,P_e,P_b)$ where:
 \begin{itemize}
 \item $C$ is the robot \emph{configuration}, specified by the connected structure of the modules.
 \item $B_C$ is a \emph{behavior} that $C$ can perform. A behavior is a controller that commands the robot to perform a specific useful action. 
@@ -487,12 +488,14 @@ Our implementation relies on a framework first presented in \cite{Jing2016}, whi
 \end{itemize} 
 %
 When we specify tasks at the high level, we use behavior properties $P_b$ to describe a desired robot action without explicitly specifying a configuration or behavior.
-Environment types $T_e$ specify the conditions under which a behavior can be used, and are determined through a sensing process described in the next section.
+Environment types $T_e$ specify the conditions under which a behavior can be used.
+%, and are determined through the environment characterization processes described in Section~\ref{sec:exploration}.
  
-In this work, we create ten library entries for four different configurations,
+We implemented a library containing 10 entries for four different configurations,
 listed in Table~\ref{table:1}.
-This library was created to enables the robot to explore and interact with the environment and objects, but the library can be expanded to include more entries for other environments and tasks. Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use the perception algorithm described in Section \ref{sec:exploration}. Here we discuss two configurations and their capabilities in details.
+This library was created to enables the robot to explore and interact with the environment and objects, but the library can be expanded to include more entries for other environments and tasks. Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use the perception algorithm described in Section \ref{sec:exploration}.
 
+To provide an illustrative example, we discuss two configurations and their capabilities in detail.
 The ``Tank'' configuration shown in Figure~\ref{fig:dropoff} is capable of picking
 up and dropping objects in a ``free'' environment. In addition, the ``Tank'' configuration can locomote on flat terrain. It uses a parametric differential drive behavior to convert a desired velocity vector into motor commands (\textbf{drive} in Table \ref{table:1}).
 
@@ -724,7 +727,7 @@ Figure \ref{fig:exps}c shows the environment setup for Experiment III. Please se
 \section{Discussion}
 \label{sec:discussion}
 We evaluate our system with respect to four criteria: \textit{autonomy}, \textit{capability}, \textit{reconfigurability}, and \textit{robustness}.
-In all four areas, we evaluate both the  system \textit{architecture}, which is more general, and the system \textit{implementation}, which was actually used in our experiments.
+In all four areas, we evaluate both the  system \textit{architecture}, which is more general, and the system \textit{implementation}, which was  used in our experiments.
 %
 \subsection{Autonomy}
 %
@@ -755,15 +758,17 @@ The system's \textit{information-gathering} capability is largely dependent on t
 To deploy a similar system in real life, more sophisticated techniques would need to be used.  Considering the ongoing trend towards high-performance sensors and computers at small sizes, we would expect that implementing these sophisticated techniques onboard the sensor module will become easier over time. 
 
 %{\color{red}(Moving around:)}
-The ability of the robot to \textit{move} in the environment is also largely determined by the hardware.  The SMORES-EP designs we used for exploration move slowly (\TODO{get speed}), and can only drive over smooth, flat ground.  In a demanding real-world application like search-and-rescue, the hardware system would likely need to be able to move more quickly.
+The ability of the robot to \textit{move} in the environment is also largely determined by the hardware.  The SMORES-EP designs we used for exploration move slowly,
+%(\TODO{get speed})
+ and can only drive over smooth, flat ground.  In a demanding real-world application like search-and-rescue, the hardware system would likely need to be able to move more quickly.
 
 In theory, the system architecture places no fundamental limitations on the kinds of gaits or behaviors used to locomote in the environment.  However, our architecture does require a suitable \textit{motion model} and \textit{path planner} for any behavior used for locomotion.  In practice, this means that while a modular robot may be capable of a large number of creative or unusual gaits for locomotion, those that conform to standard, well-understood motion models (like differential or holonomic drive) require much less effort to implement, and often end up being the most useful for actually accomplishing tasks.
 
 %{\color{red}(Interacting:)}
 The three scenarios in our experiments were selected to showcase a range of different ways SMORES-EP can interact with environments and objects: movement over flat ground, fitting into tight spaces, reaching up high, and climbing over rough terrain, and manipulating objects.  This broad range of functionality is impressive for such a small robot, and is only accessible to SMORES-EP by reconfiguring between different morphologies.
 
-In general, the range of ways in which the robot may interact with its environment is determined by the contents of the design library, which would ideally contain a large number of configurations and behaviors suitable for a diverse set of tasks. That fact that our architecture relies upon a discrete representation of behaviors could mean that a very large library of configurations and behaviors would be required to make the system useful in a real-world setting. \TODO{Expand on this, and maybe comment on algorithmic scaling to large library here?}. {\color{red} There are many challenges to have a very large library. To precisely describe capabilities and limits of each behavior, a large set of attributes are needed when labeling library entries. As a result, users will need to understand all these attributes and use accurate ones when specifying the robot tasks. 
-When searching the library for behaviors with user specified constraints, our method scales linearly with respect to the size of the library, which makes the system suitable in real-world experiments. }
+In general, the range of ways in which the robot may interact with its environment is determined by the contents of the design library, which would ideally contain a large number of configurations and behaviors suitable for a diverse set of tasks. That fact that our architecture relies upon a discrete representation of behaviors could mean that a real-world implementation would require a very large library, which presents some challenges. To precisely describe capabilities and limits of each behavior, a large set of attributes would be needed when labeling library entries. As a result, users will need to understand all these attributes and use accurate ones when specifying the robot tasks. 
+When searching the library for behaviors with user specified constraints, our method scales linearly with respect to the size of the library.%, which makes the system suitable in real-world experiments.
 
 % \begin{old}
 % %
@@ -835,7 +840,7 @@ Lack of robustness is  a weakness of the system architecture.  The high-level pl
 \subsection{Future Work and Conclusion}
 %
 %{\color{red} Generality-library}
-The abilities of the system and current MSRR technology could be extended in future work.  Our experiment utilizes a library of two configurations, and our perception system recognizes four environment types (stairs, tunnel, sign, and free).  To further develop the ability of MSRR systems to adapt to their environment, a larger library of configurations and gait controllers could be designed, along with a more powerful environment characterization algorithm.
+The abilities of the system and current MSRR technology could be extended in future work.  Our experiment utilizes a library of four configurations, and our perception system recognizes four environment types (stairs, tunnel, sign, and free).  To further develop the ability of MSRR systems to adapt to their environment, a larger library of configurations and gait controllers could be designed, along with a more powerful environment characterization algorithm.
 
 %{\color{red} Capability-hardware}
 The design of a more diverse library of configurations can be greatly aided by improving strength and versatility in module hardware. Real-world applications, such as search-and-rescue, require robots to climb over obstacles and navigate rough terrain. This requires modules with strong locomotion power and the ability to hold large payloads without breaking inter-module connections.
