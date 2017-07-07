@@ -212,7 +212,7 @@ Recent work includes a system which integrates many low-level capabilities of a 
 
 \section{System Architecture and Implementation}\label{sec:system}
 %
-Our system enables modular robots to autonomously complete known tasks in unknown environments.   Given a high-level specification of the desired task, the system enables the robot to move around the environment, gather information, and appropriately interact with the environment and objects in order to achieve the task objectives.
+Our system enables modular robots to autonomously complete known tasks in unknown environments.   Given a high-level specification of the desired task, the system enables the robot to explore the environment, gather information, and appropriately interact with the environment and objects in order to achieve the task objectives.
 The system is reactive: actions are selected based on the sensed environment, and different actions may be selected to complete the same task in different environments.
 Furthermore, it is the first system that will autonomously reconfigure the robot whenever it determines that a different configuration is needed to complete the task in the current environment.
 
@@ -220,12 +220,11 @@ The system architecture is shown in Figure~\ref{fig:overview}.
 The physical robot consists of a set of \textbf{Robot Modules} (which can move, and connect to one another) and a single \textbf{Sensor Module} (which includes environment sensors and a computer).
 The \textbf{High-Level Planner} allows tasks to be specified at a high level using a formal language, which is compiled into a provably-correct state machine controller.
 %Users do not specify which configurations and behaviors should be used to complete the task, but rather describe the required functionality. For example, the user might request that the robot perform a drive action in a tunnel environment labeled with the property max height = 3.
-The \textbf{Perception and Exploration} subsystem builds a map of the environment, and directs the robot to move and explore. 
-As it explores, the \textbf{Environment Characterization} subsystem identifies features of the environment relevant to the high-level task, transforming raw sensor data into discrete attributes.
-Based on the task requirements and sensed environment, the high-level planner select an appropriate behaviors for the robot from the \textbf{Library}.
+\textbf{Active Perception} components perform SLAM, plan waypoints for the robot to explore its environment, and identify features of the environment relevant to the high-level task. They also characterize the environment in terms of robot capabilities.
+Based on the task requirements and observed environment, the high-level planner selects an appropriate behavior for the robot from the \textbf{Library}.
 If the current configuration of the robot cannot execute the desired behavior, the high-level planner will command the \textbf{Reconfiguration subsystem} to transform the robot into a configuration that can execute the behavior.
 
-The following sections discuss the role of each component within the general system architecture, and provide details of the specific implementation used in our experiments. Inter-process communication between the many software components in our implementation is provided by ROS\footnote{http://www.ros.org}.  
+The following sections discuss the role of each component within the general system architecture, and provide details of the implementation used in our experiments. Inter-process communication between the many software components in our implementation is provided by ROS\footnote{http://www.ros.org}.  
 %
 % \begin{old}
 % Our system combines existing hardware and open source software with novel algorithms to create a complete autonomous MSRR system. The system is designed to perform object manipulation and transportation tasks in unknown environments. A significant novel contribution of this system is its ability to recognize and adapt to the environment mid-mission, in order to complete tasks even when the ``initial robot'' (in its starting configuration) is unable to complete the task in the presence of obstacles and constraints discovered in the environment.
@@ -308,23 +307,17 @@ processor, 4 GB memory, and a 64 GB hard drive. A USB WiFi adapter provides
 network connectivity. A front-facing Orbecc Astra Mini camera provides RGB-D
 data, enabling the robot to explore and map its environment and recognize
 objects of interest.  A thin stem extends $40cm$ above the body, supporting a
-downward-facing webcam. This camera provide a view of a  $0.75m\times0.5m$ area
-in front of the brain module, and is used to track AprilTa
+downward-facing webcam. This camera provides a view of a  $0.75m\times0.5m$ area
+in front of the brain module, and is used to track AprilTag
 \cite{olson2011apriltag} fiducials for reconfiguration. A $7.4v$, $2200mAh$ LiPo
 battery provides about one hour of running time.
-
-The decision to use a single centralized sensor module, rather than many sensors
-distributed among all the modules, is an important aspect of our system
-architecture, allowing us to use a single, powerful sensor that enabled SLAM,
-navigation, and environment characterization. \TODO{expand on this, and maybe
-move it to the sensing section.}
 
 %
 % Sensor Module Figure
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.3\textwidth]{images/sensor_module_new_labelled.jpg}
-\caption{Brain Module with labelled components.  UP board and battery are inside the body. \TODO{Change picture to new sensor.}}
+\caption{Sensor Module with labelled components.  UP board and battery are inside the body.}
 \label{fig:sensor-module}
 \end{center}
 \vspace{-2em}
@@ -342,7 +335,7 @@ move it to the sensing section.}
 
 In our architecture, the high-level planner subsystem provides a framework for users to specify tasks  at a high level using a formal language, and acts as the main, centralized controller that directs robot motion and actions based on the given tasks.
 In order to act as the central controller and communicate with other system components, the high-level planner needs to treat each component of our system as a low-level atomic controller.
-At system level, the sensing components gather and process environment information for the high-level planner, which then makes decision based on the given robot tasks by invoking appropriate low-level controllers.
+At system level, the sensing components gather and process environment information for the high-level planner, which then makes decisions based on the given robot tasks by invoking appropriate low-level controllers.
 
 In our system, the robot and environment status is abstracted as a set of Boolean propositions.
 For example, the robot action \textbf{pickUp} is \lt if the robot is currently picking up an object (and \lf otherwise) and the environment proposition \textbf{pinkItem} is \lt if the robot is currently sensing a pink item (and \lf otherwise).
@@ -429,7 +422,7 @@ The perception and exploration subsystem interprets sensor data to explore and u
 
 In our implementation, mapping and robot pose are provided by an RGB-D SLAM software package called RTAB-MAP\cite{rtabmap}. A 3D map of the environment is incrementally built and stored in an efficient octree-based volumetric map using Octomap\cite{octomap}. To drive exploration of the unknown environment, a Next Best View planner \cite{Daudelin2017} is used. Upon request, it provides waypoints to the high-level planner that maximize expected information collection of unknown regions of the environment. To identify objects of interest in the task, color detection and tracking is used.  Colored objects are recognized using CMVision\footnote{CMVision: http://www.cs.cmu.edu/$\sim$jbruce/cmvision/}, and tracked in 3D using depth information from the onboard 3D sensor\footnote{Lucas Coelho Figueiredo: https://github.com/lucascoelho91/ballFollower}. Although we implement object recognition by color, more sophisticated methods could be included in the same system architecture.
 
-To enable the high-level planner to choose appropriate configurations for a task, our framework requires an environment characterization algorithm. This algorithm reasons about regions of interest in the environment to classify them in terms of the abilities of possible robot configurations. For our proof-of-concept, we implemented an algorithm that can differentiate between four environment types relevant to object manipulation, shown in Figure \ref{fig:characters}. 
+To enable the high-level planner to choose appropriate configurations for a task, our framework requires an environment characterization algorithm. This algorithm reasons about regions of interest in the environment to classify them in terms of the abilities of robot configurations. For our proof-of-concept, we implemented an algorithm that can differentiate between four environment types relevant to object manipulation, shown in Figure \ref{fig:characters}. 
 
 When an object is recognized in the environment, the 3D information about its surroundings is evaluated. An occupancy grid is created around the object location, and all grid cells within a robot-radius of obstacles are denoted unreachable (as shown in Figure~\ref{fig:characterization}). The closest reachable point to the object within $20^o$ of the robot's line of sight to the object is selected. If the distance from this point to the object is greater than a threshold value and the object is on the ground, the environment is characterized as a ``tunnel'', likely requiring a configuration that is narrow enough to move between the surrounding obstacles to retrieve the object. If above the ground, the environment is characterized as a ``stairs'' environment, requiring a robot that can climb to reach the object. If the closest reachable point is under the threshold value, the environment is classified as either a ``free'' or ``sign'' environment, depending on the height of the colored object.
 
