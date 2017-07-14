@@ -145,7 +145,7 @@ The physical robot is composed of modules that support multiple robot configurat
 \section{Introduction} \label{sec:introduction}
 %
 Modular self-reconfigurable robot (MSRR) systems are composed of a number of simple repeated robot elements (called \emph{modules}) that connect together to form larger robotic structures. These robots can \emph{self-reconfigure}, changing their shape (\emph{i.e.} the connective arrangement of the modules) to meet the needs of the task at hand.
-The number of possible morphologies of these systems typically scales exponentially with the number of identical modules, making them highly adaptable for a wide variety of tasks. 
+The number of possible morphologies of these systems typically scales exponentially with the number of identical modules, making them highly adaptable for a wide variety of tasks.
 
 Over the past three decades, dozens of MSRR systems have been built \cite{Yim2007a}. Existing literature provides ample evidence of MSRR systems reconfiguring and assuming interesting morphologies, as well as methods for programming, controlling, and simulating modular robots \cite{Yim2007,Jing2016,Yim1994}.
 
@@ -743,8 +743,10 @@ Figure \ref{fig:exps}c shows the environment setup for Experiment III. Please se
 % /_____/_/____/\___/\__,_/____/____/_/\____/_/ /_/
 \section{Discussion}
 \label{sec:discussion}
-We evaluate our system with respect to four criteria: \textit{autonomy}, \textit{capability}, \textit{reconfigurability}, and \textit{robustness}.
-In all four areas, we evaluate both the  system \textit{architecture}, which is more general, and the system \textit{implementation}, which was  used in our experiments.
+The real-world experiments demonstrate that our system has the ability to autonomously reconfigure in response to observations in the environment in order to perform high-level tasks. The system performs complex tasks, determining robot actions and reconfiguration online in response to observations of the environment. The same system has the successfully performs two different high-level tasks. Experiments II and III demonstrate that the same high-level task can be performed in different environments, because the robot autonomously adapts to the challenges presented by each environment. Our MSRR system is the first to successfully demonstrate this level of perception-informed reconfiguration and autonomy.
+
+In addition to demonstrating our system's abilities, the experiments revealed several insights related to perception-informed autonomy on MSRR systems. As this is the first successful system of its kind, we encountered many challenges with achieving robust performance, and discovered many limitations of the system implementation and with the modular robot hardware. We hope to share these observations to aid those who may wish to implement our system or improve its robustness and capability.
+
 %
 \subsection{Autonomy}
 %
