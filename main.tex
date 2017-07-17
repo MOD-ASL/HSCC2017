@@ -493,7 +493,7 @@ In addition to characterizing the environment, the algorithm also selects a wayp
 \subsection{Library of Configurations and Behaviors}
 \label{sec:configuration-specifics}
 %
-In our architecture, the full set of capabilities of the modular robot is encoded in a library of robot configurations and behaviors.  Each entry is labeled with  attributes that describe what it does, as well as the environment conditions under which it may be used. This allows the high-level planner  to match environment characterizations from\ the perception subsystem with the configuration and behavior that can perform the task in the current environment.
+In our architecture, the full set of capabilities of the modular robot is encoded in a library of robot configurations and behaviors.  Each entry is labeled with  attributes that describe what it does, as well as the environment conditions under which it may be used. This allows the high-level planner  to match environment characterizations from the perception subsystem with the configuration and behavior that can perform the task in the current environment.
 
 Our implementation relies on a framework first presented in \cite{Jing2016}, which we summarize here.
 In this framework, a library entry is defined as $l = (C,B_C,P_e,P_b)$ where:
@@ -507,7 +507,13 @@ In this framework, a library entry is defined as $l = (C,B_C,P_e,P_b)$ where:
 When we specify tasks at the high level, we use behavior properties $P_b$ to describe a desired robot action without explicitly specifying a configuration or behavior.
 Environment types $T_e$ specify the conditions under which a behavior can be used.
 %, and are determined through the environment characterization processes described in Section~\ref{sec:exploration}.
- 
+
+Robot configurations and behaviors can be created using a computer simulation program called VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{vsparc.org}) presented in \cite{Jing2016}.
+VSPARC allows users to design, simulate and test configurations and behaviors for the SMORES-EP robot system.
+The behavior designs can then be used to control the physical SMORES-EP robot to perform various actions.
+
+In \cite{Jing2016}, all robot behaviors are \textit{static} behaviors. That is, once the behavior is created in VSPARC, joint values for each module are fixed and cannot be modified during behavior execution.
+
 We implemented a library containing 10 entries for four different configurations,
 listed in Table~\ref{table:1}.
 This library was created to enables the robot to explore and interact with the environment and objects, but the library can be expanded to include more entries for other environments and tasks. Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use the perception algorithm described in Section \ref{sec:exploration}.
