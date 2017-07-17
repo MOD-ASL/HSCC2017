@@ -229,9 +229,9 @@ Recent work includes a system which integrates many low-level capabilities of a 
 
 \section{System Architecture and Implementation}\label{sec:system}
 %
-Our system enables modular robots to autonomously complete known tasks in unknown environments.   Given a high-level specification of the desired task, the system enables the robot to explore the environment, gather information, and appropriately interact with the environment and objects in order to achieve the task objectives.
-The system is reactive: actions are selected based on the sensed environment, and different actions may be selected to complete the same task in different environments.
-Furthermore, it is the first system that will autonomously reconfigure the robot whenever it determines that a different configuration is needed to complete the task in the current environment.
+Our system enables modular robots to autonomously complete object manipulation tasks in unknown environments.   Given a high-level specification of the desired task, the system enables the robot to explore the environment, gather information, and appropriately interact with the environment and objects in order to achieve the task objectives.
+
+Consider, for example, the task of delivering an object to an \textit{a priori} unknown dropoff location in an unknown environment. Our system is able to perform this task by exploring and reactively reconfiguring to adapt to observations of the environment. System actions are selected based on the explored environment; thus, the robot's actions and even morphology may be very different for the same task under different environments. Ours is the first system that autonomously reconfigures the robot whenever it determines that a different configuration is needed to complete the task in the current environment.
 
 The system architecture is shown in Figure~\ref{fig:overview}.
 The physical robot consists of a set of \textbf{Robot Modules} (which can move, and connect to one another) and a single \textbf{Sensor Module} (which includes environment sensors and a computer).
