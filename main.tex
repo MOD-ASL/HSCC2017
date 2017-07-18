@@ -6,7 +6,7 @@
 
 %%%  Included by IEEE:
 
-\documentclass[conference]{IEEEtran}
+\documentclass[journal]{IEEEtran}
 \usepackage{times}
 
 % numbers option provides compact numerical references in the text. 
@@ -85,43 +85,17 @@
 \begin{document}
 
 \title{An Integrated System for Perception-Driven Autonomy with Modular Robots}
+\author{Jonathan~Daudelin,~\IEEEmembership{Member,~IEEE,}
+        Gangyuan~Jing,~\IEEEmembership{Member,~IEEE,}
+        Tarik~Tuson,~\IEEEmembership{Member,~IEEE,}
+        Mark~Yim,~\IEEEmembership{Member,~IEEE,}
+        Hadas~Kress-Gazit,~\IEEEmembership{Member,~IEEE,}
+        and~Mark~Campbell,~\IEEEmembership{Member,~IEEE}% <-this % stops a space
+\thanks{J.Daudelin, G. Jing, M. Campbell, and H. Kress-Gazit are with the Sibley School of Mechanical and Aerospace Engineering, Cornell University, Ithaca,
+NY, 14850.}% <-this % stops a space
+\thanks{T. Tuson and M. Yim are with the Mechanical Engineering and Applied Mechanics Department, University of Pennsylvania, Philadelphia, PA, 19104.}% <-this % stops a space
+\thanks{J. Daudelin, G. Jing, and T. Tosun contributed equally to this work.}}
 
-%\author{Mystery Authors}
-
-\author{
-\authorblockN{Jonathan Daudelin\textsuperscript{*}}
-\authorblockA{
-Cornell University\\
-\texttt{jd746@cornell.edu}}
-%
-\and
-\authorblockN{Gangyuan Jing\textsuperscript{*}}
-\authorblockA{
-Cornell University\\
-\texttt{gj56@cornell.edu}}
-%
-\and
-\authorblockN{Tarik Tosun\textsuperscript{*}}
-\authorblockA{Univ. of Pennsylvania\\
-\texttt{tarikt@grasp.upenn.edu}}
-%
-\and
-\authorblockN{Mark Campbell}
-\authorblockA{Cornell University\\
-\texttt{mc288@cornell.edu}}
-%
-\and
-\authorblockN{Hadas Kress-Gazit}
-\authorblockA{Cornell University\\
-\texttt{hadaskg@cornell.edu}}
-%
-\and
-\authorblockN{Mark Yim}
-\authorblockA{Univ. of Pennsylvania\\
-\texttt{yim@grasp.upenn.edu}}
-%
-\thanks{\textsuperscript{*}J. Daudelin, G. Jing, and T. Tosun contributed equally to this work.}
-} 
 
 \maketitle
 
@@ -872,8 +846,26 @@ To conclude, this paper presents the first MSRR system that uses perception of a
        % /_/ |_|\___/_/  \___/_/   \___/_/ /_/\___/\___/____/
 
 %% Use plainnat to work nicely with natbib. 
-\bibliographystyle{plainnat4}
+\bibliographystyle{IEEEtran}
 \bibliography{references}
+
+
+\begin{IEEEbiography}{Michael Shell}
+Biography text here.
+\end{IEEEbiography}
+
+% if you will not have a photo at all:
+\begin{IEEEbiographynophoto}{John Doe}
+Biography text here.
+\end{IEEEbiographynophoto}
+
+% insert where needed to balance the two columns on the last page with
+% biographies
+%\newpage
+
+\begin{IEEEbiographynophoto}{Jane Doe}
+Biography text here.
+\end{IEEEbiographynophoto}
 
 \end{document}
 
