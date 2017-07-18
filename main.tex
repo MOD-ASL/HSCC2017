@@ -87,13 +87,13 @@
 \title{An Integrated System for Perception-Driven Autonomy with Modular Robots}
 \author{Jonathan~Daudelin,~\IEEEmembership{Member,~IEEE,}
         Gangyuan~Jing,~\IEEEmembership{Member,~IEEE,}
-        Tarik~Tuson,~\IEEEmembership{Member,~IEEE,}
+        Tarik~Tosun,~\IEEEmembership{Member,~IEEE,}
         Mark~Yim,~\IEEEmembership{Member,~IEEE,}
         Hadas~Kress-Gazit,~\IEEEmembership{Member,~IEEE,}
         and~Mark~Campbell,~\IEEEmembership{Member,~IEEE}% <-this % stops a space
 \thanks{J.Daudelin, G. Jing, M. Campbell, and H. Kress-Gazit are with the Sibley School of Mechanical and Aerospace Engineering, Cornell University, Ithaca,
 NY, 14850.}% <-this % stops a space
-\thanks{T. Tuson and M. Yim are with the Mechanical Engineering and Applied Mechanics Department, University of Pennsylvania, Philadelphia, PA, 19104.}% <-this % stops a space
+\thanks{T. Tosun and M. Yim are with the Mechanical Engineering and Applied Mechanics Department, University of Pennsylvania, Philadelphia, PA, 19104.}% <-this % stops a space
 \thanks{J. Daudelin, G. Jing, and T. Tosun contributed equally to this work.}}
 
 
@@ -263,32 +263,27 @@ used for differential drive on flat ground.  The modules are equipped
 with electro-permanent magnets that allow any face of one module to connect to
 any face of another, allowing the robot to self-reconfigure. The magnetic faces
 can also be used to attach to objects made of ferromagnetic materials (like steel). 
-EP magnets require very little energy to connect and disconnect, and no energy to maintain their
-holding force \cite{tosun2016design}.
+The EP magnets require very little energy to connect and disconnect, and no energy to maintain their attachment force of 90N \cite{tosun2016design}.
 
 Each module has an onboard battery, microcontroller, and WiFi
 module to send and receive messages.  In this work, clusters of SMORES
 modules were controlled by a central computer running a Python program that
 sends WiFi commands to control the four DoF and magnets of each module.
+Wireless networking was provided by a standard off-the-shelf  router, with a range of about 100 feet, and commands to a single module can be received at a rate of about 20hz.
 Battery life is about one hour (depending on motor, magnet, and radio usage).
-%, and commands to a single module can be received at a rate of about 20hz.
-%Wireless networking was provided by a standard off-the-shelf  router, with a
-%range of about 100 feet.
 
-%The SMORES-EP hardware system also includes passive cubes that modules can connect to, providing lightweight passive structure in SMORES-EP configurations.  Cubes have the same $80mm$ form factor as modules.
-
+The SMORES-EP hardware system also includes passive cubes that modules can connect to, providing lightweight passive structure in SMORES-EP configurations.  Cubes have the same 80mm form factor as modules.
 %
-%% SMORES-EP module DoF picture
-%\begin{figure}   
-%\begin{center}
-%\includegraphics[height=1.5in]{images/smores_dof.pdf}
-%\end{center}
-%\caption{SMORES-EP module}
-%\label{fig:smores-module}
-%\vspace{-2em}
-%\end{figure}
+% SMORES-EP module DoF picture
+\begin{figure}   
+\begin{center}
+\includegraphics[height=1.5in]{images/smores_dof.pdf}
+\end{center}
+\caption{SMORES-EP module}
+\label{fig:smores-module}
+\vspace{-2em}
+\end{figure}
 %
-
 \subsection{Sensor Module} % (fold)
 \label{sec:sensor_module}
 %
@@ -306,7 +301,6 @@ downward-facing webcam. This camera provides a view of a  0.75m $\times$ 0.5m ar
 in front of the sensor module, and is used to track AprilTag
 \cite{olson2011apriltag} fiducials for reconfiguration. A 7.4V, 2200mAh LiPo
 battery provides about one hour of running time.
-
 %
 % Sensor Module Figure
 \begin{figure}
@@ -868,6 +862,7 @@ Biography text here.
 \end{IEEEbiographynophoto}
 
 \end{document}
+
 
 
 
