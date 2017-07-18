@@ -236,7 +236,7 @@ Recent work includes a system which integrates many low-level capabilities of a 
 %
 Our system enables modular robots to autonomously complete object manipulation tasks in unknown environments.   Given a high-level specification of the desired task, the system enables the robot to explore the environment, gather information, and appropriately interact with the environment and objects in order to achieve the task objectives.
 
-Consider, for example, the task of delivering an object to an \textit{a priori} unknown dropoff location in an unknown environment. Our system is able to perform this task by exploring and reactively reconfiguring to adapt to observations of the environment. System actions are selected based on the explored environment; thus, the robot's actions and even morphology may be very different for the same task under different environments. Ours is the first system that autonomously reconfigures the robot whenever it determines that a different configuration is needed to complete the task in the current environment.
+Consider, for example, the task of delivering an object to an \textit{a priori} unknown dropoff location in an unknown environment. Our system is able to perform this task by exploring and reactively reconfiguring to adapt to observations of the environment. System actions are selected based on the explored environment; thus, the robot's actions and even morphology may be very different for the same task under different environments. Ours is the first system that autonomously reconfigures the robot whenever it determines that a different configuration is needed to complete the task in the current environment. ({\color{red} Do we need this argument in the system architecture section?})
 
 The system architecture is shown in Figure~\ref{fig:overview}.
 The physical robot consists of a set of \textbf{Robot Modules} (which can move, and connect to one another) and a single \textbf{Sensor Module} (which includes environment sensors and a computer).
@@ -499,7 +499,7 @@ In addition to characterizing the environment, the algorithm also selects a wayp
 \subsection{Library of Configurations and Behaviors}
 \label{sec:configuration-specifics}
 %
-In our architecture, the full set of capabilities of the modular robot is encoded in a library of robot configurations and behaviors.  Each entry is labeled with  attributes that describe what it does, as well as the environment conditions under which it may be used. This allows the high-level planner  to match environment characterizations from the perception subsystem with the configuration and behavior that can perform the task in the current environment.
+In our architecture, the full set of capabilities of the modular robot, such as driving and picking up items, is encoded in a library of robot configurations and behaviors.  Each entry is labeled with  attributes that describe what it does, as well as the environment conditions under which it may be used. This allows the high-level planner to match environment characterizations from the perception subsystem with the configuration and behavior that can perform the task in the current environment.
 
 Our implementation relies on a framework first presented in \cite{Jing2016}, which we summarize here.
 In this framework, a library entry is defined as $l = (C,B_C,P_e,P_b)$ where:
@@ -519,10 +519,16 @@ VSPARC allows users to design, simulate and test configurations and behaviors fo
 The behavior designs can then be used to control the physical SMORES-EP robot to perform various actions.
 
 In \cite{Jing2016}, all robot behaviors are \textit{static} behaviors. That is, once the behavior is created in VSPARC, joint values for each module are fixed and cannot be modified during behavior execution.
+Static behaviors, such as a car with a fixed turning radius, do not provide enough maneuverability for the robot to navigate around unknown environment.
+In this work, we expand the type of behaviors in the library by adding \textit{parametric} behaviors, whose joint values can be altered during run-time, and therefore allow a wider range of motions.
+Consider the task of delivering an object to an \textit{a priori} unknown dropoff location in an unknown environment.
+Based on the sensed environment, the perception and exploration subsystem (Section~\ref{sec:exploration}) can a generate collision-free path, which is used to calculate real-time velocity for the robot to follow the path.
+The robot velocity is then converted to joint values in parametric behaviors during run-time.
 
 We implemented a library containing 10 entries for four different configurations,
 listed in Table~\ref{table:1}.
-This library was created to enables the robot to explore and interact with the environment and objects, but the library can be expanded to include more entries for other environments and tasks. Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use the perception algorithm described in Section \ref{sec:exploration}.
+This library was created to enables the robot to explore and interact with the environment and objects, but the library can be expanded to include more entries for other environments and tasks. 
+Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use the perception algorithm described in Section \ref{sec:exploration}.
 
 To provide an illustrative example, we discuss two configurations and their capabilities in detail.
 The ``Tank'' configuration shown in Figure~\ref{fig:dropoff} is capable of picking
@@ -533,7 +539,8 @@ a long arm in front, and is suitable for reaching between obstacles in a narrow 
 However, the locomotion ability of this configuration is limited to forward/backward
 motion, making it unsuitable for general navigation.
 
-This library-based framework allows us to specify tasks for modular robots at a high level, by associating abstract robot actions with robust low-level controllers that execute appropriate robot behaviors based on the sensed environment. For example, if a task specification requires the robot to execute a \textbf{pickUp} behavior, our system could select either the Tank or Proboscis configurations to perform the action, since both have behaviors property \textbf{pickUp}. To choose the appropriate configuration to use, the robot uses perception to characterize its environment in terms of the environment types $T_e$ associated with each configuration. If the environment is of type ``tunnel'', only the Proboscis configuration can be used, and the robot will take  reconfigure to form the Proboscis if it is not already in that configuration. Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
+This library-based framework allows us to specify tasks for modular robots at a high level, by associating abstract robot actions with robust low-level controllers that execute appropriate robot behaviors based on the sensed environment.
+For example, if a task requires the robot to execute a \textbf{drop} behavior, our system could select either the Tank or Proboscis configurations to perform the action, since both have behaviors property \textbf{drop}. To choose the appropriate configuration to use, the robot uses perception to characterize its environment in terms of the environment types $T_e$ associated with each configuration. If the environment is of type ``tunnel'', only the Proboscis configuration can be used, and the robot will take  reconfigure to form the Proboscis if it is not already in that configuration. Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
 %
 \begin{table}
 \centering
