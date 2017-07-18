@@ -528,7 +528,7 @@ Several techniques were developed to ensure reliable connection and disconnectio
 
 \subsection{High-Level Planner}
 \label{sec:high-level}
-
+Test. \TODO{remove this}
 In our architecture, the high-level planner subsystem provides a framework for users to specify tasks  at a high level using a formal language, and acts as the main, centralized controller that directs robot motion and actions based on the given tasks.  Users do not specify the configurations and behaviors used to complete tasks, but rather describe desired actions in terms of goals and outcomes.  Returning to our stair-climbing example, the user indicates that the robot should \textbf{explore} until it locates the mailbox, then \textbf{drop} the object off.  The sequence of configurations and behaviors used to complete this task is not specified by the user, but instead determined by the high-level planner as it continually reacts to the sensed environment.
 
 The high-level planner treats each component of our system as a low-level atomic controller.
