@@ -252,9 +252,8 @@ The following sections discuss the role of each component within the general sys
 \subsection{Hardware} % (fold)
 \label{sec:hardware}
 %
-%\subsection{SMORES-EP Modular Robot} \label{sec:smores}
+\subsubsection{SMORES-EP Modular Robot} \label{sec:smores}
 %
-
 Our system implementation is built around the SMORES-EP robot \cite{tosun2016design},
 \cite{tosun2017paintpots}, but the system architecture could
 be used with any modular robot capable of self-reconfiguration. Each SMORES-EP module is the size of an 80mm cube
@@ -272,7 +271,7 @@ sends WiFi commands to control the four DoF and magnets of each module.
 Wireless networking was provided by a standard off-the-shelf  router, with a range of about 100 feet, and commands to a single module can be received at a rate of about 20hz.
 Battery life is about one hour (depending on motor, magnet, and radio usage).
 
-The SMORES-EP hardware system also includes passive cubes that modules can connect to, providing lightweight passive structure in SMORES-EP configurations.  Cubes have the same 80mm form factor as modules.
+The hardware system also includes passive cubes that modules can connect to, providing lightweight passive structure in SMORES-EP configurations.  Cubes have the same 80mm form factor as modules.
 %
 % SMORES-EP module DoF picture
 \begin{figure}   
@@ -281,10 +280,9 @@ The SMORES-EP hardware system also includes passive cubes that modules can conne
 \end{center}
 \caption{SMORES-EP module}
 \label{fig:smores-module}
-\vspace{-2em}
 \end{figure}
 %
-\subsection{Sensor Module} % (fold)
+\subsubsection{Sensor Module} % (fold)
 \label{sec:sensor_module}
 %
 Our system architecture assumes there is a single \textit{sensor module}, containing sensors and a computer, that is carried by a cluster of modules.
@@ -333,23 +331,29 @@ battery provides about one hour of running time.
 
 %Since the proposed system performs tasks in unknown environments and conditions, a robust suite of perception algorithms is required to inform control and decision-making. The robot must have the ability to explore and build a map of its environment while avoiding obstacles and tracking its pose. The system must be able to recognize objects and regions of interest related to the desired task. Finally, the system must characterize the environment in terms of configuration capabilities. Features in the environment may restrict which robot configurations can viably perform parts of the high-level task, such as retrieving an object or navigating to a waypoint. The system needs to recognize these features to be able to intelligently choose the appropriate robot configuration for performing the task.
 
-The perception and exploration subsystem interprets sensor data to explore and understand the environment and inform robot behavior and adaptation. The architecture of this subsystem requires algorithms to perform SLAM, provide navigation goals for exploration, recognize objects of interest, and characterize the environment in terms of robot configuration abilities.
+%The perception and exploration subsystem interprets sensor data to explore and understand the environment and inform robot behavior and adaptation. The architecture of this subsystem requires algorithms to perform SLAM, provide navigation goals for exploration, recognize objects of interest, and characterize the environment in terms of robot configuration abilities.
+
+Completing tasks in unknown environments requires the robot to explore and gain information about its surroundings, and use that information to inform reconfiguration.
+Recalling the stair-climbing example from the beginning of Section~\ref{sec:system}, the robot needed to explore and navigate its environment, visually locate the mailbox, and characterize the environment near the mailbox as ``stairs.''  In our system architecture, the perception and exploration subsystem is responsible for performing SLAM, providing navigation goals for exploration, and recognizing objects and regions of interest.  It is also responsible for characterizing the environment in terms of robot configurations abilities, allowing the high-level planner to make decisions regarding reconfiguration.
 
 In our implementation, mapping and robot pose are provided by an RGB-D SLAM software package called RTAB-MAP\cite{rtabmap}. A 3D map of the environment is incrementally built and stored in an efficient octree-based volumetric map using Octomap\cite{octomap}. To drive exploration of the unknown environment, a Next Best View algorithm \cite{Daudelin2017} is used. It uses the current volumetric map of the environment to estimate the next reachable sensor viewpoint that will observe the largest volume of undiscovered portions of objects (the Next Best View). It also estimates the amount of information (in an entropy-reduction sense) that will be gained from a sensor measurement taken at that viewpoint. The system provides the volumetric map of the environment and the reachable space of sensor viewpoints in that map to the algorithm. The algorithm then returns Next Best View waypoints to the high-level planner upon request. In the example object delivery task, the system begins the task by iteratively navigating to these Next Best View waypoints to explore objects in the environment until it finds the dropoff zone.
 
-To identify objects of interest in the task (such as the dropoff zone), color detection and tracking is used.  Colored objects are recognized using CMVision\footnote{CMVision: http://www.cs.cmu.edu/$\sim$jbruce/cmvision/}, and tracked in 3D using depth information from the onboard 3D sensor\footnote{Lucas Coelho Figueiredo: https://github.com/lucascoelho91/ballFollower}. For the example task, the dropoff zone is assumed to have a pink sign on it to enable the robot to recognize it in the environment. Although we implement object recognition by color, more sophisticated methods could be included in the same system architecture.
+To identify objects of interest in the task (such as the dropoff zone), color detection and tracking is used.  Colored objects are recognized using CMVision\footnote{CMVision: http://www.cs.cmu.edu/$\sim$jbruce/cmvision/}, and tracked in 3D using depth information from the onboard 3D sensor\footnote{Lucas Coelho Figueiredo: https://github.com/lucascoelho91/ballFollower}. In our stair-climbing example, the mailbox could be marked with a pink sign, allowing the robot to recognize it in the environment. Although we implement object recognition by color, more sophisticated methods could be included in the same system architecture.
 
 To enable the high-level planner to choose appropriate configurations for a task, our framework requires an environment characterization algorithm. This algorithm reasons about regions of interest in the environment to classify them in terms of the abilities of robot configurations. For our proof-of-concept, we implemented an algorithm that can differentiate between four environment types relevant to object manipulation, shown in Figure \ref{fig:characters}. 
 
-When an object is recognized in the environment, the 3D information about its surroundings is evaluated. An occupancy grid is created around the object location, and all grid cells within a robot-radius of obstacles are denoted unreachable (as shown in Figure~\ref{fig:characterization}). The closest reachable point to the object within $20^o$ of the robot's line of sight to the object is selected. If the distance from this point to the object is greater than a threshold value and the object is on the ground, the environment is characterized as a ``tunnel'', likely requiring a configuration that is narrow enough to move between the surrounding obstacles to retrieve the object. If above the ground, the environment is characterized as a ``stairs'' environment, requiring a robot that can climb to reach the object. If the closest reachable point is under the threshold value, the environment is classified as either a ``free'' or ``sign'' environment, depending on the height of the colored object.
+When an object is recognized in the environment, the 3D information about its surroundings is evaluated. An occupancy grid is created around the object location, and all grid cells within a robot-radius of obstacles are denoted unreachable (as shown in Figure~\ref{fig:characterization}). The closest reachable point to the object within $20^o$ of the robot's line of sight to the object is selected. If the distance from this point to the object is greater than a threshold value and the object is on the ground, the environment is characterized as a ``tunnel'', likely requiring a configuration that is narrow enough to move between the surrounding obstacles to retrieve the object. If above the ground, the environment is characterized as a ``stairs'' environment, requiring a robot that can climb to reach the object. If the closest reachable point is under the threshold value, the environment is classified as either a ``free'' or ``high'' environment, depending on the height of the colored object.
 
-In addition to characterizing the environment, the algorithm also selects a waypoint based on the characterization for the robot to position itself for reconfiguration and performing the object manipulation task. For the object delivery task, the robot characterizes the environment surrounding the dropoff zone. This enables it to determine how to reconfigure to successfully deliver the object. For example, if the environment is a ``sign'' environment, it must lift the object up to be placed onto the colored zone. If the environment is a ``stairs'' environment, it must climb the stairs to drop off the object.
+%In addition to characterizing the environment, the algorithm also selects a waypoint based on the characterization for the robot to position itself for reconfiguration and performing the object manipulation task. For the object delivery task, the robot characterizes the environment surrounding the dropoff zone. This enables it to determine how to reconfigure to successfully deliver the object. For example, if the environment is a ``high'' environment, it must lift the object up to be placed onto the colored zone. If the environment is a ``stairs'' environment, it must climb the stairs to drop off the object.
+
+Based on the environment characterization and target location, the algorithm will also return a waypoint for the robot to position itself to perform its task (or to reconfigure, if necessary).  In our stair-climbing example, the environment characterization algorithm would direct the robot to drive to a waypoint at the base of the stairs, which is the best place for it to reconfigure and begin climbing the stairs.
+
 
 %
 % Environment types figure
 \begin{figure}[t]
-      \centering
-      \begin{subfigure}[t]{0.15\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.15\textwidth}
         \includegraphics[width=\textwidth]{images/FreeEnvironment.png}
         %\label{fig:obja}
         \caption{\textbf{``free'}' environment}
@@ -363,7 +367,7 @@ In addition to characterizing the environment, the algorithm also selects a wayp
     \begin{subfigure}[t]{0.15\textwidth}
         \includegraphics[width=\textwidth]{images/HighFreeEnvironment.png}
         %\label{fig:objb}
-        \caption{\textbf{``sign''} environment}
+        \caption{\textbf{``high''} environment}
     \end{subfigure} \ \ \ \ \ \
     \begin{subfigure}[t]{0.15\textwidth}
         \includegraphics[width=\textwidth]{images/LedgeEnvironment.png}
@@ -372,7 +376,7 @@ In addition to characterizing the environment, the algorithm also selects a wayp
     \end{subfigure}
       \caption{Environment characterization types.}
       \label{fig:characters}
-   \end{figure}
+\end{figure}
 %
 % Characterization method figure
 \begin{figure}
@@ -409,7 +413,7 @@ Environment types $T_e$ specify the conditions under which a behavior can be use
 %, and are determined through the environment characterization processes described in Section~\ref{sec:exploration}.
 
 Robot configurations and behaviors can be created using a computer simulation program called VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{vsparc.org}) presented in \cite{Jing2016}.
-VSPARC allows users to design, simulate and test configurations and behaviors for the SMORES-EP robot system.
+VSPARC allows users to de, simulate and test configurations and behaviors for the SMORES-EP robot system.
 The behavior designs can then be used to control the physical SMORES-EP robot to perform various actions.
 
 In \cite{Jing2016}, all robot behaviors are \textit{static} behaviors. That is, once the behavior is created in VSPARC, joint values for each module are fixed and cannot be modified during behavior execution.
@@ -429,7 +433,7 @@ The ``Tank'' configuration shown in Figure~\ref{fig:dropoff} is capable of picki
 up and dropping objects in a ``free'' environment. In addition, the ``Tank'' configuration can locomote on flat terrain. It uses a parametric differential drive behavior to convert a desired velocity vector into motor commands (\textbf{drive} in Table \ref{table:1}).
 
 The ``Proboscis'' configuration shown in Figure~\ref{fig:pink_grab} has
-a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects or reaching up in a ``sign'' environment to drop items.
+a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects or reaching up in a ``high'' environment to drop items.
 However, the locomotion ability of this configuration is limited to forward/backward
 motion, making it unsuitable for general navigation.
 
@@ -448,7 +452,7 @@ For example, if a task requires the robot to execute a \textbf{drop} behavior, o
  Tank & \textbf{drive} & ``free''\\ \hline
  Proboscis & \textbf{pickUp} & ``tunnel'' or ``free''\\ \hline
  Proboscis & \textbf{drop} &``tunnel'' or ``free'' \\ \hline
- Proboscis & \textbf{placeStamp} & ``sign''\\ \hline
+ Proboscis & \textbf{placeStamp} & ``high''\\ \hline
  Scorpion & \textbf{drive} & ``free''\\ \hline
  Snake & \textbf{climbUp} & ``stairs''\\ \hline
  Snake & \textbf{climbDown} & ``stairs''\\ \hline
@@ -722,7 +726,7 @@ Figure \ref{fig:exps}a shows the environment setup for Experiment II. The full p
 
 For the final experiment, the robot is given a stamp and is tasked with placing it on a package that needs to be shipped. The high-level task has the same specification as in Experiment II, which for its environment includes the following sub-tasks: explore the unknown environment, find the package with stamp location denoted by a pink area, and place the stamp on the package. The robot was started in the ``Tank'' configuration used in the first experiment.
 
-Figure \ref{fig:exps}c shows the environment setup for Experiment III. Please see the video attachment for the full performance of this experiment. The robot begins exploring the unknown environment, and quickly observes the package to be stamped. It characterizes the environment as the ``sign" environment using the 3D map created of the environment, and determines that the ``Proboscis'' configuration is needed with the ``placeStamp'' behavior to place the stamp on the pink goal area. The robot then navigates to a position directly in front of the package, reconfigures appropriately, and executes the gait to place the stamp correctly on the package to complete the task.
+Figure \ref{fig:exps}c shows the environment setup for Experiment III. Please see the video attachment for the full performance of this experiment. The robot begins exploring the unknown environment, and quickly observes the package to be stamped. It characterizes the environment as the ``high" environment using the 3D map created of the environment, and determines that the ``Proboscis'' configuration is needed with the ``placeStamp'' behavior to place the stamp on the pink goal area. The robot then navigates to a position directly in front of the package, reconfigures appropriately, and executes the gait to place the stamp correctly on the package to complete the task.
 
 %     ____  _                           _
 %    / __ \(_)___________  ____________(_)___  ____
@@ -863,17 +867,3 @@ Biography text here.
 \end{IEEEbiographynophoto}
 
 \end{document}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
