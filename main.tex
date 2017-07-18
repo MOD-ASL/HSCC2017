@@ -124,9 +124,14 @@ Over the past three decades, dozens of MSRR systems have been built \cite{Yim200
 
 Some of the most challenging problem domains for robots are those in which they must autonomously complete a task in an unknown environment.  Search-and-rescue problems fall into this category: we might want a robot to enter a collapsed building and locate survivors, without knowing what kind of terrain the robot needs to traverse before it actually enters the building.
 
-The theoretical ability of modular robots to address these known-task-unknown-environment problems by reconfiguring has been frequently cited as an advantage \cite{Yim2007a}, but has never been experimentally demonstrated.  For the first time, we present a system architecture that integrates perception, high-level mission planning, and modular robot hardware, to solve these kinds of problems. In three hardware experiments, we show that our system allows a modular robot to autonomously explore, reconfigure and solve tasks in unknown environments.  These demonstrations fill an experimental gap in the field, showing that reconfiguration can provide an advantage in practice, not just in theory.
+The theoretical ability of modular robots to reconfigure in response to these known-task-unknown-environment problems has been frequently cited as an advantage \cite{Yim2007a}, but has never been experimentally demonstrated.
+%For the first time, we present a system architecture that integrates perception, high-level mission planning, and modular robot hardware, to solve these kinds of problems.
+For the first time, we present a system that integrates perception, high-level mission planning, and modular robot hardware, allowing a modular robot to autonomously reconfigure in response its perceived environment in order to complete a task.
+%In three hardware experiments, we show that our system allows a modular robot to autonomously explore, reconfigure and solve tasks in unknown environments.
+We validate our system in three hardware experiments.  Based on a high-level task specification, we show how our system allows the robot to autonomously explore, decide when and how to reconfigure, and manipulate objects to complete its task.
+These demonstrations fill an experimental gap in the field, showing that reconfiguration can provide an advantage in practice, not just in theory.
 
-However, our contribution is not just the experimental results, but also our system architecture, which provides a general framework to solve known-task-unknown-environment-problems with modular robots.  We present the tools we used to achieve this capability (some novel, some existing), and discuss their roles in the system (Section~\ref{sec:system}).  Our hardware experiments with the SMORES-EP modular robot serve as a proof-of-concept, demonstrating how the system can address a variety of tasks in different unknown environments (Section~\ref{sec:experiments}).  Finally, we discuss lessons learned during development, and comment on challenges and opportunities for others who might wish to adopt this architecture.
+However, our contribution is not just the experimental results, but also our system architecture, which provides a general framework to solve tasks in unknown environments using autonomous, reactive reconfiguration.  We present the tools we used to achieve this capability (some novel, some existing), and discuss their roles in the system (Section~\ref{sec:system}).  Our hardware experiments with the SMORES-EP modular robot serve as a proof-of-concept, demonstrating how the system can address a variety of tasks in different unknown environments (Section~\ref{sec:experiments}).  Finally, we discuss lessons learned during development, and comment on challenges and opportunities for others who might wish to adopt this architecture.
 
 %
 % These capabilities are impressive, and each represents a significant research accomplishment in its own right. However, in order to truly live up to their promise of flexible capability in the real world, MSRR systems must demonstrate autonomy: moving, navigating, interacting with objects, and self-reconfiguring, all in unknown environments and without external localization or control. 
@@ -177,9 +182,8 @@ However, our contribution is not just the experimental results, but also our sys
 % to be.
 %%%
 
-%The Millibot system demonstrated the ability to map a partially unknown environment when operating as a swarm \cite{Grabowski2000}. The autonomy of the Millibot swarm is limited: a human operator makes all high-level decisions, and is responsible for navigation using a GUI. Certain members of the swarm are designated as ``beacons'', and have known locations, making the environment only partially unknown.
-
-
+% millibot
+The Millibot system demonstrated the ability to map a partially unknown environment when operating as a swarm \cite{Grabowski2000}. The autonomy of the Millibot swarm is limited: a human operator makes all high-level decisions, and is responsible for navigation using a GUI. Certain members of the swarm are designated as ``beacons'', and have known locations, making the environment only partially unknown.
 
 % swarm-bots
 Swarm-Bots is a MSRR system that has been applied in exploration \cite{Dorigo2005} and collective manipulation \cite{Mondada2005} scenarios.  Exploration is demonstrated in partially unknown environments, with some members of the swarm acting as ``beacons'' with known location.  In a collective manipulation task, Swarm-Bots have limited autonomy, with a human operator specifying the location of the manipulation target and the global sequence of manipulation actions.
@@ -193,19 +197,20 @@ The swarmanoid project (successor to the swarm-bots), uses a heterogeneous swarm
 Autonomous reconfiguration has been demonstrated with several other modular robot systems. CKbot, Conro, and MTRAN have all demonstrated the ability to join disconnected clusters of modules together \cite{Yim2007, Rubenstein2004,Murata2006}. In order to align, Conro uses infra-red sensors on the docking faces of the modules, while CKBot and MTRAN use a separate sensor module on each cluster.  In all cases, individual clusters locate and servo towards each other until they are close enough to dock. These experiments do not include any planning or sequencing of multiple reconfiguration actions in order to create a goal structure appropriate for a task.  Additionally,  modules are not individually mobile, and mobile clusters of modules are limited to slow crawling gaits.  Consequently, reconfiguration is very time consuming, with a single connection requiring 5-15 minutes.
 
 % TEMP
-%Other work has focused on reconfiguration planning, but not autonomous reconfiguration.  Paulos et al. present a system in which self-reconfigurable modular boats self-assemble into prescribed floating structures, such as a bridge \cite{Paulos2015}.  Individual boat modules are able to move about the pool, allowing for rapid reconfiguration.  In these experiments, the environment is known and external localization is provided by an overhead AprilTag system. 
+Other work has focused on reconfiguration planning, but not autonomous reconfiguration.  Paulos et al. present a system in which self-reconfigurable modular boats self-assemble into prescribed floating structures, such as a bridge \cite{Paulos2015}.  Individual boat modules are able to move about the pool, allowing for rapid reconfiguration.  In these experiments, the environment is known and external localization is provided by an overhead AprilTag system. 
 
-%MSRR systems have demonstrated the ability to accomplish low-level tasks such as various modes of locomotion \cite{Yim1994}.
+MSRR systems have demonstrated the ability to accomplish low-level tasks such as various modes of locomotion \cite{Yim1994}.
 Recent work includes a system which integrates many low-level capabilities of a MSRR system in a design library, and accomplishes high-level user-specified tasks by synthesizing elements of the library into a reactive state-machine \cite{Jing2016}. This system demonstrates autonomy with respect to task-related decision making, but is designed to operate in a fully known environment with external sensing.
 
 % Traditional systems and wrapup statement
-%Our system goes beyond existing work by using self-reconfiguration capabilities of an MSRR system to take autonomy a step further.  The system uses perception of the environment to inform the choice of robot configuration, allowing the robot to adapt its abilities to surmount challenges arising from \textit{a priori} unknown features in the environment. Through hardware experiments, we demonstrate that autonomous self-reconfiguration allows our system to adapt to the environment to complete complex tasks.
+Our system goes beyond existing work by using self-reconfiguration capabilities of an MSRR system to take autonomy a step further.  The system uses perception of the environment to inform the choice of robot configuration, allowing the robot to adapt its abilities to surmount challenges arising from \textit{a priori} unknown features in the environment. Through hardware experiments, we demonstrate that autonomous self-reconfiguration allows our system to adapt to the environment to complete complex tasks.
 
 \section{System Architecture and Implementation}\label{sec:system}
 %
-Our system enables modular robots to autonomously complete object manipulation tasks in unknown environments.   Given a high-level specification of the desired task, the system enables the robot to explore the environment, gather information, and appropriately interact with the environment and objects in order to achieve the task objectives.
-
-Consider, for example, the task of delivering an object to an \textit{a priori} unknown dropoff location in an unknown environment. Our system is able to perform this task by exploring and reactively reconfiguring to adapt to observations of the environment. System actions are selected based on the explored environment; thus, the robot's actions and even morphology may be very different for the same task under different environments. Ours is the first system that autonomously reconfigures the robot whenever it determines that a different configuration is needed to complete the task in the current environment. ({\color{red} Do we need this argument in the system architecture section?})
+Given a high-level specification of the desired task, our system enables the robot to explore the environment, gather information, and appropriately interact with the environment and objects in order to achieve the task objectives.
+For example, suppose we ask the robot to enter an unknown environment and deliver an object to a mailbox (which it can recognize visually). The robot explores the environment and locates the mailbox, but recognizes that in order to reach it, it will need to ascend a flight of stairs. In response, it chooses to reconfigure into a stair-climbing configuration, which it then uses to climb the stairs and deliver the object.  Afterwards, it descends and reconfigures back into a driving configuration, to return to home base.
+While other systems have demonstrated reconfiguration, ours is the first to do so in response to perceived environments in order to complete tasks.
+%Consider, for example, the task of delivering an object to an \textit{a priori} unknown dropoff location in an unknown environment. Our system is able to perform this task by exploring and reactively reconfiguring to adapt to observations of the environment. System actions are selected based on the explored environment; thus, the robot's actions and even morphology may be very different for the same task under different environments. Ours is the first system that autonomously reconfigures the robot whenever it determines that a different configuration is needed to complete the task in the current environment. ({\color{red} Do we need this argument in the system architecture section?})
 
 The system architecture is shown in Figure~\ref{fig:overview}.
 The physical robot consists of a set of \textbf{Robot Modules} (which can move, and connect to one another) and a single \textbf{Sensor Module} (which includes environment sensors and a computer).
@@ -252,10 +257,10 @@ The following sections discuss the role of each component within the general sys
 
 Our system implementation is built around the SMORES-EP robot \cite{tosun2016design},
 \cite{tosun2017paintpots}, but the system architecture could
-be used with any modular robot capable of self-reconfiguration. Each SMORES-EP module is the size of an \textit{80mm cube}
+be used with any modular robot capable of self-reconfiguration. Each SMORES-EP module is the size of an 80mm cube
 and has four actuated joints, including two wheels that can be
 used for differential drive on flat ground.  The modules are equipped
-with electro-permanent magents that allow any face of one module to connect to
+with electro-permanent magnets that allow any face of one module to connect to
 any face of another, allowing the robot to self-reconfigure. The magnetic faces
 can also be used to attach to objects made of ferromagnetic materials (like steel). 
 EP magnets require very little energy to connect and disconnect, and no energy to maintain their
@@ -284,22 +289,22 @@ Battery life is about one hour (depending on motor, magnet, and radio usage).
 %\end{figure}
 %
 
-%\subsection{Brain Module} % (fold)
+\subsection{Sensor Module} % (fold)
 \label{sec:sensor_module}
 %
 Our system architecture assumes there is a single \textit{sensor module}, containing sensors and a computer, that is carried by a cluster of modules.
 %SMORES-EP modules have no sensors that allow them to gather information about their environment. To enable autonomous operation, we extend the SMORES-EP hardware by introducing a \textit{sensor module}, shown in Figure~\ref{fig:sensor-module}.
 The sensor module used in our experiments was designed to work well with SMORES-EP, and is shown in Figure~\ref{fig:sensor-module}.
-The body of the sensor module is a \(90mm \times 70mm \times 70mm\) box with thin steel plates on its front and back that allow SMORES-EP modules
+The body of the sensor module is a 90mm $\times$ 70mm $\times$ 70mm box with thin steel plates on its front and back that allow SMORES-EP modules
 to connect to it.
 Computation is provided by an UP computing board with an Intel Atom 1.92 GHz
 processor, 4 GB memory, and a 64 GB hard drive. A USB WiFi adapter provides
 network connectivity. A front-facing Orbecc Astra Mini camera provides RGB-D
 data, enabling the robot to explore and map its environment and recognize
-objects of interest.  A thin stem extends $40cm$ above the body, supporting a
-downward-facing webcam. This camera provides a view of a  $0.75m\times0.5m$ area
-in front of the brain module, and is used to track AprilTag
-\cite{olson2011apriltag} fiducials for reconfiguration. A $7.4v$, $2200mAh$ LiPo
+objects of interest.  A thin stem extends 40cm above the body, supporting a
+downward-facing webcam. This camera provides a view of a  0.75m $\times$ 0.5m area
+in front of the sensor module, and is used to track AprilTag
+\cite{olson2011apriltag} fiducials for reconfiguration. A 7.4V, 2200mAh LiPo
 battery provides about one hour of running time.
 
 %
@@ -476,7 +481,7 @@ SMORES-EP is capable of all three classes of modular self-reconfiguration (chain
 
 Determining the relative positions of modules during mobile self-reconfiguration is an important challenge. 
 %As discussed in Section~\ref{sec:related-work}, past systems have relied on offboard global positioning systems \cite{Paulos2015} or distributed approaches, in which sensors are mounted on each disconnected set of modules \cite{Yim2007}.  
-Our localization method is centralized, using an RGB camera carried by the robot to track AprilTag fiducials mounted to individual modules.  As discussed in Section~\ref{sec:hardware}, the camera provides a view of a $0.75m\times0.5m$ area on the ground in front of the brain module.  
+Our localization method is centralized, using an RGB camera carried by the robot to track AprilTag fiducials mounted to individual modules.  As discussed in Section~\ref{sec:hardware}, the camera provides a view of a $0.75m\times0.5m$ area on the ground in front of the sensor module.  
 Within this area, our system provides pose for any module equipped with an AprilTag marker to perform reconfiguration. 
 %Within this area (which we call the \emph{reconfiguration zone}), any module equipped with an AprilTag marker can detach from the cluster, drive to another location, and reattach to the cluster, provided that both of its wheels were in contact with the ground in its starting position.% \TODO{Get accurate number for height and FoV.}
 
@@ -864,6 +869,8 @@ Biography text here.
 \end{IEEEbiographynophoto}
 
 \end{document}
+
+
 
 
 
