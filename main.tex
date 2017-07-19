@@ -214,7 +214,7 @@ While other systems have demonstrated reconfiguration, ours is the first to do s
 
 The system architecture is shown in Figure~\ref{fig:overview}.
 The physical robot consists of a set of \textbf{Robot Modules} (which can move, and connect to one another) and a single \textbf{Sensor Module} (which includes environment sensors and a computer).
-The \textbf{High-Level Planner} allows tasks to be specified at a high level using a formal language, which is compiled into a provably-correct state machine controller.
+The \textbf{High-Level Planner} allows tasks to be specified at a high level using a formal language, which is compiled into a provably-correct controller.
 %Users do not specify which configurations and behaviors should be used to complete the task, but rather describe the required functionality. For example, the user might request that the robot perform a drive action in a tunnel environment labeled with the property max height = 3.
 \textbf{Active Perception} components perform SLAM, plan waypoints for the robot to explore its environment, and identify features of the environment relevant to the high-level task. They also characterize the environment in terms of robot capabilities.
 Based on the task requirements and observed environment, the high-level planner selects an appropriate behavior for the robot from the \textbf{Library}.
@@ -261,7 +261,7 @@ and has four actuated joints, including two wheels that can be
 used for differential drive on flat ground.  The modules are equipped
 with electro-permanent magnets that allow any face of one module to connect to
 any face of another, allowing the robot to self-reconfigure. The magnetic faces
-can also be used to attach to objects made of ferromagnetic materials (like steel). 
+can also be used to attach to objects made of ferromagnetic materials (e.g. steel). 
 The EP magnets require very little energy to connect and disconnect, and no energy to maintain their attachment force of 90N \cite{tosun2016design}.
 
 Each module has an onboard battery, microcontroller, and WiFi
@@ -287,7 +287,7 @@ The hardware system also includes passive cubes that modules can connect to, pro
 %
 Our system architecture assumes there is a single \textit{sensor module}, containing sensors and a computer, that is carried by a cluster of modules.
 %SMORES-EP modules have no sensors that allow them to gather information about their environment. To enable autonomous operation, we extend the SMORES-EP hardware by introducing a \textit{sensor module}, shown in Figure~\ref{fig:sensor-module}.
-The sensor module used in our experiments was designed to work well with SMORES-EP, and is shown in Figure~\ref{fig:sensor-module}.
+The sensor module used in our experiments was designed to work with SMORES-EP, and is shown in Figure~\ref{fig:sensor-module}.
 The body of the sensor module is a 90mm $\times$ 70mm $\times$ 70mm box with thin steel plates on its front and back that allow SMORES-EP modules
 to connect to it.
 Computation is provided by an UP computing board with an Intel Atom 1.92 GHz
@@ -512,7 +512,7 @@ Once all module movement operations have completed and the goal topology is form
 
 %To travel from its initial location to its final location, a module uses its left and right wheels to move by differential-drive.  Because the reconfiguration zone is free of obstacles, collision-free paths can be pre-computed and stored as part of the reconfiguration plan.  Paths can also be computed at runtime if desired.  AprilTag localization allows the robot to follow the path.
 
-Several techniques were developed to ensure reliable connection and disconnection during reconfiguration.  When a module disconnects from the cluster, the electro-permanent magnets on the connected faces are turned off.  To guarantee a clean break of the magnetic connection, the disconnecting module bends its tilt joint up and down, mechanically separating itself from the cluster. During docking, accurate alignment is crucial to the strength of the magnetic connection \cite{tosun2016design}.  For this reason, rather than driving directly to its final docking location, a module instead drives to a pre-docking waypoint directly in front of its docking location.  At the waypoint, the module spins in place slowly until its heading is perfectly aligned with the dock point, and then drives in straight to attach. To guarantee a good connection, the module intentionally overdrives its dock point, pushing itself into the cluster while firing its magnets. \TODO{Is this paragraph worth including?  It's useful information, but it might distract from the main message of the paper.}
+Several techniques were developed to ensure reliable connection and disconnection during reconfiguration.  When a module disconnects from the cluster, the electro-permanent magnets on the connected faces are turned off.  To guarantee a clean break of the magnetic connection, the disconnecting module bends its tilt joint up and down, mechanically separating itself from the cluster. During docking, accurate alignment is crucial to the strength of the magnetic connection \cite{tosun2016design}.  For this reason, rather than driving directly to its final docking location, a module instead drives to a pre-docking waypoint directly in front of its docking location.  At the waypoint, the module spins in place slowly until its heading is perfectly aligned with the dock point, and then drives in straight to attach. To guarantee a good connection, the module intentionally overdrives its dock point, pushing itself into the cluster while firing its magnets.
 %
 \begin{figure}[t]
 \begin{center}
@@ -528,7 +528,6 @@ Several techniques were developed to ensure reliable connection and disconnectio
 
 \subsection{High-Level Planner}
 \label{sec:high-level}
-Test. \TODO{remove this}
 In our architecture, the high-level planner subsystem provides a framework for users to specify tasks  at a high level using a formal language, and acts as the main, centralized controller that directs robot motion and actions based on the given tasks.  Users do not specify the configurations and behaviors used to complete tasks, but rather describe desired actions in terms of goals and outcomes.  Returning to our stair-climbing example, the user indicates that the robot should \textbf{explore} until it locates the mailbox, then \textbf{drop} the object off.  The sequence of configurations and behaviors used to complete this task is not specified by the user, but instead determined by the high-level planner as it continually reacts to the sensed environment.
 
 The high-level planner treats each component of our system as a low-level atomic controller.
