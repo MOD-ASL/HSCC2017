@@ -127,7 +127,7 @@ Some of the most challenging problem domains for robots are those in which they 
 
 The theoretical ability of modular robots to reconfigure in response to these known-task-unknown-environment problems has been frequently cited as an advantage \cite{Yim2007a}, but has never been experimentally demonstrated.
 %For the first time, we present a system architecture that integrates perception, high-level mission planning, and modular robot hardware, to solve these kinds of problems.
-For the first time, we present a system that integrates perception, high-level mission planning, and modular robot hardware, allowing a modular robot to autonomously reconfigure in response its perceived environment in order to complete a task.
+For the first time, we present a system that integrates perception, high-level mission planning, and modular robot hardware, allowing a modular robot to autonomously reconfigure in response to its perceived environment in order to complete a task.
 %In three hardware experiments, we show that our system allows a modular robot to autonomously explore, reconfigure and solve tasks in unknown environments.
 We validate our system in three hardware experiments.  Based on a high-level task specification, we show how our system allows the robot to autonomously explore, decide when and how to reconfigure, and manipulate objects to complete its task.
 These demonstrations fill an experimental gap in the field, showing that reconfiguration can provide an advantage in practice, not just in theory.
@@ -648,9 +648,9 @@ gap in the field, representing the first evidence of a modular robot autonomousl
 
 \newcommand{\Lwidth}{0.5\columnwidth}
 \newcommand{\Rwidth}{0.4\columnwidth}
-\newcommand{\Tbuffer}{-2cm}
-\newcommand{\Rboxheight}{-0.1\height}
-\setlength{\tabcolsep}{5pt} %reduces horizontal padding in table. 
+%\newcommand{\Tbuffer}{-2cm}
+\newcommand{\Rboxheight}{-0.5\height}
+\setlength{\tabcolsep}{4pt} %reduces horizontal padding in table. 
 %\renewcommand{\arraystretch}{5}
 \begin{table}
 \centering
@@ -658,13 +658,16 @@ gap in the field, representing the first evidence of a modular robot autonomousl
 \hline
 \textbf{Environment Setup} & \textbf{Task Description}\\
 \hline
-\raisebox{\Rboxheight}{ \includegraphics[width=\Lwidth, trim={0cm 0cm 0cm \Tbuffer}]{images/overhead_starting.jpg}} %\vspace{0.2cm}
+\raisebox{\Rboxheight}{\includegraphics[width=\Lwidth]{images/overhead_starting.jpg}}
+%
 & \pbox{\Rwidth}{Explore environment to find all pink or green objects and blue dropoff zone. Deliver all objects to dropoff zone.}\\
 \hline
-\raisebox{\Rboxheight}{ \includegraphics[width=\Lwidth, trim={0cm 0cm 0cm \Tbuffer}]{images/stairs_explore_overhead.jpg}} %\vspace{0.2cm} 
+\raisebox{\Rboxheight}{\includegraphics[width=\Lwidth]{images/stairs_explore_overhead.jpg}}
+%
 & \pbox{\Rwidth}{Explore environment to find mailbox, then deliver a circuit to the box.}\\
 \hline
-\raisebox{\Rboxheight}{\includegraphics[width=\Lwidth, trim={0cm 0cm 0cm \Tbuffer}]{images/stamp_explore_overhead.jpg}} %\vspace{0.2cm}
+\raisebox{\Rboxheight}{\includegraphics[width=\Lwidth]{images/stamp_explore_overhead.jpg}}
+%
 & \pbox{\Rwidth}{Explore environment to find package, then place a stamp on the package.}\\
 \hline
 \end{tabular}
