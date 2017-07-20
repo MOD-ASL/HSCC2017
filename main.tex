@@ -102,9 +102,16 @@ NY, 14850.}% <-this % stops a space
 
 \begin{abstract}
 
-We present an integrated system architecture that allows self-reconfigurable modular robots to autonomously perform high-level tasks in unknown environments, using perception and reconfiguration to recognize and adapt to environment obstacles and constraints.  By performing three hardware experiments, we demonstrate that our implementation of the system is capable of autonomously completing different object manipulation tasks in different environments without human changes to the system.
+The theoretical ability of modular robots to reconfigure in response to \textit{a priori} unknown environments has frequently been cited as an advantage, but has never been experimentally demonstrated.
+For the first time, we present a system that integrates perception, high-level mission planning, and modular robot hardware, providing allowing a modular robot to autonomously reconfigure in response to its perceived environment in order to complete a task.
+We validate our system in three hardware experiments, where we demonstrate a modular robot autonomously exploring, reconfiguring, and manipulating objects to complete high-level tasks in unknown environments.
 
-The physical robot is composed of modules that support multiple robot configurations. An onboard 3D sensor provides information about the environment and informs exploration, reconfiguration decision making and feedback control.  A centralized high-level mission planner uses information from the environment and the user-specified task description to autonomously compose low-level controllers to perform locomotion, reconfiguration, other behaviors. A novel, centralized, self-reconfiguration method is used to change robot configurations as needed. This is the first modular robot system that uses perception-driven reconfiguration to intelligently adapt to \textit{a priori} unknown environments to perform complex tasks.
+%We present an integrated system architecture that allows self-reconfigurable modular robots to autonomously perform high-level tasks in unknown environments, using perception and reconfiguration to recognize and adapt to environment obstacles and constraints.  By performing three hardware experiments, we demonstrate that our implementation of the system is capable of autonomously completing different object manipulation tasks in different environments without human changes to the system.
+
+
+We present the details of our system architecture and implementation, which provides a general framework allowing modular robots to solve tasks in unknown environments using autonomous, reactive reconfiguration.  
+The physical robot is composed of modules that support multiple robot configurations. An onboard 3D sensor provides information about the environment and informs exploration, reconfiguration decision making and feedback control.  A centralized high-level mission planner uses information from the environment and the user-specified task description to autonomously compose low-level controllers to perform locomotion, reconfiguration, other behaviors. A novel, centralized, self-reconfiguration method is used to change robot configurations as needed.
+%This is the first modular robot system that uses perception-driven reconfiguration to intelligently adapt to \textit{a priori} unknown environments to perform complex tasks.
 
 \end{abstract}
 
