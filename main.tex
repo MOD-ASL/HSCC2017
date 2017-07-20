@@ -29,6 +29,7 @@
 \usepackage{amsmath}
 \usepackage{nccmath} % for fleqn
 \usepackage{algorithm}
+\usepackage{pbox}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%  Macros:
@@ -631,24 +632,26 @@ gap in the field, representing the first evidence of a modular robot autonomousl
 
 %Three experiments were run, each time varying the environment and the type of task to be performed. Each experiment required the robot to explore an unknown environment to search for and identify one or more objects of interest, and then complete some manipulation task with those objects.
 
-
+\newcommand{\Lwidth}{0.5\columnwidth}
+\newcommand{\Rwidth}{0.4\columnwidth}
+\setlength{\tabcolsep}{1pt} %reduces horizontal padding in table. 
 \begin{table}
 \centering
 \begin{tabular}{|c|c|}
 \hline
 \textbf{Environment Setup} & \textbf{Task Description}\\
 \hline
-\raisebox{-.5\height}{\includegraphics[width=0.25\textwidth]{images/overhead_starting.jpg}} & Explore environment to find all pink or green objects and blue dropoff zone. Deliver all objects to dropoff zone.\\ 
+\raisebox{-.5\height}{\includegraphics[width=\Lwidth]{images/overhead_starting.jpg}} & \pbox{\Rwidth}{Explore environment to find all pink or green objects and blue dropoff zone. Deliver all objects to dropoff zone.}\\ 
 \hline
-\raisebox{-.5\height}{\includegraphics[width=0.25\textwidth]{images/stairs_explore_overhead.jpg}} & Explore environment to find mailbox, then deliver a circuit to the box. \\ 
+\raisebox{-.5\height}{\includegraphics[width=\Lwidth]{images/stairs_explore_overhead.jpg}} & \pbox{\Rwidth}{Explore environment to find mailbox, then deliver a circuit to the box.} \\ 
 \hline
-\raisebox{-.5\height}{\includegraphics[width=0.25\textwidth]{images/stamp_explore_overhead.jpg}} & Explore environment to find package, then place a stamp on the package. \\ 
+\raisebox{-.5\height}{\includegraphics[width=\Lwidth]{images/stamp_explore_overhead.jpg}} & \pbox{\Rwidth}{Explore environment to find package, then place a stamp on the package.} \\ 
 \hline
 \end{tabular}
 \caption{Tasks Comparison}
 \label{table:task-compare}
 \end{table}
-
+\setlength{\tabcolsep}{6pt} % resetting to default
 
 \subsection{Experiment I}
 %
