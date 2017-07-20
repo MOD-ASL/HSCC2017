@@ -618,9 +618,9 @@ In the next state, the specified high level behavior properties are mapped to a 
 \label{sec:experiments}
 %
 
-In three hardware experiments, we demonstrate how our system allows the robot to autonomously explore, decide how and when to reconfigure, and manipulate objects to complete tasks in unknown environments.
+In three hardware experiments, we demonstrate how our system allows the robot to autonomously explore, decide how and when to reconfigure, and manipulate objects to complete tasks in unknown environments. Table \ref{table:task-compare} illustrates the environments and tasks in each experiment.
 In Experiment I, the robot completes a complex, multi-part object retrieval task that requires significant exploration, reactive decision-making, and reconfiguration in response to its environment.
-In Experiments II and III, the robot is given the same high-level task in two  different environments.  We show how the system successfully reacts to the two scenarios by taking very different actions, both requiring reconfiguration.
+In Experiments II and III, the robot is given the same high-level task (delivering an object to an \textit{a priori} unknown goal) in two different environments.  We show how the system successfully reacts to the two scenarios by taking very different actions, both requiring reconfiguration.
 
 These experiments accomplish two goals.  First, they fill an experimental
 gap in the field, representing the first evidence of a modular robot autonomously reconfiguring in response to its perceived (\textit{a priori} unknown) environment in order to complete tasks.  Second, they provide observations and insights into the challenges presented by autonomous modular robot systems.  By discussing lessons learned, we hope to allow others to build on our work and create even more capable systems. 
@@ -746,7 +746,7 @@ The robot begins the experiment in the ``Scorpion'' configuration with its view 
       \begin{subfigure}[t]{0.24\textwidth}
         \includegraphics[width=\textwidth]{images/stairs_reconfig.jpg}
         %\label{fig:obja}
-        \caption{Experiment II}
+        \caption{Reconfiguring to climb stairs}
     \end{subfigure}
     \begin{subfigure}[t]{0.24\textwidth}
         \includegraphics[width=\textwidth]{images/stairs_climb.jpg}
@@ -757,7 +757,7 @@ The robot begins the experiment in the ``Scorpion'' configuration with its view 
     \begin{subfigure}[t]{0.24\textwidth}
         \includegraphics[width=\textwidth]{images/stamp_explore_ground.jpg}
         %\label{fig:objb}
-        \caption{Experiment III}
+        \caption{Reconfiguring to place stamp \TODO{change figure} }
     \end{subfigure}
     \begin{subfigure}[t]{0.24\textwidth}
         \includegraphics[width=\textwidth]{images/stamp_placing.jpg}
