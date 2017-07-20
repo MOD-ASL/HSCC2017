@@ -424,14 +424,14 @@ When we specify tasks at the high level, we use behavior properties $P_b$ to des
 Environment types $T_e$ specify the conditions under which a behavior can be used.
 %, and are determined through the environment characterization processes described in Section~\ref{sec:exploration}.
 
-Robot configurations and behaviors can be created using a computer simulation program called VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{vsparc.org}) presented in \cite{Jing2016}.
+Robot configurations and behaviors can be created using a computer simulation program called VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}) presented in \cite{Jing2016}.
 VSPARC allows users to design, simulate and test configurations and behaviors for the SMORES-EP robot system.
 Our system can then use the behavior designs to control the physical SMORES-EP robot to perform various actions.
 
 In \cite{Jing2016}, all robot behaviors are \textit{static} behaviors.
 That is, once users create a behavior in VSPARC, joint values for each module are fixed and cannot be modified during behavior execution.
 Static behaviors, such as a car with a fixed turning radius, do not provide enough maneuverability for the robot to navigate around unknown environment.
-In this work, we expand the type of behaviors in the library by using the \textit{parametric} behavior, which is first introcuded in \cite{JingAURO2017}.
+In this work, we expand the type of behaviors in the library by using the \textit{parametric} behavior, which is first introduced in \cite{JingAURO2017}.
 Parametric behaviors have joint values that can be altered during run-time, and therefore allow a wider range of motions.
 Recall the mail delivery task, based on the sensed environment, the perception and exploration subsystem (Section~\ref{sec:exploration}) can a generate collision-free path, which is used to calculate real-time velocity for the robot to follow the path.
 Our system then converts the robot velocity to joint values in parametric behaviors during run-time.
@@ -450,8 +450,10 @@ a long arm in front, and is suitable for reaching between obstacles in a narrow 
 However, the locomotion ability of this configuration is limited to forward/backward
 motion, making it unsuitable for general navigation.
 
-\TODO{Hadas says this paragraph is handwavey. I am not sure how we can change it...}This library-based framework allows us to specify tasks for modular robots at a high level, by associating abstract robot actions with robust low-level controllers that execute appropriate robot behaviors based on the sensed environment.
-For example, if a task requires the robot to execute a \textbf{drop} behavior, our system could select either the Tank or Proboscis configurations to perform the action, since both have behaviors property \textbf{drop}. To choose the appropriate configuration to use, the robot uses perception to characterize its environment in terms of the environment types $T_e$ associated with each configuration. If the environment is of type ``tunnel'', only the Proboscis configuration can be used, and the robot will take reconfigure to form the Proboscis if it is not already in that configuration. 
+This library-based framework allows users to express desired robot actions in an abstract way by specifying behavior properties. For example, if a task specifies that the robot should execute a behavior with the \textbf{drop} property, our system could choose to use either the Tank or Proboscis configurations to perform the action, since both have behaviors with the \textbf{drop} property.
+The decision of which configuration to use is made during task execution, based on the sensed environment.
+For example, if the perception system reports that the environment is of type ``tunnel'', the Proboscis configuration will be used, because the library indicates that it can be used in ``tunnel''-type environments while the Tank cannot.
+
 % I moved the disccusion about this to highlevel %Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
 %
 \begin{table}
