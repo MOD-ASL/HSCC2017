@@ -638,18 +638,24 @@ gap in the field, representing the first evidence of a modular robot autonomousl
 
 \newcommand{\Lwidth}{0.5\columnwidth}
 \newcommand{\Rwidth}{0.4\columnwidth}
-\setlength{\tabcolsep}{1pt} %reduces horizontal padding in table. 
+\newcommand{\Tbuffer}{-2cm}
+\newcommand{\Rboxheight}{-0.1\height}
+\setlength{\tabcolsep}{5pt} %reduces horizontal padding in table. 
+%\renewcommand{\arraystretch}{5}
 \begin{table}
 \centering
 \begin{tabular}{|c|c|}
 \hline
 \textbf{Environment Setup} & \textbf{Task Description}\\
 \hline
-\raisebox{-.5\height}{\includegraphics[width=\Lwidth]{images/overhead_starting.jpg}} & \pbox{\Rwidth}{Explore environment to find all pink or green objects and blue dropoff zone. Deliver all objects to dropoff zone.}\\ 
+\raisebox{\Rboxheight}{ \includegraphics[width=\Lwidth, trim={0cm 0cm 0cm \Tbuffer}]{images/overhead_starting.jpg}} %\vspace{0.2cm}
+& \pbox{\Rwidth}{Explore environment to find all pink or green objects and blue dropoff zone. Deliver all objects to dropoff zone.}\\
 \hline
-\raisebox{-.5\height}{\includegraphics[width=\Lwidth]{images/stairs_explore_overhead.jpg}} & \pbox{\Rwidth}{Explore environment to find mailbox, then deliver a circuit to the box.} \\ 
+\raisebox{\Rboxheight}{ \includegraphics[width=\Lwidth, trim={0cm 0cm 0cm \Tbuffer}]{images/stairs_explore_overhead.jpg}} %\vspace{0.2cm} 
+& \pbox{\Rwidth}{Explore environment to find mailbox, then deliver a circuit to the box.}\\
 \hline
-\raisebox{-.5\height}{\includegraphics[width=\Lwidth]{images/stamp_explore_overhead.jpg}} & \pbox{\Rwidth}{Explore environment to find package, then place a stamp on the package.} \\ 
+\raisebox{\Rboxheight}{\includegraphics[width=\Lwidth, trim={0cm 0cm 0cm \Tbuffer}]{images/stamp_explore_overhead.jpg}} %\vspace{0.2cm}
+& \pbox{\Rwidth}{Explore environment to find package, then place a stamp on the package.}\\
 \hline
 \end{tabular}
 \caption{Environments and tasks for hardware experiments}
