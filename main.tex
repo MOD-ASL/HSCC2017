@@ -622,9 +622,9 @@ If the robot is not currently in a capable configuration, the controller command
 \label{sec:experiments}
 %
 
-In three hardware experiments, we demonstrate how our system allows the robot to autonomously explore, decide how and when to reconfigure, and manipulate objects to complete tasks in unknown environments.
+In three hardware experiments, we demonstrate how our system allows the robot to autonomously explore, decide how and when to reconfigure, and manipulate objects to complete tasks in unknown environments. Table \ref{table:task-compare} presents the environments and tasks in each experiment.
 In Experiment I, the robot completes a complex, multi-part object retrieval task that requires significant exploration, reactive decision-making, and reconfiguration in response to its environment.
-In Experiments II and III, the robot is given the same high-level task in two  different environments.  We show how the system successfully reacts to the two scenarios by taking very different actions, both requiring reconfiguration.
+In Experiments II and III, the robot is given the same high-level task (delivering an object to an \textit{a priori} unknown goal) in two different environments.  We show how the system successfully reacts to the two scenarios by taking very different actions, both requiring reconfiguration.
 
 These experiments accomplish two goals.  First, they fill an experimental
 gap in the field, representing the first evidence of a modular robot autonomously reconfiguring in response to its perceived (\textit{a priori} unknown) environment in order to complete tasks.  Second, they provide observations and insights into the challenges presented by autonomous modular robot systems.  By discussing lessons learned, we hope to allow others to build on our work and create even more capable systems. 
@@ -643,7 +643,7 @@ gap in the field, representing the first evidence of a modular robot autonomousl
 \textbf{Environment Setup} & \textbf{Task Description}\\
 \hline
  & \\
-\raisebox{-.5\height}{\includegraphics[width=0.25\textwidth]{images/overhead_starting.jpg}} & Explore environment to find all pink or green objects and blue dropoff zone. Deliver all objects to dropoff zone.\\
+\raisebox{-.5\height}{\includegraphics[width=0.25\textwidth]{images/overhead_starting.jpg}} & Explore environment to find all pink or green objects and the blue dropoff zone. Deliver all objects to dropoff zone.\\
  & \\
 \hline
  & \\
@@ -746,7 +746,7 @@ In Experiments II and III, the robot helps researchers at the University of Penn
 %For Experiment II, the robot is given a circuit that needs to be shipped, and is tasked with finding the shipping bin in which to place the circuit.
 %The high-level task includes sub-tasks of exploring the unknown environment, locating and characterizing the environment surrounding the mail bin, and delivering the package to the bin.
 
-Figure \ref{fig:exps}a\TODO{Change the reference here and maybe talk about reconf?} shows the environment setup for Experiment II, which includes an obstacle (cardboard box), a staircase, and the mailbox at the top of the staircase.  The mailbox is marked with a pink rectangle.  The astute reader will recognize that this scenario is identical to the mail delivery example referred to throughout the paper.  
+The environment setup for Experiment II (see Table \ref{table:task-compare}) includes an obstacle (cardboard box), a staircase, and the mailbox at the top of the staircase.  The mailbox is marked with a pink rectangle.  Note that this scenario is identical to the mail delivery example mentioned earlier in the paper.  
 
 %The full performance of the experiment is included in the video attachment to this paper.
 The robot begins the experiment in the ``Scorpion'' configuration with its view of the staircase and mailbox blocked by the cardboard box.  After a short period of exploration, it observes and recognizes the mailbox, and characterizes the environment surrounding it as ``stairs''. Based on this characterization, it determines that the ``Snake'' configuration is needed to traverse the stairs. Using the 3D map and characterization of the environment surrounding the mail bin, the robot navigates to a point directly in front of the stairs, faces the bin, and reconfigures to the ``Snake'' configuration. It then executes the stair climbing gait to reach the mail bin, and drops the circuit successfully. It then descends the stairs and reconfigures back to the ``Scorpion'' configuration to end the mission.
@@ -756,7 +756,7 @@ The robot begins the experiment in the ``Scorpion'' configuration with its view 
       \begin{subfigure}[t]{0.24\textwidth}
         \includegraphics[width=\textwidth]{images/stairs_reconfig.jpg}
         %\label{fig:obja}
-        \caption{Experiment II}
+        \caption{Reconfiguring to climb stairs}
     \end{subfigure}
     \begin{subfigure}[t]{0.24\textwidth}
         \includegraphics[width=\textwidth]{images/stairs_climb.jpg}
@@ -767,7 +767,7 @@ The robot begins the experiment in the ``Scorpion'' configuration with its view 
     \begin{subfigure}[t]{0.24\textwidth}
         \includegraphics[width=\textwidth]{images/stamp_explore_ground.jpg}
         %\label{fig:objb}
-        \caption{Experiment III}
+        \caption{Reconfiguring to place stamp \TODO{change figure} }
     \end{subfigure}
     \begin{subfigure}[t]{0.24\textwidth}
         \includegraphics[width=\textwidth]{images/stamp_placing.jpg}
@@ -780,10 +780,10 @@ The robot begins the experiment in the ``Scorpion'' configuration with its view 
 
 \subsection{Experiment III}
 
-For the final experiment, the robot is given a postage stamp\footnote{The postage stamp has a thin steel backing, so that the robot can pick it up with its magnets.} to place on the package so that it can be shipped to Cornell. The high-level task has the same specification as in Experiment II: explore the unknown environment, find the target location indicated by a pink area, and place the object at the target.
+For the final experiment, the robot is given a postage stamp\footnote{The postage stamp has a thin steel backing, so that the robot can pick it up with its magnets, and so that it adheres to magnets on the package.} to place on the package so that it can be shipped to Cornell. The high-level task has the same specification as in Experiment II: explore the unknown environment, find the delivery goal indicated by a pink area, and place the object at the target. The environment is different, most significantly in that the delivery goal is in a ``high'' environment type instead of the ``stairs'' environment used in Experiment II (see Table \ref{table:task-compare}).
 
 %Please see the video attachment for the full performance of this experiment.
-Figure \ref{fig:exps}c\TODO{Change the reference here and maybe talk about reconf?}  shows the environment setup for Experiment III.  The robot begins in the ``Tank'' configuration, and cannot see the package from its starting location.  After a short exploration, the robot identifies the pink square marking the package.  The pink square is unobstructed, but is about 25cm above the ground, so the system correctly characterizes this as the ``high''-type environment, and recognizes that reconfiguration will be needed to reach up and place the stamp on the target.  The robot navigates to a position directly in front of the package, reconfigures to the ``Proboscis'' configuration, and executes the ``highReach'' behavior to place the stamp on the target, completing its task.
+The robot begins in the ``Tank'' configuration, and cannot see the package from its starting location.  After a short exploration, the robot identifies the pink square marking the package.  The pink square is unobstructed, but is about 25cm above the ground, so the system correctly characterizes this as the ``high''-type environment, and recognizes that reconfiguration will be needed to reach up and place the stamp on the target.  The robot navigates to a position directly in front of the package, reconfigures to the ``Proboscis'' configuration, and executes the ``highReach'' behavior to place the stamp on the target, completing its task.
 %
 %     ____  _                           _
 %    / __ \(_)___________  ____________(_)___  ____
