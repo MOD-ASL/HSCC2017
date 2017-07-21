@@ -442,17 +442,17 @@ Here we list 10 entries for four different configurations in Table~\ref{table:1}
 Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use the perception algorithm described in Section \ref{sec:exploration}.
 
 To provide an illustrative example, we discuss two configurations and their capabilities in detail.
-The ``Tank'' configuration shown in Figure~\ref{fig:dropoff} is capable of picking
-up and dropping objects in a ``free'' environment. In addition, the ``Tank'' configuration can locomote on flat terrain. It uses a parametric differential drive behavior to convert a desired velocity vector into motor commands (\textbf{drive} in Table \ref{table:1}).
+The ``Car'' configuration shown in Figure~\ref{fig:dropoff} is capable of picking
+up and dropping objects in a ``free'' environment. In addition, the ``Car'' configuration can locomote on flat terrain. It uses a parametric differential drive behavior to convert a desired velocity vector into motor commands (\textbf{drive} in Table \ref{table:1}).
 
 The ``Proboscis'' configuration shown in Figure~\ref{fig:pink_grab} has
 a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects or reaching up in a ``high'' environment to drop items.
 However, the locomotion ability of this configuration is limited to forward/backward
 motion, making it unsuitable for general navigation.
 
-This library-based framework allows users to express desired robot actions in an abstract way by specifying behavior properties. For example, if a task specifies that the robot should execute a behavior with the \textbf{drop} property, our system could choose to use either the Tank or Proboscis configurations to perform the action, since both have behaviors with the \textbf{drop} property.
+This library-based framework allows users to express desired robot actions in an abstract way by specifying behavior properties. For example, if a task specifies that the robot should execute a behavior with the \textbf{drop} property, our system could choose to use either the Car or Proboscis configurations to perform the action, since both have behaviors with the \textbf{drop} property.
 The decision of which configuration to use is made during task execution, based on the sensed environment.
-For example, if the perception system reports that the environment is of type ``tunnel'', the Proboscis configuration will be used, because the library indicates that it can be used in ``tunnel''-type environments while the Tank cannot.
+For example, if the perception system reports that the environment is of type ``tunnel'', the Proboscis configuration will be used, because the library indicates that it can be used in ``tunnel''-type environments while the Car cannot.
 
 % I moved the disccusion about this to highlevel %Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
 %
@@ -463,9 +463,9 @@ For example, if the perception system reports that the environment is of type ``
  \multirow{2}{6em}{Configuration} & Behavior & Environment \\
  & properties & Types \\
  \hline
- Tank & \textbf{pickUp} & ``free'' \\\hline
- Tank & \textbf{drop} & ``free'' \\\hline
- Tank & \textbf{drive} & ``free''\\ \hline
+ Car & \textbf{pickUp} & ``free'' \\\hline
+ Car & \textbf{drop} & ``free'' \\\hline
+ Car & \textbf{drive} & ``free''\\ \hline
  Proboscis & \textbf{pickUp} & ``tunnel'' or ``free''\\ \hline
  Proboscis & \textbf{drop} &``tunnel'' or ``free'' \\ \hline
  Proboscis & \textbf{highReach} & ``high''\\ \hline
@@ -572,7 +572,7 @@ Our system then converts this path to joint values, which are used to execute th
 %Some robot actions, such as \textbf{driveExplore}, \textbf{driveToObject}, and \textbf{driveToDropoff}, requires the robot to navigate in the environment without colliding with obstacles.
 %To achieve this, a goal pose is first determined by the controller and sent to a path planning program to generate a collision free path while considering the dynamics of the robot.
 %The path is then converted to a sequence of robot velocity vectors and used as the input to control a parametric driving behavior in the library.
-%In this work, we use the ROS navigation package\footnote{http://wiki.ros.org/navigation} to generate paths for a differential drive robot to control the ``Tank'' configuration in the library.
+%In this work, we use the ROS navigation package\footnote{http://wiki.ros.org/navigation} to generate paths for a differential drive robot to control the ``Car'' configuration in the library.
 
 %Propositions related to the state of the environment are evaluated using the perception tools described in Section~\ref{sec:exploration}. For example in Specification~\ref{spec:experiment}, the proposition \textbf{arrived} is \lt if the robot arrives at its target location, which is determined by consulting the robot's position in the map generated by SLAM. The proposition \textbf{dropoffZone} is \lt if the robot is currently sensing a drop-off zone, which is determined by consulting both the map and color tracking functions.
 
@@ -757,9 +757,9 @@ During the experiment, the high-level planner used the library of configurations
    \vspace{-1em}
    \end{figure*}
 %
-Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available as an attachment to this paper. The robot starts in the ``Tank'' configuration. The starting location prevents the robot from seeing the objects initially, forcing it to explore the environment to search for them. After a period of exploration, the robot locates the pink object. The characterization algorithm correctly classifies the surrounding environment as a ``tunnel'' type, and accordingly the robot navigates in front of the object and reconfigures to the ``Proboscis'' configuration. The ``Proboscis'' then uses its long arm to reach into the tunnel and pull the object out into the open.
+Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available as an attachment to this paper. The robot starts in the ``Car'' configuration. The starting location prevents the robot from seeing the objects initially, forcing it to explore the environment to search for them. After a period of exploration, the robot locates the pink object. The characterization algorithm correctly classifies the surrounding environment as a ``tunnel'' type, and accordingly the robot navigates in front of the object and reconfigures to the ``Proboscis'' configuration. The ``Proboscis'' then uses its long arm to reach into the tunnel and pull the object out into the open.
 
- The ``Proboscis'' can only drive forwards and backwards (it cannot turn), so the robot concludes that it must reconfigure back to the ``Tank'' to drive the object to the drop-off zone.  To do so, the robot drops the object, reconfigures, and picks the object back up. The ``Tank'' then navigates to and drops off the object at the drop-off zone, which the robot previously located during exploration and recorded in the global map built by the SLAM algorithm.
+ The ``Proboscis'' can only drive forwards and backwards (it cannot turn), so the robot concludes that it must reconfigure back to the ``Car'' to drive the object to the drop-off zone.  To do so, the robot drops the object, reconfigures, and picks the object back up. The ``Car'' then navigates to and drops off the object at the drop-off zone, which the robot previously located during exploration and recorded in the global map built by the SLAM algorithm.
 
  Once done, the robot navigates directly to the green object, which it discovered while dropping off the pink object. The robot correctly determines
 that the green object is in a ``free'' environment, and picks it up without reconfiguring. The robot finishes the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows a volumetric map of the environment generated as the robot explores and delivers objects. The robot successfully completed all tasks in the experiment in about 26 minutes. 
@@ -822,7 +822,7 @@ The robot begins the experiment in the ``Scorpion'' configuration with its view 
 For the final experiment, a student gives the robot a postage stamp\footnote{The postage stamp has a thin steel backing, so that the robot can pick it up with its magnets, and so that it adheres to magnets on the package.} to place on the package so that it can be shipped to Cornell. The high-level task has the same specification as in Experiment II: explore the unknown environment, find the delivery goal indicated by a pink area, and place the object at the target. The environment is different, most significantly in that the delivery goal is in a ``high'' environment type instead of the ``stairs'' environment used in Experiment II (see Table \ref{table:task-compare}).
 
 %Please see the video attachment for the full performance of this experiment.
-The robot begins in the ``Tank'' configuration, and cannot see the package from its starting location.  After a short exploration, the robot identifies the pink square marking the package.  The pink square is unobstructed, but is about 25cm above the ground, so the system correctly characterizes this as the ``high''-type environment, and recognizes that reconfiguration will be needed to reach up and place the stamp on the target.  The robot navigates to a position directly in front of the package, reconfigures to the ``Proboscis'' configuration, and executes the ``highReach'' behavior to place the stamp on the target, completing its task.
+The robot begins in the ``Car'' configuration, and cannot see the package from its starting location.  After a short exploration, the robot identifies the pink square marking the package.  The pink square is unobstructed, but is about 25cm above the ground, so the system correctly characterizes this as the ``high''-type environment, and recognizes that reconfiguration will be needed to reach up and place the stamp on the target.  The robot navigates to a position directly in front of the package, reconfigures to the ``Proboscis'' configuration, and executes the ``highReach'' behavior to place the stamp on the target, completing its task.
 %
 %     ____  _                           _
 %    / __ \(_)___________  ____________(_)___  ____
@@ -843,7 +843,7 @@ Likewise, high-fidelity centralized sensing during reconfiguration, provided by 
 
 Centralized sensing has some drawbacks.  The sensor module is larger than a single SMORES-EP module, and is only compatible with configurations that can hold it in a good view of the robot's surroundings.  This also limits the kinds of behaviors that can be performed, because care must be taken to hold the sensor level and steady.  The configurations and behaviors used in our experiments move more slowly than in past experiments with SMORES-EP, in part for this reason. Supporting the sensor module while traversing obstacles and rough terrain is particularly challenging.  In Experiment II, we used rigid connectors to attach the sensor module to the surrounding SMORES-EP modules, in order to avoid connection breakage when climbing the stairs. 
 
-Centralized sensing also limits reconfiguration. Since modules can only move in 2D within the camera view,  some reconfigurations are not possible.  For example,  the ``Tank'' cannot reconfigure into the ``Snake'' using  our implementation, because the camera cannot see the back wheels of the ``Tank''. \TODO{This might be hard for users to imagine? We never actually show how each configuration looks like}  Consequently, if the robot had started out as the ``Tank'' at the beginning of Task 3, it would not have been able to complete its task.
+Centralized sensing also limits reconfiguration. Since modules can only move in 2D within the camera view,  some reconfigurations are not possible.  For example,  the ``Car'' cannot reconfigure into the ``Snake'' using  our implementation, because the camera cannot see the back wheels of the ``Car''. Consequently, if the robot had started out as the ``Car'' at the beginning of Task 3, it would not have been able to complete its task.
 
 We believe the benefits provided to our system by centralized sensing outweigh the costs.  The decision represents a tradeoff, sacrificing some of the flexibility of the modular system to achieve more capability and autonomy.  As future modular systems move out of the lab and into real-world deployment, it will become increasingly important for designers to consider similar tradeoffs.
 
