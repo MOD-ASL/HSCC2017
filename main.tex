@@ -407,7 +407,7 @@ Based on the environment characterization and target location, the algorithm als
 %
 In our architecture, we encode the full set of capabilities of the modular robot, such as driving and picking up items, in a library of robot configurations and behaviors.
 Specifically, we label each entry with attributes that describe what it does, as well as the environment conditions under which it may be used. 
-This allows the high-level planner to match environment characterizations from the perception subsystem with the configuration and behavior that can perform the task in the current environment. 
+This allows the high-level planner to match environment characterizations from the perception subsystem with configurations and behaviors that can perform the task in the current environment. 
 In the case of our mail delivery example, when the environment characterization algorithm reports that the mailbox is located in a ``stairs''-type environment, the high-level planner queries the library for configurations that can climb stairs.  
 Since the library indicates that current configuration is only capable of driving on flat ground, the high-level planner opts to reconfigure to the stair-climber configuration, and executes its \textbf{climbUp} behavior.
 
@@ -424,7 +424,7 @@ When we specify tasks at the high level, we use behavior properties $P_b$ to des
 Environment types $T_e$ specify the conditions under which a behavior can be used.
 %, and are determined through the environment characterization processes described in Section~\ref{sec:exploration}.
 
-Robot configurations and behaviors can be created using a computer simulation program called VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}) presented in \cite{Jing2016}.
+To create robot configurations and behaviors, we utilize a computer simulation program called VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}) presented in \cite{Jing2016}.
 VSPARC allows users to design, simulate and test configurations and behaviors for the SMORES-EP robot system.
 Our system can then use the behavior designs to control the physical SMORES-EP robot to perform various actions.
 
