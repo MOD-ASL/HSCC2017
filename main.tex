@@ -707,7 +707,7 @@ The high-level task is compact, consisting of three sub-tasks: explore the envir
 
 Figure \ref{fig:map} shows the environment layout used in the experiment, designed to represent a messy office. The environment contains two colored objects: a green soda can in the open (a ``free'' environment type), and a pink spool of wire in a narrow gap between two trash cans (a ``tunnel'' environment). Obstacles, environment types, and locations of the objects and drop-off zone are unknown \textit{a priori}.  Note that the object colors (pink and green) have no influence on environment characterization: in other words, the robot does not know that the pink object is in a ``tunnel''  before the experiment starts.  Both objects have small pieces of steel attached to them, making it possible for the modules to grasp them using their magnetic connectors.
 
-Five SMORES-EP modules, one Sensor Module, and three passive cubes composed the robot for performing the task. 
+Five SMORES-EP modules, one Sensor Module\footnote{This experiment uses an older version of the sensor module.  The body is larger (160 $\times$ 80 $\times$ 80mm box), and it uses an older Asus Xtion Pro Live RGB-D camera, which is larger than the Orbecc Astra but provides similar data.  The only functional difference between this older sensor module and the version presented in Section~\ref{sec:sensor_module} is the larger size.}, and three passive cubes composed the robot for performing the task. 
 During the experiment, the high-level planner used the library of configurations and behaviors described in Section \ref{sec:configuration-specifics}.
 
 % Map
@@ -804,9 +804,9 @@ The robot begins the experiment in the ``Scorpion'' configuration with its view 
     \end{subfigure}
     
     \begin{subfigure}[t]{0.24\textwidth}
-        \includegraphics[width=\textwidth]{images/stamp_explore_ground.jpg}
+        \includegraphics[width=\textwidth]{images/stamp_reconfig.jpg}
         %\label{fig:objb}
-        \caption{Reconfiguring to place stamp \TODO{change figure} }
+        \caption{Reconfiguring to place stamp}
     \end{subfigure}
     \begin{subfigure}[t]{0.24\textwidth}
         \includegraphics[width=\textwidth]{images/stamp_placing.jpg}
