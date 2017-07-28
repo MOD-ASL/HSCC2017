@@ -109,7 +109,7 @@ We validate our system in three hardware experiments, where we demonstrate a mod
 %We present an integrated system architecture that allows self-reconfigurable modular robots to autonomously perform high-level tasks in unknown environments, using perception and reconfiguration to recognize and adapt to environment obstacles and constraints.  By performing three hardware experiments, we demonstrate that our implementation of the system is capable of autonomously completing different object manipulation tasks in different environments without human changes to the system.
 
 We present the details of our system architecture and implementation, which provides a general framework allowing modular robots to solve tasks in unknown environments using autonomous, reactive reconfiguration.  
-The physical robot is composed of modules that support multiple robot configurations. An onboard 3D sensor provides information about the environment and informs exploration, reconfiguration decision making and feedback control.  A centralized high-level mission planner uses information from the environment and the user-specified task description to autonomously compose low-level controllers to perform locomotion, reconfiguration, other behaviors. A novel, centralized, self-reconfiguration method is used to change robot configurations as needed.
+The physical robot is composed of modules that support multiple robot configurations. An onboard 3D sensor provides information about the environment and informs exploration, reconfiguration decision making and feedback control.  A centralized high-level mission planner uses information from the environment and the user-specified task description to autonomously compose low-level controllers to perform locomotion, reconfiguration, other behaviors. A novel, centralized self-reconfiguration method is used to change robot configurations as needed.
 %This is the first modular robot system that uses perception-driven reconfiguration to intelligently adapt to \textit{a priori} unknown environments to perform complex tasks.
 
 \end{abstract}
@@ -553,7 +553,7 @@ When a module disconnects from the cluster, the electro-permanent magnets on the
 \label{sec:high-level}
 In our architecture, the high-level planner subsystem provides a framework for users to specify tasks  at a high level using a formal language, and acts as the main, centralized controller that directs robot motion and actions based on the given tasks.  Users do not specify the configurations and behaviors used to complete tasks, but rather describe desired actions in terms of goals and outcomes.  Returning to our mail delivery example, the user indicates that the robot should \textbf{explore} until it locates the \textbf{mailBox}, then \textbf{drop} the object off.  The sequence of configurations and behaviors used to complete this task is not specified by the user, but instead determined by the high-level planner as it continually reacts to the sensed environment.
 
-The high-level planner commands each component introduced in previous sections to collaboratively form a system for controlling our MSRR system to achieve complex tasks.
+The high-level planner coordinates each component introduced in previous sections to form a system for controlling our MSRR to achieve complex tasks.
 At system level, the sensing components gather and process environment information for the high-level planner, which then takes actions based on the given robot tasks by invoking appropriate low-level behaviors.
 
 We abstract the robot and environment status as a set of Boolean propositions.
@@ -567,7 +567,7 @@ In the mail delivery example, our system can choose to do a drop action by execu
 Our system evaluate propositions related to the state of the environment using perception and environment characterization tools in Section~\ref{sec:exploration}. For example, we can map proposition \textbf{mailBox} to the color tracking function in our perception subsystem, which assign the value \lt to \textbf{mailBox} if and only if the robot is currently seeing a mailbox with the onboard camera.
 The system treats propositions, such as \textbf{explore}, that require the robot to navigate in the workspace differently from the other simple robot actions, such as \textbf{drop}.
 In this example, we can map \textbf{explore} to behavior property \textbf{drive}, which represents a set of parametric behaviors as discussed in Section~\ref{sec:configuration-specifics}.
-In order to obtain joint values for behaviors at run-time, a path planner of the perception and planning subsystem (Section~\ref{sec:exploration} takes into account the robot goal as well as the current environment information from  our perception subsystem, and generates a collision-free path for the robot to follow.
+In order to obtain joint values for behaviors at run-time, a path planner in the perception and planning subsystem (Section~\ref{sec:exploration} takes into account the robot goal as well as the current environment information from  our perception subsystem, and generates a collision-free path for the robot to follow.
 Our system then converts this path to joint values, which are used to execute the \textbf{drive} behaviors.
 %in Specification~\ref{spec:experiment}, the proposition \textbf{arrived} is \lt if the robot arrives at its target location, which is determined by consulting the robot's position in the map generated by SLAM. The proposition \textbf{dropoffZone} is \lt if the robot is currently sensing a drop-off zone, which is determined by consulting both the map and color tracking functions.
 
@@ -625,8 +625,8 @@ Execution of the high-level controller begins at the predefined initial state in
 In the next state, for each robot proposition LTLMoP chooses a behavior from the design library which satisfies both the behavior properties and current environment type.
 For example, in Figure~\ref{fig:autSimple} we start in the top state and execute the \textbf{explore} program.
 If  the robot senses a mailbox, the value of \textbf{mailBox} is \lt and therefore the next state is the bottom right state. We then stop the \textbf{explore} program and execute the \textbf{driveToMailBox} program.
-Since self-reconfiguration is time-consuming, if there are multiple configurations capable of executing the selected behavior, the controller chooses the current robot configuration.
-If the robot is not currently in such a configuration, the controller instructs the robot to reconfigure to a randomly selected appropriate configuration.
+Since self-reconfiguration is time-consuming, the controller chooses to execute the selected behavior using the current robot configuration whenever possible.
+If the current configuration cannot execute the behavior, the controller instructs the robot to reconfigure to one that can, and if multiple appropriate configurations are available, the controller selects one at random.
 
 \begin{figure}
 \begin{center}
