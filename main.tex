@@ -405,17 +405,17 @@ Based on the environment characterization and target location, the algorithm als
 \subsection{Library of Configurations and Behaviors}
 \label{sec:configuration-specifics}
 %
-In our architecture, we encode the full set of capabilities of the modular robot, such as driving and picking up items, in a library of robot configurations and behaviors.
+In this work, we use the architecture introduced in \cite{Jing2016}. We encode the full set of capabilities of the modular robot, such as driving and picking up items, in a library of robot configurations and behaviors.
 Specifically, we label each entry with attributes that describe what it does, as well as the environment conditions under which it may be used. 
 This allows the high-level planner to match environment characterizations from the perception subsystem with configurations and behaviors that can perform the task in the current environment. 
 In the case of our mail delivery example, when the environment characterization algorithm reports that the mailbox is located in a ``stairs''-type environment, the high-level planner queries the library for configurations that can climb stairs.  
 Since the library indicates that current configuration is only capable of driving on flat ground, the high-level planner opts to reconfigure to the stair-climber configuration, and executes its \textbf{climbUp} behavior.
 
 Our implementation relies on a framework first presented in \cite{Jing2016}, which we summarize here.
-In this framework, a library entry is defined as $l = (C,B_C,P_e,P_b)$ where:
+In this framework, a library entry is defined as $l = (C,B_C,P_b,T_e)$ where:
 \begin{itemize}
 \item $C$ is the robot \emph{configuration}, specified by the connected structure of the modules.
-\item $B_C$ is a \emph{behavior} that $C$ can perform. A behavior is a controller that commands the robot to perform a specific action. 
+\item $B_C$ is a \emph{behavior} that $C$ can perform. A behavior is a controller that specifies commands for robot joints to perform a specific action. 
 \item $P_b$ is a set of \emph{behavior properties} that describes what $B_C$ does. 
 \item $T_e$ is a set of \emph{environment types} that describe the environments in which this library entry is suitable. 
 \end{itemize} 
@@ -424,16 +424,18 @@ When we specify tasks at the high level, we use behavior properties $P_b$ to des
 Environment types $T_e$ specify the conditions under which a behavior can be used.
 %, and are determined through the environment characterization processes described in Section~\ref{sec:exploration}.
 
-To create robot configurations and behaviors, we utilize a computer simulation program called VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}) presented in \cite{Jing2016}.
+To create robot configurations and behaviors, we utilize the VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}) simulator presented in \cite{Jing2016}.
 VSPARC allows users to design, simulate and test configurations and behaviors for the SMORES-EP robot system.
 Our system can then use the behavior designs to control the physical SMORES-EP robot to perform various actions.
 
 In \cite{Jing2016}, all robot behaviors are \textit{static} behaviors.
 That is, once users create a behavior in VSPARC, joint values for each module are fixed and cannot be modified during behavior execution.
 Static behaviors, such as a car with a fixed turning radius, do not provide enough maneuverability for the robot to navigate around unknown environment.
-In this work, we expand the type of behaviors in the library by using the \textit{parametric} behavior, which is first introduced in \cite{JingAURO2017}.
-Parametric behaviors have joint values that can be altered during run-time, and therefore allow a wider range of motions.
-Recall the mail delivery task, based on the sensed environment, the perception and exploration subsystem (Section~\ref{sec:exploration}) can a generate collision-free path, which is used to calculate real-time velocity for the robot to follow the path.
+In this work, we expand the type of behaviors in the library by using \textit{parametric} behaviors, which were first introduced in \cite{JingAURO2017}.
+Parametric behaviors have joint commands that can be altered during run-time, and therefore allow a wider range of motions.
+For example, a parametric behavior for a car configuration can be a driving action with two parameters: turning angle and driving velocity.  
+The system associates a parametric behavior with a program that generates values of joint commands based on environment information and current robot tasks.
+Recall the mail delivery task, based on the sensed environment, the perception and exploration subsystem (Section~\ref{sec:exploration}) can generate a collision-free path, which is used to calculate real-time velocity for the robot to follow the path.
 Our system then converts the robot velocity to joint values in parametric behaviors during run-time.
 
 The library introduced in \cite{Jing2016} has 57 robot configurations and 97 behaviors.
@@ -463,16 +465,16 @@ For example, if the perception system reports that the environment is of type ``
  \multirow{2}{6em}{Configuration} & Behavior & Environment \\
  & properties & Types \\
  \hline
- Car & \textbf{pickUp} & ``free'' \\\hline
- Car & \textbf{drop} & ``free'' \\\hline
- Car & \textbf{drive} & ``free''\\ \hline
- Proboscis & \textbf{pickUp} & ``tunnel'' or ``free''\\ \hline
- Proboscis & \textbf{drop} &``tunnel'' or ``free'' \\ \hline
- Proboscis & \textbf{highReach} & ``high''\\ \hline
+ \multirow{3}{*}{Car} & \textbf{pickUp} & ``free'' \\\cline{2-3}
+  & \textbf{drop} & ``free'' \\\cline{2-3}
+  & \textbf{drive} & ``free''\\ \hline
+ \multirow{3}{*}{Proboscis} & \textbf{pickUp} & ``tunnel'' or ``free''\\ \cline{2-3}
+  & \textbf{drop} &``tunnel'' or ``free'' \\ \cline{2-3}
+  & \textbf{highReach} & ``high''\\ \hline
  Scorpion & \textbf{drive} & ``free''\\ \hline
- Snake & \textbf{climbUp} & ``stairs''\\ \hline
- Snake & \textbf{climbDown} & ``stairs''\\ \hline
- Snake & \textbf{drop} & ``stairs'' or ``free''\\
+ \multirow{3}{*}{Snake} & \textbf{climbUp} & ``stairs''\\ \cline{2-3}
+  & \textbf{climbDown} & ``stairs''\\ \cline{2-3}
+  & \textbf{drop} & ``stairs'' or ``free''\\
  \hline
 \end{tabular}
 \caption{A library of robot behaviors}
@@ -494,7 +496,7 @@ When the high-level planner decides to use a new configuration during a task, th
 Determining the relative positions of modules during mobile self-reconfiguration is an important challenge. 
 %As discussed in Section~\ref{sec:related-work}, past systems have relied on offboard global positioning systems \cite{Paulos2015} or distributed approaches, in which sensors are mounted on each disconnected set of modules \cite{Yim2007}.  
 Our localization method is centralized, using a camera carried by the robot to track AprilTag fiducials mounted to individual modules.
-As discussed in Section~\ref{sec:hardware}, the camera provides a view of a $0.75m\times0.5m$ area on the ground in front of the sensor module.  
+As discussed in Section~\ref{sec:hardware}, the camera provides a view of a $0.75\text{m}\times0.5\text{m}$ area on the ground in front of the sensor module.  
 Within this area, our system provides pose for any module equipped with an AprilTag marker to perform reconfiguration. 
 %Within this area (which we call the \emph{reconfiguration zone}), any module equipped with an AprilTag marker can detach from the cluster, drive to another location, and reattach to the cluster, provided that both of its wheels were in contact with the ground in its starting position.% \TODO{Get accurate number for height and FoV.}
 
@@ -538,7 +540,7 @@ When a module disconnects from the cluster, the electro-permanent magnets on the
   \includegraphics[width=0.32\columnwidth]{images/reconf_detach.jpg}
   \includegraphics[width=0.32\columnwidth]{images/reconf_waypoint.jpg}
   \includegraphics[width=0.32\columnwidth]{images/reconf_attach.jpg}
-  \caption{Module movement during reconfiguration. (1) Left module detaches from cluster. (2) Module drives to waypoint, and spins to establish its heading. (2) Module drives straight in to dock point, and reattaches.}
+  \caption{Module movement during reconfiguration. (1) Left module detaches from cluster. (2) Module drives to waypoint, and spins to establish its heading. (3) Module drives straight in to dock point, and reattaches.}
   \label{fig:reconf}
 \end{center}
 \end{figure}
@@ -549,8 +551,8 @@ When a module disconnects from the cluster, the electro-permanent magnets on the
 \label{sec:high-level}
 In our architecture, the high-level planner subsystem provides a framework for users to specify tasks  at a high level using a formal language, and acts as the main, centralized controller that directs robot motion and actions based on the given tasks.  Users do not specify the configurations and behaviors used to complete tasks, but rather describe desired actions in terms of goals and outcomes.  Returning to our mail delivery example, the user indicates that the robot should \textbf{explore} until it locates the \textbf{mailBox}, then \textbf{drop} the object off.  The sequence of configurations and behaviors used to complete this task is not specified by the user, but instead determined by the high-level planner as it continually reacts to the sensed environment.
 
-The high-level planner treats each component of our system as a low-level atomic controller.
-At system level, the sensing components gather and process environment information for the high-level planner, which then take actions based on the given robot tasks by invoking appropriate low-level controllers.
+The high-level planner commands each component introduced in previous sections to collaboratively form a system for controlling our MSRR system to achieve complex tasks.
+At system level, the sensing components gather and process environment information for the high-level planner, which then takes actions based on the given robot tasks by invoking appropriate low-level behaviors.
 
 We abstract the robot and environment status as a set of Boolean propositions.
 In the mailbox example, the robot action \textbf{drop} is \lt if the robot is currently dropping an object to the mailbox (and \lf otherwise) and the environment proposition \textbf{mailBox} is \lt if the robot is currently sensing a mailbox (and \lf otherwise).
@@ -563,7 +565,7 @@ In the mail delivery example, our system can choose to do a drop action by execu
 Our system evaluate propositions related to the state of the environment using perception and environment characterization tools in Section~\ref{sec:exploration}. For example, we can map proposition \textbf{mailBox} to the color tracking function in our perception subsystem, which assign the value \lt to \textbf{mailBox} if and only if the robot is currently seeing a mailbox with the onboard camera.
 The system treats propositions, such as \textbf{explore}, that require the robot to navigate in the workspace differently from the other simple robot actions, such as \textbf{drop}.
 In this example, we can map \textbf{explore} to behavior property \textbf{drive}, which represents a set of parametric behaviors as discussed in Section~\ref{sec:configuration-specifics}.
-In order to obtain joint values for behaviors at run-time, a path planner takes into account the robot goal as well as the current environment information from  our perception subsystem, and generates a collision-free path for the robot to follow.
+In order to obtain joint values for behaviors at run-time, a path planner of the perception and planning subsystem (Section~\ref{sec:exploration} takes into account the robot goal as well as the current environment information from  our perception subsystem, and generates a collision-free path for the robot to follow.
 Our system then converts this path to joint values, which are used to execute the \textbf{drive} behaviors.
 %in Specification~\ref{spec:experiment}, the proposition \textbf{arrived} is \lt if the robot arrives at its target location, which is determined by consulting the robot's position in the map generated by SLAM. The proposition \textbf{dropoffZone} is \lt if the robot is currently sensing a drop-off zone, which is determined by consulting both the map and color tracking functions.
 
@@ -611,15 +613,26 @@ Our system then converts this path to joint values, which are used to execute th
 %\end{spec}
 
 
-Our implementation employs an existing framework called LTLMoP to automatically generate robot controllers from user-specified high-level instructions using formal methods \cite{DBLP:conf/iros/FinucaneJK10,DBLP:journals/trob/Kress-GazitFP09}.
+Our implementation employs an existing tool called LTLMoP (Linear Temporal Logic MissiOn Planning) to automatically generate robot controllers from user-specified high-level instructions using logic synthesis \cite{DBLP:conf/iros/FinucaneJK10,DBLP:journals/trob/Kress-GazitFP09}.
 The user describes the desired robot tasks with high-level specification over the set of abstracted robot and environment propositions that are mapped to behavior properties from the library.
 LTLMoP automatically converts the specification to logic formulas, which are then used to synthesize a robot controller that satisfies the given tasks (if one exists).
-The controller is in the form of a finite state automaton.
+The controller is in the form of a finite state automaton, as shown in Figure~\ref{fig:autSimple}.
 Each state specifies a set of high-level robot actions that need to be performed, and transitions between states include a set of environment propositions.
+Note some of propositions are omitted in Figure~\ref{fig:autSimple} for clarity.
 Execution of the high-level controller begins at the predefined initial state in the finite state automaton. In each iteration, LTLMoP determines the values of all environment propositions by calling the corresponding sensing program. Then, LTLMoP chooses the next state in the finite state machine by taking the transition that matches the current value of all environment propositions. 
 In the next state, for each robot proposition LTLMoP chooses a behavior from the design library which satisfies both the behavior properties and current environment type.
-Since self-reconfiguration is time-consuming, if there are multiple configurations capable of executing the selected behavior, the controller minimizes times for reconfiguration by biasing towards the current robot configuration.
-If the robot is not currently in a capable configuration, the controller commands the robot to reconfigure to a randomly selected capable configuration.
+For example, in Figure~\ref{fig:autSimple} we start in the top state and execute the \textbf{explore} program.
+If  the robot senses a mailbox, the value of \textbf{mailBox} is \lt and therefore the next state is the bottom right state. We then stop the \textbf{explore} program and execute the \textbf{driveToMailBox} program.
+Since self-reconfiguration is time-consuming, if there are multiple configurations capable of executing the selected behavior, the controller chooses the current robot configuration.
+If the robot is not currently in such a configuration, the controller instructs the robot to reconfigure to a randomly selected appropriate configuration.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.4\textwidth]{images/autSimple.png}
+\caption{An example of a synthesized controller automaton. A proposition with ``!'' has a value of \lf, and \lt otherwise.}
+\label{fig:autSimple}
+\end{center}
+\end{figure}
 
 %Since the synthesized high-level controller is a discrete finite state automaton, we need to implement it continuously in order to control the robot to satisfy the given task.
 %Execution of the high-level controller begins at the predefined initial state in the finite state automaton. In each iteration, the values of all environment propositions are determined by calling the corresponding sensing program. Then, we determine the next state in the finite state machine by taking the transition that matches the current value of all environment propositions. 
@@ -627,8 +640,7 @@ If the robot is not currently in a capable configuration, the controller command
 %The system then maps the system proposition specified in the next state to its set of behavior properties, and selects a behavior from the design library which satisfies both the behavior properties and current environment properties.
 %If the robot is not currently in a configuration capable of executing the selected behavior, the system commands the robot to reconfigure. Finally, the behavior is executed, and the program continues on to the next iteration. 
 
-%For example, in Fig.~\ref{fig:automaton} we start in the top state and execute the ``explore'' program.
-%If  the robot senses a pink object, the value of ``pinkObject'' is \lt and therefore the next state is the bottom right state. We then stop the ``explore'' program and execute the ``driveToObject'' program.
+
 
 
 %     ______                     _                      __
