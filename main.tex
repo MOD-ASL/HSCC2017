@@ -889,6 +889,7 @@ Human Error & 4 & 16.7\% \\
 \end{tabular}
 \caption{Reasons for experiment failure.}
 \label{table:errors}
+\vspace{-0.7cm}
 \end{table}
 %
 Our implementation is vulnerable to small errors, which could cause the task to fail. 
@@ -906,7 +907,8 @@ loop, and are significantly less vulnerable to these kinds of errors.
 However, these behaviors required much more up-front development effort.
 
 %Lack of robustness is  a weakness of the system architecture.
-The high-level planner assumes all underlying components are reliable and robust, so if any low-level component fails, the high-level planner might behave unexpected and the entire task may fail. In the future, we will explore high-level strategies for error recovery: for example, recognizing that a module has failed and adapting the approach so that task will not fail entirely. \TODO{From Mark C: Rather than use in the future, which you should not do in journal papers, can we reference a few of our papers and say that further development, with papers A, B and C would likely improve robustness dramatically. } 
+The high-level planner assumes all underlying components are reliable and robust, so if any low-level component fails, the high-level planner might behave unexpected and the entire task may fail. In the future, we will explore high-level strategies for error recovery: for example, recognizing that a module has failed and adapting the approach so that task will not fail entirely.
+\TODO{From Mark C: Rather than use in the future, which you should not do in journal papers, can we reference a few of our papers and say that further development, with papers A, B and C would likely improve robustness dramatically. } 
 %
 \subsection{Challenges for Future Systems}
 %
@@ -957,33 +959,42 @@ Components of this system include novel controller synthesis, environment charac
 %% Use plainnat to work nicely with natbib. 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
-
-
+%
+\newcommand{\biovspace}{-1.5cm}
+%
+\vspace{\biovspace}
 \begin{IEEEbiography}
     [{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{images/jonathan.jpg}}]{Jonathan Daudelin a.k.a The Pizza Shredder}
 He shreds pizza...
+{\color{red}is currently a Ph.D candidate in the Verifiable Robotics Research Group at Cornell University. His research focuses on synthesizing controllers from high-level robot tasks with modular robot systems, and improving the optimality of the correct-by-construction controllers. He received the Best Systems Paper Award at RSS 2016, in addition to being a finalist for the Best Paper and the Best Student Paper awards.}
 \end{IEEEbiography}
-
+\vspace{\biovspace}
+%
 % if you will not have a photo at all:
-\begin{IEEEbiographynophoto}{Gangyuan Jing}
+\begin{IEEEbiography}
+[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{images/jing.jpg}}]{Gangyuan Jing}
 is currently a Ph.D candidate in the Verifiable Robotics Research Group at Cornell University. His research focuses on synthesizing controllers from high-level robot tasks with modular robot systems, and improving the optimality of the correct-by-construction controllers. He received the Best Systems Paper Award at RSS 2016, in addition to being a finalist for the Best Paper and the Best Student Paper awards.
-\end{IEEEbiographynophoto}
-
+\end{IEEEbiography}
+\vspace{\biovspace}
+%
 % insert where needed to balance the two columns on the last page with
 % biographies
 %\newpage
-
-\begin{IEEEbiographynophoto}{Tarik Tosun}
-received the B.S.E. degree in Mechanical and Aerospace Engineering from Princeton University, Princeton, NJ, USA in 2012. Currently, he is working towards the Ph.D. degree at the University of Pennsylvania, Philadelphia, PA, USA in the Modlab, a part of the GRASP Laboratory. His interests include modular robots, and automatic synthesis of robot designs from task requirements. Mr. Tosun is a National Science Foundation Graduate Research Fellow and a member of Tau Beta Pi. He received the Best Systems Paper Award at RSS 2016, in addition to being a finalist for the Best Paper and the Best Student Paper awards.
-\end{IEEEbiographynophoto}
-
-\begin{IEEEbiographynophoto}{Mark Yim}
+\begin{IEEEbiography}
+    [{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{images/tosun.jpg}}]{Tarik Tosun}
+received the B.S.E. degree in Mechanical and Aerospace Engineering from Princeton University in 2012. Currently, he is working towards the Ph.D. degree at the University of Pennsylvania in the Modlab, a part of the GRASP Laboratory. His interests include modular robots, and automatic synthesis of robot designs from task requirements. Mr. Tosun is a National Science Foundation Graduate Research Fellow and a member of Tau Beta Pi. He received Best Systems Paper at RSS 2016, and was a finalist for Best Paper and Best Student Paper. In 2017, he received the John A. Goff Award, awarded annually to a Ph.D. student in the University of Pennsylvania MEAM department on the basis of scholarship, resourcefulness, and leadership.
+\end{IEEEbiography}
+\vspace{\biovspace}
+%
+\begin{IEEEbiography}
+[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{images/yim.jpg}}]{Mark Yim}
 is a Professor in the Mechanical Engineering and Applied Mechanics Department at the University of Pennsylvania.  Prior to Penn, he was Principal Scientist at the Palo Alto Research Center (formerly Xerox PARC).  His group designs and builds small flying robots, self-assembling structures, and modular self-reconfigurable robots, and has demonstrated robots that can transform into different shapes, jump, climb, manipulate objects and reassemble themselves.  Recently, his work has followed a theme of simplicity and low cost.  His other research interests include product design, reactive art and architecture, origami, snake locomotion, urban search and rescue and mobile manipulation.  Honors include the Lindback Award for Distinguished Teaching (UPenn's highest teaching honor); induction as a World Technology Network Fellow; and induction to MIT's TR100 in 1999.  He has over 200 publications and patents issued (perhaps most prominent are related to the video game vibration control which resulted in over US\$100 million in litigation and settlements) and has started two companies. He received the Best Systems Paper Award at RSS 2016, in addition to being a finalist for the Best Paper and the Best Student Paper awards.
-\end{IEEEbiographynophoto}
-
-\begin{IEEEbiographynophoto}{Hadas Kress-Gazit}
+\end{IEEEbiography}
+\vspace{\biovspace}
+%
+\begin{IEEEbiography}
+[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{images/kress-gazit.jpg}}]{Hadas Kress-Gazit}
 received her Ph.D. in Electrical and Systems Engineering from the University of Pennsylvania in 2008. She is currently an Associate Professor at the Sibley School of Mechanical and Aerospace Engineering at Cornell University. Her research focuses on creating verifiable robot controllers for complex high-level tasks using logic, verification methods, synthesis, hybrid systems theory and computational linguistics. She is a recipient of the NSF CAREER award in 2010 and was a finalist for the Best Student Paper Award at ICRA 2007 and a finalist for the Best Paper award at IROS 2007. She received the Best Systems Paper Award at RSS 2016, in addition to being a finalist for the Best Paper and the Best Student Paper awards.
-\end{IEEEbiographynophoto}
-
-
+\end{IEEEbiography}
+%
 \end{document}
