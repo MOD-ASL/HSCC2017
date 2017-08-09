@@ -907,8 +907,10 @@ loop, and are significantly less vulnerable to these kinds of errors.
 However, these behaviors required much more up-front development effort.
 
 %Lack of robustness is  a weakness of the system architecture.
-The high-level planner assumes all underlying components are reliable and robust, so if any low-level component fails, the high-level planner might behave unexpected and the entire task may fail. In the future, we will explore high-level strategies for error recovery: for example, recognizing that a module has failed and adapting the approach so that task will not fail entirely.
-\TODO{From Mark C: Rather than use in the future, which you should not do in journal papers, can we reference a few of our papers and say that further development, with papers A, B and C would likely improve robustness dramatically. } 
+The high-level planner assumes all underlying components are reliable and robust, so if any low-level component fails, the high-level planner might behave unexpected and the entire task may fail. Further development, with the failure-recovery framework introduced in \cite{Maniatopoulos16icra} would likely improve robustness of the system dramatically.
+
+%In the future, we will explore high-level strategies for error recovery: for example, recognizing that a module has failed and adapting the approach so that task will not fail entirely.
+%\TODO{From Mark C: Rather than use in the future, which you should not do in journal papers, can we reference a few of our papers and say that further development, with papers A, B and C would likely improve robustness dramatically. } 
 %
 \subsection{Challenges for Future Systems}
 %
