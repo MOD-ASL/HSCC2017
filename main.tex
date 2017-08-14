@@ -454,7 +454,7 @@ up and dropping objects in a ``free'' environment. In addition, the ``Car'' conf
 
 The ``Proboscis'' configuration shown in Figure~\ref{fig:pink_grab} has
 a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects or reaching up in a ``high'' environment to drop items.
-However, the locomotion ability of this configuration is limited to forward/backward
+However, the locomotion behaviors available for this configuration are limited to forward/backward
 motion, making it unsuitable for general navigation.
 
 This library-based framework allows users to express desired robot actions in an abstract way by specifying behavior properties. For example, if a task specifies that the robot should execute a behavior with the \textbf{drop} property, the system could choose to use either the Car or Proboscis configurations to perform the action, since both have behaviors with the \textbf{drop} property.
@@ -776,7 +776,7 @@ During the experiment, the high-level planner used the library of configurations
 %
 Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available as an attachment to this paper. The robot starts in the ``Car'' configuration. The starting location prevents the robot from seeing the objects initially, forcing it to explore the environment. After a period of exploration, the robot locates the pink object. The characterization algorithm correctly classifies the surrounding environment as a ``tunnel'' type, and gives this classification to the high-level planner. Based on this classification, the high-level planner directs the robot to navigate in front of the object and reconfigure to the ``Proboscis'' configuration. The ``Proboscis'' then uses its long arm to reach into the tunnel and pull the object out into the open.
 
- The ``Proboscis'' can only drive forwards and backwards (it cannot turn), so the robot concludes that it must reconfigure back to the ``Car'' to drive the object to the drop-off zone.  To do so, the robot drops the object, reconfigures, and picks the object back up. The ``Car'' then navigates to and drops off the object at the drop-off zone, which the robot previously located during exploration and recorded in the global map built by the SLAM algorithm.
+ The ``Proboscis'' only has behaviors to drive forwards and backwards (it has no turning behavior), so the robot concludes that it must reconfigure back to the ``Car'' to drive the object to the drop-off zone.  To do so, the robot drops the object, reconfigures, and picks the object back up. The ``Car'' then navigates to and drops off the object at the drop-off zone, which the robot previously located during exploration and recorded in the global map built by the SLAM algorithm.
 
 After delivering the pink object, the robot navigates directly to the green object, discovered while dropping off the pink object. The robot correctly determines that the green object is in a ``free'' environment, and picks it up without reconfiguring. The robot finishes the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows a volumetric map of the environment generated as the robot explores and delivers objects. The robot successfully completed all tasks in the experiment in approximately 26 minutes.
 
