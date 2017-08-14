@@ -102,7 +102,7 @@ NY, 14850.}% <-this % stops a space
 
 \begin{abstract}
 
-The theoretical ability of modular robots to reconfigure in response to \textit{a priori} unknown environments has frequently been cited as an advantage, but has never been experimentally demonstrated.
+The theoretical ability of modular robots to reconfigure in response to complex tasks in \textit{a priori} unknown environments has frequently been cited as an advantage, but has never been experimentally demonstrated.
 For the first time, we present a system that integrates perception, high-level mission planning, and modular robot hardware, allowing a modular robot to autonomously reconfigure in response to an \textit{a priori} unknown environment in order to complete high-level tasks.
 Three hardware experiments validate the system, and demonstrate a modular robot autonomously exploring, reconfiguring, and manipulating objects to complete high-level tasks in unknown environments.
 
@@ -130,8 +130,8 @@ Over the past three decades, dozens of MSRR systems have been built \cite{Yim200
 
 Some of the most challenging problem domains for robots are those in which they must autonomously complete a task in an unknown environment. Search-and-rescue problems fall into this category: for example, a robot enters a collapsed building to locate survivors without knowing what kind of terrain it will need to traverse once inside.
 
-The theoretical ability of modular robots to reconfigure in response to multi-part tasks in unknown environments has been frequently cited as an advantage \cite{Yim2007a}, but has never been experimentally demonstrated.
-For the first time, this paper presents a system integrating perception, high-level mission planning, and modular robot hardware, allowing a modular robot to autonomously complete high-level tasks by reconfiguring in response to its perceived environment.
+The theoretical ability of modular robots to reconfigure in response to complex tasks (involving manipulation and locomotion) in unknown environments has been frequently cited as an advantage \cite{Yim2007a}, but has never been experimentally demonstrated.
+For the first time, this paper presents a system integrating perception, high-level mission planning, and modular robot hardware, allowing a modular robot to autonomously complete complex high-level tasks by reconfiguring in response to its perceived environment.
 We validate our system in three hardware experiments.  Based on a high-level task specification, a modular robot autonomously explores, decides when and how to reconfigure, and manipulates objects to complete its task.
 These validations demonstrate mature technology to a level not seen in the community, and fill an experimental gap in the field, showing that reconfiguration can provide an advantage in practice, not just in theory.
 
@@ -216,7 +216,7 @@ Our system goes beyond existing work by using self-reconfiguration capabilities 
 %
 Our system is capable of operating in home- or office-like environments with arbitrary static obstacles. Given a high-level task, our system allows the robot to enter an unknown environment (with no \textit{a priori} knowledge of the map), autonomously explore, visually locate objects and regions of interest, and reactively employ manipulation and movement behaviors to interact with objects and obstacles. The system processes RGB-D sensor data to characterize features of the environment, and uses this information to autonomously reconfigure when it determines that a particular configuration is needed.
 %Given a high-level specification of the desired task, our system enables the robot to explore the environment, gather information, and appropriately interact with the environment and objects in order to achieve the task objectives.
-While other systems have demonstrated reconfiguration, ours is the first to autonomously complete high-level, multi-part tasks by reconfiguring to appropriate morphologies in response to the perceived environment.
+While other systems have demonstrated reconfiguration, ours is the first to autonomously complete high-level, complex tasks by reconfiguring to appropriate morphologies in response to the perceived environment.
 %While other systems have demonstrated reconfiguration, ours is the first to do so in response to perceived environments in order to complete tasks.
 
 For example, consider the following mail delivery task: Explore the environment, locate a mailbox, and drop an object in the mailbox.  To complete this task, the robot explores and locates the mailbox. The system recognizes that in order to reach the mailbox, it needs to ascend a flight of stairs. In response, it chooses to reconfigure into a stair-climbing configuration, which successfully climbs the stairs and delivers the object.  Afterwards, the robot descends and reconfigures back into a driving configuration, to return to home base.
@@ -986,8 +986,7 @@ is currently a Ph.D. candidate in the Verifiable Robotics Research Group at Corn
 % biographies
 %\newpage
 \begin{IEEEbiography}
-    [{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{images/tosun.jpg}}]{Tarik Tosun}
-received the B.S.E. degree in Mechanical and Aerospace Engineering from Princeton University in 2012. Currently, he is working towards the Ph.D. degree at the University of Pennsylvania in the Modlab, a part of the GRASP Laboratory. His interests include modular robots, and automatic synthesis of robot designs from task requirements. Mr. Tosun is a National Science Foundation Graduate Research Fellow and a member of Tau Beta Pi. He received Best Systems Paper at RSS 2016, and was a finalist for Best Paper and Best Student Paper. In 2017, he received the John A. Goff Award, awarded annually to a Ph.D. student in the University of Pennsylvania MEAM department on the basis of scholarship, resourcefulness, and leadership.
+    [{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{images/tosun.jpg}}]{Tarik Tosun} is a Ph.D. student in the University of Pennsylvania department of Mechanical Engineering and Applied Mechanics. His interests include modular robots and automatic synthesis of robot designs from task requirements. Mr. Tosun is an NSF Graduate Research Fellow, and a member of Tau Beta Pi. He received Best Systems Paper at RSS 2016. In 2017, he received the John A. Goff Award, awarded annually to a Ph.D. student in the University of Pennsylvania MEAM department on the basis of scholarship, resourcefulness, and leadership.
 \end{IEEEbiography}
 \vspace{\biovspace}
 %
