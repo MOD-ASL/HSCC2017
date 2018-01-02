@@ -1,22 +1,53 @@
-%
-                                                                   % RSS 2016 High Level Control of Modular Robots
+%pdflatex
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%                    Included packages                 %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%  Included by IEEE:
+% \documentclass[journal]{IEEEtran}
+% \usepackage{times}
 
-\documentclass[journal]{IEEEtran}
-\usepackage{times}
-
-% numbers option provides compact numerical references in the text. 
-\usepackage[numbers]{natbib}
-\usepackage{multicol}
-\usepackage[bookmarks=true]{hyperref}
+% % numbers option provides compact numerical references in the text. 
+% \usepackage[numbers]{natbib}
+% \usepackage{multicol}
+% \usepackage[bookmarks=true]{hyperref}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Included by science:
+\documentclass[12pt]{article}
+
+% Users of the {thebibliography} environment or BibTeX should use the
+% scicite.sty package, downloadable from *Science* at
+% http://www.sciencemag.org/authors/preparing-manuscripts-using-latex 
+% This package should properly format in-text
+% reference calls and reference-list numbers.
+
+\usepackage{scicite}
+\usepackage{times}
+
+% The preamble here sets up a lot of new/revised commands and
+% environments.  It's annoying, but please do *not* try to strip these
+% out into a separate .sty file (which could lead to the loss of some
+% information when we convert the file to other formats).  Instead, keep
+% them in the preamble of your main LaTeX source file.
+% The following parameters seem to provide a reasonable page setup.
+
+\topmargin 0.0cm
+\oddsidemargin 0.2cm
+\textwidth 16cm 
+\textheight 21cm
+\footskip 1.0cm
+%
+\newenvironment{sciabstract}{%
+\begin{quote} \bf}
+{\end{quote}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 %%%   Additional packages:
 
+\usepackage[bookmarks=true]{hyperref}
 \usepackage{pdfsync}
 \usepackage[dvipsnames,table]{xcolor}
 \usepackage{mathtools}
@@ -69,59 +100,102 @@
 \newcommand{\reqnomode}{\tagsleft@false}
 \makeatother
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% More science preamble:
+% Include your paper's title here
+\title{An Integrated System for Perception-Driven Autonomy with Modular Robots} 
 
-\pdfinfo{
-   /Author (Mystery Authors)
-   /Title  () %TODO add title
-   /CreationDate ()
-   /Subject ()
-   /Keywords ()
+
+% Place the author information here.  Please hand-code the contact
+% information and notecalls; do *not* use \footnote commands.  Let the
+% author contact information appear immediately below the author names
+% as shown.  We would also prefer that you don't change the type-size
+% settings shown here.
+\author
+{Jonathan Daudelin\textsuperscript{*}, Gangyuan Jing\textsuperscript{*}, Tarik Tosun\textsuperscript{*}, \\ Mark Yim, Hadas Kress-Gazit, and Mark Campbell\\
+\\
+\normalsize{Daudelin, Jing, Kress-Gazit, and Campbell: Department of Mechanical and Aerospace Engineering,}\\
+\normalsize{Cornell University, Ithaca NY, USA}\\
+\normalsize{Tosun and Yim: Department of Mechanical Engineering and Applied Mechanics, }\\
+\normalsize{University of Pennsylvania, Philadelphia PA, USA}\\
+\\
+\normalsize{\textsuperscript{*} J. Daudelin, G. Jing, and T. Tosun contributed equally to this work.} \\
+\normalsize{Address correspondence to: Jonathan Daudelin, jd746@cornell.edu} \\
 }
+
+% Include the date command, but leave its argument blank.
+
+\date{}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%                     Main document                        %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{graphicx}
-\IEEEoverridecommandlockouts
+%\IEEEoverridecommandlockouts
+
 \begin{document}
-\bstctlcite{IEEEexample:BSTcontrol} % for automatic et al in bibliography
 
-\title{An Integrated System for Perception-Driven Autonomy with Modular Robots}
-\author{Jonathan~Daudelin\textsuperscript{*},~\IEEEmembership{Member,~IEEE,}
-        Gangyuan~Jing\textsuperscript{*},~\IEEEmembership{Member,~IEEE,}
-        Tarik~Tosun\textsuperscript{*},~\IEEEmembership{Member,~IEEE,}
-        Mark~Yim,~\IEEEmembership{Member,~IEEE,}
-        Hadas~Kress-Gazit,~\IEEEmembership{Senior Member,~IEEE,}
-        and~Mark~Campbell,~\IEEEmembership{Senior Member,~IEEE}% <-this % stops a space
-\thanks{J.Daudelin, G. Jing, M. Campbell, and H. Kress-Gazit are with the Sibley School of Mechanical and Aerospace Engineering, Cornell University, Ithaca,
-NY, 14850.}% <-this % stops a space
-\thanks{T. Tosun and M. Yim are with the Mechanical Engineering and Applied Mechanics Department, University of Pennsylvania, Philadelphia, PA, 19104.}% <-this % stops a space
-\thanks{\textsuperscript{*}J. Daudelin, G. Jing, and T. Tosun contributed equally to this work.}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % Old IEEE title stuff:
+% \bstctlcite{IEEEexample:BSTcontrol} % for automatic et al in bibliography
+
+% \title{An Integrated System for Perception-Driven Autonomy with Modular Robots}
+% \author{Jonathan~Daudelin\textsuperscript{*},~\IEEEmembership{Member,~IEEE,}
+%         Gangyuan~Jing\textsuperscript{*},~\IEEEmembership{Member,~IEEE,}
+%         Tarik~Tosun\textsuperscript{*},~\IEEEmembership{Member,~IEEE,}
+%         Mark~Yim,~\IEEEmembership{Member,~IEEE,}
+%         Hadas~Kress-Gazit,~\IEEEmembership{Senior Member,~IEEE,}
+%         and~Mark~Campbell,~\IEEEmembership{Senior Member,~IEEE}% <-this % stops a space
+% \thanks{J.Daudelin, G. Jing, M. Campbell, and H. Kress-Gazit are with the Sibley School of Mechanical and Aerospace Engineering, Cornell University, Ithaca,
+% NY, 14850.}% <-this % stops a space
+% \thanks{T. Tosun and M. Yim are with the Mechanical Engineering and Applied Mechanics Department, University of Pennsylvania, Philadelphia, PA, 19104.}% <-this % stops a space
+% \thanks{\textsuperscript{*}J. Daudelin, G. Jing, and T. Tosun contributed equally to this work.}}
 
 
-\maketitle
+% \maketitle
 
-\begin{abstract}
+% \begin{abstract}
 
+% The theoretical ability of modular robots to reconfigure in response to complex tasks in \textit{a priori} unknown environments has frequently been cited as an advantage, but has never been experimentally demonstrated.
+% For the first time, we present a system that integrates perception, high-level mission planning, and modular robot hardware, allowing a modular robot to autonomously reconfigure in response to an \textit{a priori} unknown environment in order to complete high-level tasks.
+% Three hardware experiments validate the system, and demonstrate a modular robot autonomously exploring, reconfiguring, and manipulating objects to complete high-level tasks in unknown environments.
+
+% %We present an integrated system architecture that allows self-reconfigurable modular robots to autonomously perform high-level tasks in unknown environments, using perception and reconfiguration to recognize and adapt to environment obstacles and constraints.  By performing three hardware experiments, we demonstrate that our implementation of the system is capable of autonomously completing different object manipulation tasks in different environments without human changes to the system.
+
+% We present system architecture, software and hardware in a general framework that enables modular robots to solve tasks in unknown environments using autonomous, reactive reconfiguration. The physical robot is composed of modules that support multiple robot configurations. An onboard 3D sensor provides information about the environment and informs exploration, reconfiguration decision making and feedback control.  A centralized high-level mission planner uses information from the environment and the user-specified task description to autonomously compose low-level controllers to perform locomotion, reconfiguration, and other behaviors. A novel, centralized self-reconfiguration method is used to change robot configurations as needed.
+% %This is the first modular robot system that uses perception-driven reconfiguration to intelligently adapt to \textit{a priori} unknown environments to perform complex tasks.
+
+% \end{abstract}
+
+% \IEEEpeerreviewmaketitle
+% End of IEEE stuff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Science titling
+% Double-space the manuscript.
+\baselineskip24pt
+% Make the title.
+\maketitle 
+
+% Place your abstract within the special {sciabstract} environment.
+
+\begin{sciabstract}
+%
 The theoretical ability of modular robots to reconfigure in response to complex tasks in \textit{a priori} unknown environments has frequently been cited as an advantage, but has never been experimentally demonstrated.
 For the first time, we present a system that integrates perception, high-level mission planning, and modular robot hardware, allowing a modular robot to autonomously reconfigure in response to an \textit{a priori} unknown environment in order to complete high-level tasks.
 Three hardware experiments validate the system, and demonstrate a modular robot autonomously exploring, reconfiguring, and manipulating objects to complete high-level tasks in unknown environments.
 
-%We present an integrated system architecture that allows self-reconfigurable modular robots to autonomously perform high-level tasks in unknown environments, using perception and reconfiguration to recognize and adapt to environment obstacles and constraints.  By performing three hardware experiments, we demonstrate that our implementation of the system is capable of autonomously completing different object manipulation tasks in different environments without human changes to the system.
+We present system architecture, software and hardware in a general framework that enables modular robots to solve tasks in unknown environments using autonomous, reactive reconfiguration. The physical robot is composed of modules that support multiple robot configurations. An onboard 3D sensor provides information about the environment and informs exploration, reconfiguration decision making and feedback control.  A centralized high-level mission planner uses information from the environment and the user-specified task description to autonomously compose low-level controllers to perform locomotion, reconfiguration, and other behaviors. A novel, centralized self-reconfiguration method is used to change robot configurations as needed.
+%
+\end{sciabstract}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-We present system architecture, software and hardware in a general framework that enables modular robots to solve tasks in unknown environments using autonomous, reactive reconfiguration.  
-The physical robot is composed of modules that support multiple robot configurations. An onboard 3D sensor provides information about the environment and informs exploration, reconfiguration decision making and feedback control.  A centralized high-level mission planner uses information from the environment and the user-specified task description to autonomously compose low-level controllers to perform locomotion, reconfiguration, and other behaviors. A novel, centralized self-reconfiguration method is used to change robot configurations as needed.
-%This is the first modular robot system that uses perception-driven reconfiguration to intelligently adapt to \textit{a priori} unknown environments to perform complex tasks.
-
-\end{abstract}
-
-\IEEEpeerreviewmaketitle
-
-       %     ____      __                 __           __  _
-       %    /  _/___  / /__________  ____/ /_  _______/ /_(_)___  ____
-       %    / // __ \/ __/ ___/ __ \/ __  / / / / ___/ __/ / __ \/ __ \
-       %  _/ // / / / /_/ /  / /_/ / /_/ / /_/ / /__/ /_/ / /_/ / / / /
-       % /___/_/ /_/\__/_/   \____/\__,_/\__,_/\___/\__/_/\____/_/ /_/
+%     ____      __                 __           __  _
+%    /  _/___  / /__________  ____/ /_  _______/ /_(_)___  ____
+%    / // __ \/ __/ ___/ __ \/ __  / / / / ___/ __/ / __ \/ __ \
+%  _/ // / / / /_/ /  / /_/ / /_/ / /_/ / /__/ /_/ / /_/ / / / /
+% /___/_/ /_/\__/_/   \____/\__,_/\__,_/\___/\__/_/\____/_/ /_/
 
 \section{Introduction} \label{sec:introduction}
 %
@@ -964,48 +1038,7 @@ Components of this system include novel controller synthesis, environment charac
        % /_/ |_|\___/_/  \___/_/   \___/_/ /_/\___/\___/____/
 
 %% Use plainnat to work nicely with natbib. 
-\bibliographystyle{IEEEtran}
+\bibliographystyle{Science}
 \bibliography{references}
-%
-\newcommand{\biovspace}{-1.5cm}
-%
-\vspace{\biovspace}
-\begin{IEEEbiography}
-[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{images/daudelin.jpg}}]{Jonathan Daudelin}
-received his B.S. in Mechanical Engineering from New Jersey Institute of Technology in 2013, graduating with highest honors. He is currently a Ph.D. candidate at Cornell University, working in the Autonomous Systems Lab. His research focuses on active sensing and planning for information gain in autonomous robots. He received the National Science Foundation Graduate Research Fellowship, and is a member of Tau Beta Pi.
-\end{IEEEbiography}
-\vspace{\biovspace}
-%
-% if you will not have a photo at all:
-\begin{IEEEbiography}
-[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{images/jing.jpg}}]{Gangyuan Jing}
-is currently a Ph.D. candidate in the Verifiable Robotics Research Group at Cornell University. His research focuses on synthesizing controllers from high-level robot tasks with modular robot systems, and improving the optimality of the correct-by-construction controllers. He received the Best Systems Paper Award at RSS 2016, in addition to being a finalist for the Best Paper and the Best Student Paper awards.
-\end{IEEEbiography}
-\vspace{\biovspace}
-%
-% insert where needed to balance the two columns on the last page with
-% biographies
-%\newpage
-\begin{IEEEbiography}
-[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{images/tosun.jpg}}]{Tarik Tosun} is a Ph.D. student in the University of Pennsylvania department of Mechanical Engineering and Applied Mechanics. His interests include modular robots and automatic synthesis of robot designs from task requirements. Mr. Tosun is an NSF Graduate Research Fellow, and a member of Tau Beta Pi. He received Best Systems Paper at RSS 2016, in addition to being a finalist for best paper and best student paper. In 2017, he received the John A. Goff Award, awarded annually to a Ph.D. student in the Univ. of Pennsylvania MEAM department on the basis of scholarship, resourcefulness, and leadership.
-\end{IEEEbiography}
-\vspace{\biovspace}
-%
-\begin{IEEEbiography}
-[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{images/yim.jpg}}]{Mark Yim}
-Mark Yim is a Professor in the Mechanical Engineering and Applied Mechanics Department at the University of Pennsylvania. Prior to Penn, he was Principal Scientist at the Palo Alto Research Center (formerly Xerox PARC). His group designs and builds small flying robots, self-assembling structures and modular self-reconfigurable robots. Recently, his work has followed a theme of simplicity and low cost. Honors include the Lindback Award for Distinguished Teaching (UPenn’s highest teaching honor); induction as a World Technology Network Fellow; and induction to MIT’s TR100 in 1999. He has over 200 publications and patents issued (perhaps most prominent are related to the video game vibration control which resulted in over US\$100 million in litigation and settlements) and has started two companies. He received the Best Systems Paper Award at RSS 2016, in addition to being a finalist for the Best Paper and the Best Student Paper awards.
-\end{IEEEbiography}
-\vspace{\biovspace}
-%
-\begin{IEEEbiography}
-[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{images/kress-gazit.jpg}}]{Hadas Kress-Gazit}
-received her Ph.D. in Electrical and Systems Engineering from the University of Pennsylvania in 2008. She is currently an Associate Professor at the Sibley School of Mechanical and Aerospace Engineering at Cornell University. Her research focuses on creating verifiable robot controllers for complex high-level tasks using logic, verification methods, synthesis, hybrid systems theory and computational linguistics. She is a recipient of the NSF CAREER award in 2010 and was a finalist for the Best Student Paper Award at ICRA 2007 and a finalist for the Best Paper award at IROS 2007. She received the Best Systems Paper Award at RSS 2016, in addition to being a finalist for the Best Paper and the Best Student Paper awards.
-\end{IEEEbiography}
-\vspace{\biovspace}
-%
-\begin{IEEEbiography}
-[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{images/campbell.jpg}}]{Mark Campbell}
-received the B.S. degree in mechanical engineering from Carnegie Mellon University, Pittsburgh, PA, USA, in 1990, and the M.S. and Ph.D. degrees in control and estimation from the Massachusetts Institute of Technology, Cambridge, MA, USA, in 1993 and 1996, respectively. He is a Professor and the S. C. Thomas Sze Director of Mechanical and Aerospace Engineering with Cornell University, Ithaca, NY, USA. His research interests include estimation and control of autonomous vehicles. Dr. Campbell  received  a  National  Aeronautics  and  Space  Administration (NASA) Award for the Middeck Active Control Experiment flown on STS-67, and Best Paper awards from the American Institute of Aeronautics and Astronautics (AIAA), the Frontiers in Education, and teaching awards from Cornell University, the University of Washington, and the American Society for Engineering Education. He is an Associate Fellow of the AIAA, an Australian Research Council International Fellow, and an Associate Director of the American Automatic Control Council Board.
-\end{IEEEbiography}
 %
 \end{document}
