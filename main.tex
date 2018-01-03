@@ -57,6 +57,7 @@
 \usepackage{subcaption}
 \usepackage{multirow}
 \usepackage{float}
+%\usepackage{endfloat}
 \usepackage{amsmath}
 \usepackage{nccmath} % for fleqn
 \usepackage{algorithm}
@@ -197,6 +198,11 @@ We present system architecture, software and hardware in a general framework tha
 %  _/ // / / / /_/ /  / /_/ / /_/ / /_/ / /__/ /_/ / /_/ / / / /
 % /___/_/ /_/\__/_/   \____/\__,_/\__,_/\___/\__/_/\____/_/ /_/
 
+
+%\listoffigures
+
+%\listoftables
+
 \section{Introduction} \label{sec:introduction}
 %
 Modular self-reconfigurable robot (MSRR) systems are composed of a number of simple repeated robot elements (called \emph{modules}) that connect together to form larger robotic structures. These robots can \emph{self-reconfigure}, changing their shape (\emph{i.e.} the connective arrangement of the modules) to meet the needs of the task at hand.
@@ -286,7 +292,7 @@ Recent work includes a system which integrates many low-level capabilities of a 
 % Traditional systems and wrapup statement
 Our system goes beyond existing work by using self-reconfiguration capabilities of an MSRR system to take autonomy a step further.  The system uses perception of the environment to inform the choice of robot configuration, allowing the robot to adapt its abilities to surmount challenges arising from \textit{a priori} unknown features in the environment. Through hardware experiments, we demonstrate that autonomous self-reconfiguration allows our system to adapt to the environment to complete complex tasks.
 
-\section{System Architecture and Implementation}\label{sec:system}
+\section{Methods and Materials: System Architecture and Implementation}\label{sec:system}
 %
 %
 Our system is capable of operating in home- or office-like environments with arbitrary static obstacles. Given a high-level task, our system allows the robot to enter an unknown environment (with no \textit{a priori} knowledge of the map), autonomously explore, visually locate objects and regions of interest, and reactively employ manipulation and movement behaviors to interact with objects and obstacles. The system processes RGB-D sensor data to characterize features of the environment, and uses this information to autonomously reconfigure when it determines that a particular configuration is needed.
@@ -316,15 +322,7 @@ The following sections discuss the role of each component within the general sys
 % \end{old}
 %
 % System Overview Figure
-\begin{figure}
-\begin{center}
-%\includegraphics[width=0.4\textwidth]{images/overview.png}
-\includegraphics[width=\columnwidth]{images/RSS17FlowchartV5.png}
-\caption{System Overview Flowchart}
-\label{fig:overview}
-\end{center}
-\vspace{-1em}
-\end{figure}
+
 
 %
 
@@ -360,14 +358,7 @@ While our system implementation is built around the SMORES-EP robot, the system 
 
 %
 % SMORES-EP module DoF picture
-\begin{figure}   
-\begin{center}
-\includegraphics[height=1.5in]{images/smores_dof.pdf}
-\end{center}
-\caption{SMORES-EP module}
-\label{fig:smores-module}
-\vspace{-3em}
-\end{figure}
+
 %
 \subsubsection{Sensor Module} % (fold)
 \label{sec:sensor_module}
@@ -388,22 +379,7 @@ in front of the sensor module, and is used to track AprilTag
 battery provides about one hour of running time.
 %
 % Sensor Module Figure
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.3\textwidth]{images/sensor_module_new_labelled.jpg}
-\caption{Sensor Module with labelled components.  UP board and battery are inside the body.}
-\label{fig:sensor-module}
-\end{center}
-\vspace{-2em}
-\end{figure}
-%
-%     __  ___       __          __                   __
-%    / / / (_)___ _/ /_        / /   ___ _   _____  / /
-%   / /_/ / / __ `/ __ \______/ /   / _ \ | / / _ \/ /
-%  / __  / / /_/ / / / /_____/ /___/  __/ |/ /  __/ /
-% /_/ /_/_/\__, /_/ /_/     /_____/\___/|___/\___/_/
-%         /____/
-%%
+
 
 %     ____                            __  _
 %    / __ \___  _____________  ____  / /_(_)___  ____
@@ -438,42 +414,8 @@ Based on the environment characterization and target location, the algorithm als
 
 %
 % Environment types figure
-\begin{figure}[t]
-    \centering
-    \begin{subfigure}[t]{0.15\textwidth}
-        \includegraphics[width=\textwidth]{images/FreeEnvironment.png}
-        %\label{fig:obja}
-        \caption{\textbf{``free'}' environment}
-    \end{subfigure} \ \ \ \ \ \
-    \begin{subfigure}[t]{0.15\textwidth}
-        \includegraphics[width=\textwidth]{images/TunnelEnvironment.png}
-        %\label{fig:objb}
-        \caption{\textbf{``tunnel''} environment}
-    \end{subfigure}
-    
-    \begin{subfigure}[t]{0.15\textwidth}
-        \includegraphics[width=\textwidth]{images/HighFreeEnvironment.png}
-        %\label{fig:objb}
-        \caption{\textbf{``high''} environment}
-    \end{subfigure} \ \ \ \ \ \
-    \begin{subfigure}[t]{0.15\textwidth}
-        \includegraphics[width=\textwidth]{images/LedgeEnvironment.png}
-        %\label{fig:objb}
-        \caption{\textbf{``stairs''} environment}
-    \end{subfigure}
-      \caption{Environment characterization types.}
-      \label{fig:characters}
-\end{figure}
-%
+
 % Characterization method figure
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.4\textwidth]{images/characterization.png}
-\caption{An example of a \textbf{tunnel} environment characterization. Yellow grid cells are occupied, light blue cells are unreachable resulting from bloating obstacles.}
-\label{fig:characterization}
-\end{center}
-\vspace{-4em}
-\end{figure}
 
 %    ______            _____          _____                 _ _____
 %   / ____/___  ____  / __(_)___ _   / ___/____  ___  _____(_) __(_)_________
@@ -537,29 +479,7 @@ For example, if the perception system reports that the environment is of type ``
 
 % I moved the disccusion about this to highlevel %Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
 %
-\begin{table}
-\centering
-\begin{tabular}{ |c|c|c| } 
- \hline
- \multirow{2}{6em}{Configuration} & Behavior & Environment \\
- & properties & Types \\
- \hline
- \multirow{3}{*}{Car} & \textbf{pickUp} & ``free'' \\\cline{2-3}
-  & \textbf{drop} & ``free'' \\\cline{2-3}
-  & \textbf{drive} & ``free''\\ \hline
- \multirow{3}{*}{Proboscis} & \textbf{pickUp} & ``tunnel'' or ``free''\\ \cline{2-3}
-  & \textbf{drop} &``tunnel'' or ``free'' \\ \cline{2-3}
-  & \textbf{highReach} & ``high''\\ \hline
- Scorpion & \textbf{drive} & ``free''\\ \hline
- \multirow{3}{*}{Snake} & \textbf{climbUp} & ``stairs''\\ \cline{2-3}
-  & \textbf{climbDown} & ``stairs''\\ \cline{2-3}
-  & \textbf{drop} & ``stairs'' or ``free''\\
- \hline
-\end{tabular}
-\caption{A library of robot behaviors}
-\label{table:1}
-\vspace{-2em}
-\end{table}
+% Library table
 
 %     ____                        _____                        __  _
 %    / __ \___  _________  ____  / __(_)___ ___  ___________ _/ /_(_)___  ____
@@ -613,16 +533,7 @@ Once all module movement operations have completed and the goal topology is form
 We developed several techniques to ensure reliable connection and disconnection during reconfiguration.  
 When a module disconnects from the cluster, the electro-permanent magnets on the connected faces are turned off.  To guarantee a clean break of the magnetic connection, the disconnecting module bends its tilt joint up and down, mechanically separating itself from the cluster. During docking, accurate alignment is crucial to the strength of the magnetic connection \cite{tosun2016design}.  For this reason, rather than driving directly to its final docking location, a module instead drives to a pre-docking waypoint directly in front of its docking location.  At the waypoint, the module spins in place slowly until its heading is aligned with the dock point, and then drives in straight to attach. To guarantee a good connection, the module intentionally overdrives its dock point, pushing itself into the cluster while firing its magnets.
 %
-\begin{figure}[t]
-\begin{center}
-  \includegraphics[width=0.32\columnwidth]{images/reconf_detach.jpg}
-  \includegraphics[width=0.32\columnwidth]{images/reconf_waypoint.jpg}
-  \includegraphics[width=0.32\columnwidth]{images/reconf_attach.jpg}
-  \caption{Module movement during reconfiguration. (1) Left module detaches from cluster. (2) Module drives to waypoint, and spins to establish its heading. (3) Module drives straight in to dock point, and reattaches.}
-  \label{fig:reconf}
-  \vspace{-3em}
-\end{center}
-\end{figure}
+% Reconfiguration Figure
 
 %\paragraph{Post-reconfiguration} Once all module movement operations have completed and the goal topology is formed, the robot sets its joints to appropriate angles for the goal configuration to begin performing desired behaviors, and if necessary, the robot picks up any objects it dropped. This completes the reconfiguration process. 
 
@@ -705,22 +616,13 @@ If  the robot senses a mailbox, the value of \textbf{mailBox} is \lt and therefo
 Since self-reconfiguration is time-consuming, the controller chooses to execute the selected behavior using the current robot configuration whenever possible.
 If the current configuration cannot execute the behavior, the controller instructs the robot to reconfigure to one that can, and if multiple appropriate configurations are available, the controller selects one at random.
 
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.4\textwidth]{images/autSimple.png}
-\caption{An example of a synthesized controller automaton. A proposition with ``!'' has a value of \lf, and \lt otherwise.}
-\label{fig:autSimple}
-\vspace{-3em}
-\end{center}
-\end{figure}
+% Controller Automaton Figure
 
 %Since the synthesized high-level controller is a discrete finite state automaton, we need to implement it continuously in order to control the robot to satisfy the given task.
 %Execution of the high-level controller begins at the predefined initial state in the finite state automaton. In each iteration, the values of all environment propositions are determined by calling the corresponding sensing program. Then, we determine the next state in the finite state machine by taking the transition that matches the current value of all environment propositions. 
 %In the next state, the specified high level behavior properties are mapped to a behavior from the design library which satisfies both the behavior properties and current environment type.
 %The system then maps the system proposition specified in the next state to its set of behavior properties, and selects a behavior from the design library which satisfies both the behavior properties and current environment properties.
 %If the robot is not currently in a configuration capable of executing the selected behavior, the system commands the robot to reconfigure. Finally, the behavior is executed, and the program continues on to the next iteration. 
-
-
 
 
 %     ______                     _                      __
@@ -746,51 +648,7 @@ gap in the field, representing the first evidence of a modular robot autonomousl
 
 %Three experiments were run, each time varying the environment and the type of task to be performed. Each experiment required the robot to explore an unknown environment to search for and identify one or more objects of interest, and then complete some manipulation task with those objects.
 
-\newcommand{\Lwidth}{0.5\columnwidth}
-\newcommand{\Rwidth}{0.4\columnwidth}
-%\newcommand{\Tbuffer}{-2cm}
-\newcommand{\Rboxheight}{-0.5\height}
-\setlength{\tabcolsep}{4pt} %reduces horizontal padding in table. 
-%\renewcommand{\arraystretch}{5}
-\begin{table}
-\centering
-\begin{tabular}{|c|c|}
-\hline
- & \vspace{-5pt}\\
-
-\textbf{Environment Setup} & \textbf{Task Description}\\
-
-\hline
- & \vspace{-5pt}\\
- 
-\raisebox{\Rboxheight}{\includegraphics[width=\Lwidth]{images/overhead_starting.jpg}}
-%
-& \pbox{\Rwidth}{\textbf{Experiment I:} Explore environment to find all pink or green objects and blue dropoff zone. Deliver all objects to dropoff zone.}\\
-
- & \vspace{-5pt}\\
-\hline
- & \vspace{-5pt}\\
- 
-\raisebox{\Rboxheight}{\includegraphics[width=\Lwidth]{images/stairs_explore_overhead.jpg}}
-%
-& \pbox{\Rwidth}{\textbf{Experiment II:} Explore environment to find mailbox, then deliver a circuit to the box.}\\
-
- & \vspace{-5pt}\\
-\hline
- & \vspace{-5pt}\\
- 
-\raisebox{\Rboxheight}{\includegraphics[width=\Lwidth]{images/stamp_explore_overhead.jpg}}
-%
-& \pbox{\Rwidth}{\textbf{Experiment III:} Explore environment to find package, then place a stamp on the package.}\\
-
- & \\
-\hline
-\end{tabular}
-\caption{Environments and tasks for hardware experiments}
-\vspace{-2em}
-\label{table:task-compare}
-\end{table}
-\setlength{\tabcolsep}{6pt} % resetting to default
+% Environments and tasks table:
 
 \subsection{Experiment I}
 %
@@ -801,52 +659,9 @@ The high-level task is compact, consisting of three sub-tasks: explore the envir
 Five SMORES-EP modules, one Sensor Module\footnote{This experiment uses an older version of the sensor module.  The body is larger (160 $\times$ 80 $\times$ 80mm box), and it uses an older Asus Xtion Pro Live RGB-D camera, which is larger than the Orbecc Astra but provides similar data.  The only functional difference between this older sensor module and the version presented in Section~\ref{sec:sensor_module} is the larger size.}, and three passive cubes composed the robot for performing the task. 
 During the experiment, the high-level planner used the library of configurations and behaviors described in Section \ref{sec:configuration-specifics}.
 
-% Map
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.3\textwidth]{images/RSSMap.png}
-\caption{Diagram of Experiment I environment}
-\vspace{-4em}
-\label{fig:map}
-\end{center}
-\end{figure}
+% Map Figure
 
-\begin{figure*}[t]
-      \centering
-      \begin{subfigure}[t]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{images/overhead_starting.jpg}
-        %\label{fig:obja}
-        \caption{Environment and robot starting location}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{images/exploration.jpg}
-        %\label{fig:objb}
-        \caption{Exploring  while searching for objects}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{images/reconfiguration.png}
-        %\label{fig:objb}
-        \caption{Reconfiguring to retrieve pink object}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{images/pink_retrieval.png}
-        \caption{Retrieving pink object}
-        \label{fig:pink_grab}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{images/dropoff.jpg}
-        \caption{Depositing an object in the drop-off zone}
-        \label{fig:dropoff}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{images/green_retrieval.jpg}
-        %\label{fig:objb}
-        \caption{Retrieving green object}
-    \end{subfigure}
-      \caption{Phases of Experiment I.}
-      \label{fig:demo}
-   \vspace{-1em}
-   \end{figure*}
+% Experiment 1 Figure
 %
 Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available at \url{https://youtu.be/eJsnG9DZjgM}. The robot starts in the ``Car'' configuration. The starting location prevents the robot from seeing the objects initially, forcing it to explore the environment. After a period of exploration, the robot locates the pink object. The characterization algorithm correctly classifies the surrounding environment as a ``tunnel'' type, and gives this classification to the high-level planner. Based on this classification, the high-level planner directs the robot to navigate in front of the object and reconfigure to the ``Proboscis'' configuration. The ``Proboscis'' then uses its long arm to reach into the tunnel and pull the object out into the open.
 
@@ -856,14 +671,7 @@ After delivering the pink object, the robot navigates directly to the green obje
 
 Note that at one point in the video a person reaches onto the field to dislodge the green object from a crack in the floor.  This was due to a defect in the experimental setup (which is not supposed to have a crack in the floor) and not an error in the robot's performance.
 %
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.4\textwidth]{images/map4.jpg}
-\caption{Volumetric map of environment built by visual SLAM}
-\vspace{-2em}
-\label{fig:octomap}
-\end{center}
-\end{figure}
+% Octomap figure
 
 \subsection{Experiment II}
 %
@@ -880,32 +688,7 @@ The environment setup for Experiment II (see Table \ref{table:task-compare}) inc
 %The full performance of the experiment is included in the video attachment to this paper.
 The robot begins the experiment in the ``Scorpion'' configuration with its view of the staircase and mailbox blocked by the cardboard box.  After a short period of exploration, the robot observes and recognizes the mailbox, and characterizes the surrounding environment as ``stairs''. Based on this characterization, the high-level planner directs the robot to use the ``Snake'' configuration to traverse the stairs. Using the 3D map and characterization of the environment surrounding the mail bin, the robot navigates to a point directly in front of the stairs, faces the bin, and reconfigures to the ``Snake'' configuration. The robot then executes the stair climbing gait to reach the mail bin, and drops the circuit successfully. It then descends the stairs and reconfigures back to the ``Scorpion'' configuration to end the mission.
 
-\begin{figure}[t]
-      \centering
-      \begin{subfigure}[t]{0.24\textwidth}
-        \includegraphics[width=\textwidth]{images/stairs_reconfig.jpg}
-        %\label{fig:obja}
-        \caption{Reconfiguring to climb stairs}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.24\textwidth}
-        \includegraphics[width=\textwidth]{images/stairs_climb.jpg}
-        %\label{fig:objb}
-        \caption{Successful circuit delivery}
-    \end{subfigure}
-    
-    \begin{subfigure}[t]{0.24\textwidth}
-        \includegraphics[width=\textwidth]{images/stamp_reconfig.jpg}
-        %\label{fig:objb}
-        \caption{Reconfiguring to place stamp}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.24\textwidth}
-        \includegraphics[width=\textwidth]{images/stamp_placing.jpg}
-        %\label{fig:objb}
-        \caption{Successful stamp placement}
-    \end{subfigure}
-      \caption{Experiments II and III.}
-      \label{fig:exps}
-   \end{figure}
+% Experiment 2 and 3 Figure
 
 \subsection{Experiment III}
 
@@ -949,27 +732,7 @@ We selected the three scenarios in our experiments to showcase a range of differ
 %
 \subsection{Major Challenge - Robustness}
 %
-\begin{table}
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-\textbf{Reason of failure} & \textbf{Number of times} & \textbf{Percentage}\\ 
-\hline
-Hardware Issues & 10 & 41.7\% \\ 
-\hline
-Navigation Failure & 3 & 12.5\% \\ 
-\hline
-Perception-Related Errors & 6 & 25\% \\ 
-\hline
-Network Issues & 1 & 4.2\% \\ 
-\hline
-Human Error & 4 & 16.7\% \\ 
-\hline
-\end{tabular}
-\caption{Reasons for experiment failure.}
-\label{table:errors}
-\vspace{-0.7cm}
-\end{table}
+% Experiment Failure Table
 %
 Our implementation is vulnerable to small errors, which could cause the task to fail. 
 Table \ref{table:errors} shows the causes of failure for 24 attempts of Experiment II (placing the stamp on the package).  
@@ -1026,19 +789,324 @@ by each environment.
 
 Components of this system include novel controller synthesis, environment characterization, and self-reconfiguration methods. The demonstration of this novel capability is crucial to the success of modular robots as a technology, and takes a step toward the application of modular robots to tasks in the real world.
 %
-%\section*{Acknowledgments}
+\section*{Acknowledgments}
 %
-%This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
+This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 
 
-       %     ____       ____
-       %    / __ \___  / __/__  ________  ____  ________  _____
-       %   / /_/ / _ \/ /_/ _ \/ ___/ _ \/ __ \/ ___/ _ \/ ___/
-       %  / _, _/  __/ __/  __/ /  /  __/ / / / /__/  __(__  )
-       % /_/ |_|\___/_/  \___/_/   \___/_/ /_/\___/\___/____/
+%     ____       ____
+%    / __ \___  / __/__  ________  ____  ________  _____
+%   / /_/ / _ \/ /_/ _ \/ ___/ _ \/ __ \/ ___/ _ \/ ___/
+%  / _, _/  __/ __/  __/ /  /  __/ / / / /__/  __(__  )
+% /_/ |_|\___/_/  \___/_/   \___/_/ /_/\___/\___/____/
 
 %% Use plainnat to work nicely with natbib. 
 \bibliographystyle{Science}
 \bibliography{references}
 %
+
+\section*{Figures and Tables}
+
+%     _______
+%    / ____(_)___ ___  __________  ______
+%   / /_  / / __ `/ / / / ___/ _ \/ ___(_)
+%  / __/ / / /_/ / /_/ / /  /  __(__  )
+% /_/   /_/\__, /\__,_/_/   \___/____(_)
+%         /____/
+
+% System Overview Figure
+\begin{figure}
+\begin{center}
+%\includegraphics[width=0.4\textwidth]{images/overview.png}
+\includegraphics[width=\columnwidth]{images/RSS17FlowchartV5.png}
+\caption{System Overview Flowchart}
+\label{fig:overview}
+\end{center}
+\end{figure}
+
+% SMORES-EP module DoF picture
+% Sensor Module Figure
+\begin{figure}
+  \begin{subfigure}{0.5\columnwidth}
+  \begin{center}
+  \includegraphics[height=1.5in]{images/smores_dof.pdf}
+  \end{center}
+  \caption{SMORES-EP module}
+  \label{fig:smores-module}
+  \end{subfigure}
+  %
+  \begin{subfigure}{0.5\columnwidth}
+  \begin{center}
+  \includegraphics[width=0.3\textwidth]{images/sensor_module_new_labelled.jpg}
+  \caption{Sensor Module with labelled components.  UP board and battery are inside the body.}
+  \label{fig:sensor-module}
+  \end{center}
+  \end{subfigure}
+  \caption{SMORES-EP Module and Sensor Module}
+\end{figure}
+
+\begin{figure}
+% Environment types figure
+\begin{subfigure}[t]{0.45\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.45\columnwidth}
+        \includegraphics[width=\textwidth]{images/FreeEnvironment.png}
+        %\label{fig:obja}
+        \caption{\textbf{``free'}' environment}
+    \end{subfigure} \ \ \ \ \ \
+    \begin{subfigure}[t]{0.45\columnwidth}
+        \includegraphics[width=\textwidth]{images/TunnelEnvironment.png}
+        %\label{fig:objb}
+        \caption{\textbf{``tunnel''} environment}
+    \end{subfigure}
+    
+    \begin{subfigure}[t]{0.45\columnwidth}
+        \includegraphics[width=\textwidth]{images/HighFreeEnvironment.png}
+        %\label{fig:objb}
+        \caption{\textbf{``high''} environment}
+    \end{subfigure} \ \ \ \ \ \
+    \begin{subfigure}[t]{0.45\columnwidth}
+        \includegraphics[width=\textwidth]{images/LedgeEnvironment.png}
+        %\label{fig:objb}
+        \caption{\textbf{``stairs''} environment}
+    \end{subfigure}
+      \caption{Environment characterization types.}
+      \label{fig:characters}
+\end{subfigure}
+%
+% Characterization method figure
+\begin{subfigure}{0.5\columnwidth}
+\begin{center}
+\includegraphics[width=\columnwidth]{images/characterization.png}
+\caption{An example of a \textbf{tunnel} environment characterization. Yellow grid cells are occupied, light blue cells are unreachable resulting from bloating obstacles.}
+\label{fig:characterization}
+\end{center}
+\end{subfigure}
+\caption{Environment Characterization}
+\end{figure}
+
+% Reconfiguration Figure
+\begin{figure}[t]
+\begin{center}
+  \includegraphics[width=0.32\columnwidth]{images/reconf_detach.jpg}
+  \includegraphics[width=0.32\columnwidth]{images/reconf_waypoint.jpg}
+  \includegraphics[width=0.32\columnwidth]{images/reconf_attach.jpg}
+  \caption{Module movement during reconfiguration. (1) Left module detaches from cluster. (2) Module drives to waypoint, and spins to establish its heading. (3) Module drives straight in to dock point, and reattaches.}
+  \label{fig:reconf}
+\end{center}
+\end{figure}
+
+% Controller Automaton Figure
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.4\textwidth]{images/autSimple.png}
+\caption{An example of a synthesized controller automaton. A proposition with ``!'' has a value of \lf, and \lt otherwise.}
+\label{fig:autSimple}
+\end{center}
+\end{figure}
+
+\begin{figure}
+  % Map Figure
+  \begin{subfigure}{0.5\columnwidth}
+  \begin{center}
+  \includegraphics[height=1.5in]{images/RSSMap.png}
+  \caption{Diagram of Experiment I environment}
+  \label{fig:map}
+  \end{center}
+  \end{subfigure}
+  % 
+  % Octomap figure
+  \begin{subfigure}{0.5\columnwidth}
+  \begin{center}
+  \includegraphics[height=1.5in]{images/map4.jpg}
+  \caption{Volumetric map of environment 1 built by visual SLAM}
+  \label{fig:octomap}
+  \end{center}
+  \end{subfigure}
+  %
+  % Environments and tasks table:
+  \newcommand{\Lwidth}{0.4\columnwidth}
+  \newcommand{\Rwidth}{0.4\columnwidth}
+  %\newcommand{\Tbuffer}{-2cm}
+  \newcommand{\Rboxheight}{-0.5\height}
+  \setlength{\tabcolsep}{4pt} %reduces horizontal padding in table. 
+  %\renewcommand{\arraystretch}{5}
+  %\begin{table}
+  \begin{subfigure}{\columnwidth}
+  \centering
+  \begin{tabular}{|c|c|}
+  \hline
+   & \vspace{-5pt}\\
+
+  \textbf{Environment Setup} & \textbf{Task Description}\\
+
+  \hline
+   & \vspace{-5pt}\\
+   
+  \raisebox{\Rboxheight}{\includegraphics[width=\Lwidth]{images/overhead_starting.jpg}}
+  %
+  & \pbox{\Rwidth}{\textbf{Experiment I:} Explore environment to find all pink or green objects and blue dropoff zone. Deliver all objects to dropoff zone.}\\
+
+   & \vspace{-5pt}\\
+  \hline
+   & \vspace{-5pt}\\
+   
+  \raisebox{\Rboxheight}{\includegraphics[width=\Lwidth]{images/stairs_explore_overhead.jpg}}
+  %
+  & \pbox{\Rwidth}{\textbf{Experiment II:} Explore environment to find mailbox, then deliver a circuit to the box.}\\
+
+   & \vspace{-5pt}\\
+  \hline
+   & \vspace{-5pt}\\
+   
+  \raisebox{\Rboxheight}{\includegraphics[width=\Lwidth]{images/stamp_explore_overhead.jpg}}
+  %
+  & \pbox{\Rwidth}{\textbf{Experiment III:} Explore environment to find package, then place a stamp on the package.}\\
+
+   & \\
+  \hline
+  \end{tabular}
+  \caption{Environments and tasks for hardware experiments}
+  \label{table:task-compare}
+  %\end{table}
+  \end{subfigure}
+  \setlength{\tabcolsep}{6pt} % resetting to default
+  %
+\caption{Environments and Tasks for Experiments}
+\end{figure}
+
+\begin{figure}
+%
+  % Experiment 1 Figure
+  \begin{subfigure}{\columnwidth}
+      \centering
+      %\renewcommand{\thesubfigure}{\arabic{subfigure}}
+      \begin{subfigure}[t]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{images/overhead_starting.jpg}
+        %\label{fig:obja}
+        \caption{Environment and robot starting location}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{images/exploration.jpg}
+        %\label{fig:objb}
+        \caption{Exploring  while searching for objects}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{images/reconfiguration.png}
+        %\label{fig:objb}
+        \caption{Reconfiguring to retrieve pink object}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{images/pink_retrieval.png}
+        \caption{Retrieving pink object}
+        \label{fig:pink_grab}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{images/dropoff.jpg}
+        \caption{Depositing an object in the drop-off zone}
+        \label{fig:dropoff}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{images/green_retrieval.jpg}
+        %\label{fig:objb}
+        \caption{Retrieving green object}
+    \end{subfigure}
+      \caption{Phases of Experiment I.}
+      \label{fig:demo}
+  \end{subfigure}
+  %
+  % Experiment 2 and 3 Figure
+  \begin{subfigure}[t]{\columnwidth}
+      \centering
+      \begin{subfigure}[t]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/stairs_reconfig.jpg}
+        %\label{fig:obja}
+        \caption{Reconfiguring to climb stairs}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/stairs_climb.jpg}
+        %\label{fig:objb}
+        \caption{Successful circuit delivery}
+    \end{subfigure}
+    
+    \begin{subfigure}[t]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/stamp_reconfig.jpg}
+        %\label{fig:objb}
+        \caption{Reconfiguring to place stamp}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{images/stamp_placing.jpg}
+        %\label{fig:objb}
+        \caption{Successful stamp placement}
+    \end{subfigure}
+      \caption{Experiments II and III.}
+      \label{fig:exps}
+  \end{subfigure}  
+  %
+  \caption{Experiments 1, 2, and 3}
+\end{figure}
+
+
+
+%   ______      __    __
+%  /_  __/___ _/ /_  / /__  ______
+%   / / / __ `/ __ \/ / _ \/ ___(_)
+%  / / / /_/ / /_/ / /  __(__  )
+% /_/  \__,_/_.___/_/\___/____(_)
+
+% Library table
+\begin{table}
+\centering
+\begin{tabular}{ |c|c|c| } 
+ \hline
+ \multirow{2}{6em}{Configuration} & Behavior & Environment \\
+ & properties & Types \\
+ \hline
+ \multirow{3}{*}{Car} & \textbf{pickUp} & ``free'' \\\cline{2-3}
+  & \textbf{drop} & ``free'' \\\cline{2-3}
+  & \textbf{drive} & ``free''\\ \hline
+ \multirow{3}{*}{Proboscis} & \textbf{pickUp} & ``tunnel'' or ``free''\\ \cline{2-3}
+  & \textbf{drop} &``tunnel'' or ``free'' \\ \cline{2-3}
+  & \textbf{highReach} & ``high''\\ \hline
+ Scorpion & \textbf{drive} & ``free''\\ \hline
+ \multirow{3}{*}{Snake} & \textbf{climbUp} & ``stairs''\\ \cline{2-3}
+  & \textbf{climbDown} & ``stairs''\\ \cline{2-3}
+  & \textbf{drop} & ``stairs'' or ``free''\\
+ \hline
+\end{tabular}
+\caption{A library of robot behaviors}
+\label{table:1}
+\end{table}
+
+
+
+% Experiment Failure Table
+\begin{table}
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Reason of failure} & \textbf{Number of times} & \textbf{Percentage}\\ 
+\hline
+Hardware Issues & 10 & 41.7\% \\ 
+\hline
+Navigation Failure & 3 & 12.5\% \\ 
+\hline
+Perception-Related Errors & 6 & 25\% \\ 
+\hline
+Network Issues & 1 & 4.2\% \\ 
+\hline
+Human Error & 4 & 16.7\% \\ 
+\hline
+\end{tabular}
+\caption{Reasons for experiment failure.}
+\label{table:errors}
+\end{table}
+
+
+%     ______          __
+%    / ____/___  ____/ /
+%   / __/ / __ \/ __  /
+%  / /___/ / / / /_/ /
+% /_____/_/ /_/\__,_/
+
 \end{document}
