@@ -465,10 +465,10 @@ Table~\ref{table:1} lists 10 entries for four different configurations that are 
 Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use the perception algorithm described in Section \ref{sec:exploration}.
 
 To provide an illustrative example, this paper discusses two configurations and their capabilities in detail.
-The ``Car'' configuration shown in Figure~\ref{fig:dropoff} is capable of picking
+The ``Car'' configuration shown in Figure~\ref{fig:demo}-5 is capable of picking
 up and dropping objects in a ``free'' environment. In addition, the ``Car'' configuration can locomote on flat terrain. It uses a parametric differential drive behavior to convert a desired velocity vector into motor commands (\textbf{drive} in Table \ref{table:1}).
 
-The ``Proboscis'' configuration shown in Figure~\ref{fig:pink_grab} has
+The ``Proboscis'' configuration shown in Figure~\ref{fig:demo}-4 has
 a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects or reaching up in a ``high'' environment to drop items.
 However, the locomotion behaviors available for this configuration are limited to forward/backward
 motion, making it unsuitable for general navigation.
@@ -977,68 +977,62 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 
 \begin{figure}
 %
-  % Experiment 1 Figure
   \begin{subfigure}{\columnwidth}
-      \centering
-      %\renewcommand{\thesubfigure}{\arabic{subfigure}}
-      \begin{subfigure}[t]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{images/overhead_starting.jpg}
-        %\label{fig:obja}
-        \caption{Environment and robot starting location}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{images/exploration.jpg}
+  % Experiment 1 Figure
+  \begin{small}
+  \begin{tabular}{c c c}
+    \pbox{0.32\textwidth}{
+        \includegraphics[width=0.32\textwidth]{images/overhead_starting.jpg}
+        1. Environment and robot starting location} & 
+    \pbox{0.32\textwidth}{
+        \includegraphics[width=0.32\textwidth]{images/exploration.jpg}
+        2. Exploring  while searching for objects} &
+    \pbox{0.32\textwidth}{
+        \includegraphics[width=0.32\textwidth]{images/reconfiguration.png}
+        3. Reconfiguring to retrieve pink object}
+    \\
+    \pbox{0.32\textwidth}{
+        \includegraphics[width=0.32\textwidth]{images/pink_retrieval.png}
+        4. Retrieving pink object} &
+        % \label{fig:pink_grab}
+    \pbox{0.32\textwidth}{
+        \includegraphics[width=0.32\textwidth]{images/dropoff.jpg}
+        5. Depositing an object in the drop-off zone} &
+        % \label{fig:dropoff}
+    \pbox{0.32\textwidth}{
+        \includegraphics[width=0.32\textwidth]{images/green_retrieval.jpg}
         %\label{fig:objb}
-        \caption{Exploring  while searching for objects}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{images/reconfiguration.png}
-        %\label{fig:objb}
-        \caption{Reconfiguring to retrieve pink object}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{images/pink_retrieval.png}
-        \caption{Retrieving pink object}
-        \label{fig:pink_grab}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{images/dropoff.jpg}
-        \caption{Depositing an object in the drop-off zone}
-        \label{fig:dropoff}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.32\textwidth}
-        \includegraphics[width=\textwidth]{images/green_retrieval.jpg}
-        %\label{fig:objb}
-        \caption{Retrieving green object}
-    \end{subfigure}
-      \caption{Phases of Experiment I.}
-      \label{fig:demo}
+        6. Retrieving green object}
+  \end{tabular}
+  \end{small}
+  \caption{Phases of Experiment I.}
+  \label{fig:demo}
   \end{subfigure}
   %
   % Experiment 2 and 3 Figure
   \begin{subfigure}[t]{\columnwidth}
-      \centering
-      \begin{subfigure}[t]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{images/stairs_reconfig.jpg}
-        %\label{fig:obja}
-        \caption{Reconfiguring to climb stairs}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{images/stairs_climb.jpg}
+    \centering
+    \begin{small}
+    \begin{tabular}{c c}
+    \pbox{0.45\textwidth}{
+      \includegraphics[width=0.45\textwidth]{images/stairs_reconfig.jpg}
+      %\label{fig:obja}
+      1. Reconfiguring to climb stairs} &
+    \pbox{0.45\textwidth}{
+        \includegraphics[width=0.45\textwidth]{images/stairs_climb.jpg}
         %\label{fig:objb}
-        \caption{Successful circuit delivery}
-    \end{subfigure}
-    
-    \begin{subfigure}[t]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{images/stamp_reconfig.jpg}
+        2. Successful circuit delivery} 
+    \\ 
+    \pbox{0.45\textwidth}{
+        \includegraphics[width=0.45\textwidth]{images/stamp_reconfig.jpg}
         %\label{fig:objb}
-        \caption{Reconfiguring to place stamp}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{images/stamp_placing.jpg}
+        1. Reconfiguring to place stamp} &
+    \pbox{0.45\textwidth}{
+        \includegraphics[width=0.45\textwidth]{images/stamp_placing.jpg}
         %\label{fig:objb}
-        \caption{Successful stamp placement}
-    \end{subfigure}
+        2. Successful stamp placement}
+    \end{tabular}
+    \end{small}
       \caption{Experiments II and III.}
       \label{fig:exps}
   \end{subfigure}  
