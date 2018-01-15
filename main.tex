@@ -543,14 +543,13 @@ For example, if the perception system reports that the environment is of type ``
 \label{sec:reconfiguration}
 %
 When the high-level planner decides to use a new configuration during a task, the robot must reconfigure.
-We have implemented tools for mobile reconfiguration with SMORES-EP, taking advantage of the fact that individual modules can drive on flat surfaces as described in Section \ref{sec:hardware}.
+We have implemented tools for driving-based reconfiguration with SMORES-EP, taking advantage of the fact that individual modules can drive on flat surfaces.
 As discussed in Section~\ref{sec:hardware}, a downward-facing camera on the Sensor Module provides a view of a $0.75\text{m}\times0.5\text{m}$ area on the ground in front of the sensor module.  
 Within this area, the localization system provides pose for any module equipped with an AprilTag marker to perform reconfiguration. 
 %\subsection{Reconfiguration Procedure}
 Given an initial configuration and a goal configuration, the reconfiguration controller commands a set of modules to disconnect, move and reconnect to form the new topology of the goal configuration. 
 Currently, reconfiguration plans from one configuration to another are created manually and stored in the library. However the framework can work with existing assembly planning algorithms (\cite{Werfel2007,Seo2013}) to generate reconfiguration plans automatically.
-
-Figure~\ref{fig:reconf} illustrates reconfiguration. \TODO{Make a better figure, and say more here.}
+Figure~\ref{fig:reconf} shows reconfiguration from the ``Car'' to the ``Proboscis'' during Experiment 1.
 %
 % Reconfiguration Figure
 
