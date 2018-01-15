@@ -423,6 +423,20 @@ Based on the environment characterization and target location, the algorithm als
 % / /___/ /_/ / / / / __/ / /_/ /   ___/ / /_/ /  __/ /__/ / __/ / /__(__  )
 % \____/\____/_/ /_/_/ /_/\__, /   /____/ .___/\___/\___/_/_/ /_/\___/____/
 %                        /____/        /_/
+{\color{red} 
+\textbf{Library of Configurations and Behaviors}
+
+All robot configurations and behaviors used in this work, such as driving and pick up items, are included in a design library for modular robots.
+Users can create more entries to the library with a physics-based simulator program VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}).
+Created behaviors can then be utilized to control the SMORES-EP robot system.
+In addition, each library entry is labeled with attributes that describe the behavior's capabilities and environment conditions. 
+The high-level planner then can select appropriate configurations and behaviors based on given task specifications and environment information from the perception subsystem to accomplish the robot tasks.
+In our mail delivery experiment, the task specifications require the robot to reach to a mailbox and the environment characterization algorithm reports that the mailbox is in a ``stairs''-type environment.
+Then the high-level planner search the design library for a configuration and behavior that is capable to climb stairs.
+The library introduced currently has 57 robot configurations and 97 behaviors.
+Table~\ref{table:1} lists 10 entries for four different configurations that are used in this work. \TODO{Make sure the table reference is still valid in the main section}
+}
+
 \subsection{Library of Configurations and Behaviors}
 \label{sec:configuration-specifics}
 %
@@ -487,6 +501,15 @@ For example, if the perception system reports that the environment is of type ``
 %  / _, _/  __/ /__/ /_/ / / / / __/ / /_/ / /_/ / /  / /_/ / /_/ / /_/ / / / /
 % /_/ |_|\___/\___/\____/_/ /_/_/ /_/\__, /\__,_/_/   \__,_/\__/_/\____/_/ /_/
 %                                   /____/
+
+{\color{red} 
+\textbf{Reconfiguration}
+
+
+}
+
+
+
 \subsection{Reconfiguration}
 \label{sec:reconfiguration}
 %
