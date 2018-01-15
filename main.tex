@@ -207,11 +207,14 @@ We present system architecture, software and hardware in a general framework tha
 %
 Modular self-reconfigurable robot (MSRR) systems are composed of a number of simple repeated robot elements (called \emph{modules}) that connect together to form larger robotic structures. These robots can \emph{self-reconfigure}, changing their shape (\emph{i.e.} the connective arrangement of the modules) to meet the needs of the task at hand.
 The number of possible morphologies of these systems typically scales exponentially with the number of identical modules, making them highly adaptable for a wide variety of tasks.
-Over the past three decades, dozens of MSRR systems have been built \cite{Yim2007a}. Existing literature provides ample evidence of MSRR systems reconfiguring and assuming interesting morphologies, as well as methods for programming, controlling, and simulating modular robots \cite{Yim2007,Jing2016,Yim1994}.
+Over the past three decades, dozens of MSRR systems have been built \cite{Yim2007a}.
+Existing literature provides ample evidence of MSRR systems reconfiguring, assuming interesting morphologies, and exhibiting various forms of locomotion, as well as methods for programming, controlling, and simulating modular robots \cite{Yim2007, Rubenstein2004,Murata2006,Paulos2015,Yim1994,Jing2016}. 
 
 Some of the most challenging problem domains for robots are those in which they must autonomously complete a task in an unknown environment. Search-and-rescue problems fall into this category: for example, a robot enters a collapsed building to locate survivors without knowing what kind of terrain it will need to traverse once inside.
 
 The theoretical ability of modular robots to reconfigure in response to complex tasks (involving manipulation and locomotion) in unknown environments has been frequently cited as an advantage \cite{Yim2007a}, but has never been experimentally demonstrated.
+Existing systems have demonstrated limited autonomy, relying on beacons for mapping  \cite{Grabowski2000,Dorigo2005} and human input for high-level decision making \cite{Mondada2005,Dorigo2013}. Others have demonstrated swarm self-assembly to address basic tasks like hill-climbing and gap-crossing \cite{gross2006autonomous,o2010self}.  
+
 For the first time, this paper presents a system integrating perception, high-level mission planning, and modular robot hardware, allowing a modular robot to autonomously complete complex high-level tasks by reconfiguring in response to its perceived environment.
 We validate our system in three hardware experiments.  Based on a high-level task specification, a modular robot autonomously explores, decides when and how to reconfigure, and manipulates objects to complete its task.
 These validations demonstrate mature technology to a level not seen in the community, and fill an experimental gap in the field, showing that reconfiguration can provide an advantage in practice, not just in theory.
@@ -248,49 +251,6 @@ In addition to experimental validation, this work provides a novel system archit
 % autonomous reconfiguration with SMORES-EP.
 % \end{enumerate}
 %%%%%
-
-%     ____       __      __           __   _       __           __
-%    / __ \___  / /___ _/ /____  ____/ /  | |     / /___  _____/ /__
-%   / /_/ / _ \/ / __ `/ __/ _ \/ __  /   | | /| / / __ \/ ___/ //_/
-%  / _, _/  __/ / /_/ / /_/  __/ /_/ /    | |/ |/ / /_/ / /  / ,<
-% /_/ |_|\___/_/\__,_/\__/\___/\__,_/     |__/|__/\____/_/  /_/|_|
-
-\section{Related Work}\label{sec:related-work}
-%
-%
-%%% Paragraph from intro
-% The traditional approach to achieving flexible
-% robots is to build  monolithic systems that are highly capable, but also highly
-% complex (\emph{e.g.} large humanoids).  Self-reconfigurability is an elegant,
-% scalable alternative: since the shape of the robot is not fixed, each individual
-% task can be solved with a morphology that is only as complicated as it needs
-% to be.
-%%%
-
-% millibot
-The Millibot system demonstrated mapping when operating as a swarm. Certain members of the swarm are designated as ``beacons,'' and have known locations. The autonomy of the Millibot swarm is limited: a human operator makes all high-level decisions, and is responsible for navigation using a GUI \cite{Grabowski2000}.
-
-% swarm-bots
-The Swarm-Bots system has been applied in exploration \cite{Dorigo2005} and collective manipulation \cite{Mondada2005} scenarios.  Like the Millibots, some members of the swarm act as ``beacons'' that are assumed to have known location during exploration.  In a collective manipulation task, Swarm-Bots have limited autonomy, with a human operator specifying the location of the manipulation target and the global sequence of manipulation actions.
-
-%Swarm-Bots have demonstrated the capability to use self-assembly to solve low-level tasks, such as crossing a gap \cite{gross2006autonomous} or ascending a small hill \cite{o2010self}.  In these scenarios, ground proximity sensors and tilt sensors are used to trigger self-assembly.  In our work, 3D map data is used to characterize the environment, and the system autonomously selects specific morphologies that are appropriate to the task and environment. 
-%
-In \cite{o2010self}, Swarm-Bots demonstrate swarm self-assembly to climb a hill.  Robots exhibit phototaxis, with the goal of moving toward a light source.  When robots detect the presence of a hill (using tilt sensors), they aggregate to form a random connected structure to collectively surmount the hill. A similar strategy is employed to cross holes in the ground.  In each case, the swarm of robots is loaded with a single self-assembly controller specific to an \textit{a priori} known obstacle type (hill or hole).  The robots do not self-reconfigure between specific morphologies, but rather self-assemble, beginning as a disconnected swarm and coming together to form a random connected structure.  In our work, a modular robot completes high-level tasks by autonomously self-reconfiguring between specific morphologies with different capabilities.  Our system differentiates between several types of environments using RGB-D data, and may choose to use different morphologies to solve a given high-level task in different environments.    
- 
-%swarmanoid
-The swarmanoid project (successor to the swarm-bots), uses a heterogeneous swarm of ground and flying robots (called ``hand-'', ``foot-'', and ``eye-'' bots) to perform exploration and object retrieval tasks  \cite{Dorigo2013}. Robotic elements of the swarmanoid system connect and disconnect to complete the task, but the decision to take this action is not made autonomously by the robot in response to sensed environment conditions. While the location of the object to be retrieved is unknown, the method for retrieval is known and constant.
-
-% CKbot, Conro, MTRAN
-Self-reconfiguration has been demonstrated with several other modular robot systems. CKbot, Conro, and MTRAN have all demonstrated the ability to join disconnected clusters of modules together \cite{Yim2007, Rubenstein2004,Murata2006}. In order to align, Conro uses infra-red sensors on the docking faces of the modules, while CKBot and MTRAN use a separate sensor module on each cluster.  In all cases, individual clusters locate and servo towards each other until they are close enough to dock. These experiments do not include any planning or sequencing of multiple reconfiguration actions in order to create a goal structure appropriate for a task.  Additionally,  modules are not individually mobile, and mobile clusters of modules are limited to slow crawling gaits.  Consequently, reconfiguration is very time consuming, with a single connection requiring 5-15 minutes.
-
-% TEMP
-Other work has focused on reconfiguration planning.  Paulos et al. present a system in which self-reconfigurable modular boats self-assemble into prescribed floating structures, such as a bridge \cite{Paulos2015}.  Individual boat modules are able to move about the pool, allowing for rapid reconfiguration.  In these experiments, the environment is known and external localization is provided by an overhead AprilTag system. 
-
-MSRR systems have demonstrated the ability to accomplish low-level tasks such as various modes of locomotion \cite{Yim1994}.
-Recent work includes a system which integrates many low-level capabilities of a MSRR system in a design library, and accomplishes high-level user-specified tasks by synthesizing elements of the library into a reactive state-machine \cite{Jing2016}. This system demonstrates autonomy with respect to task-related decision making, but is designed to operate in a fully known environment with external sensing.
-
-% Traditional systems and wrapup statement
-Our system goes beyond existing work by using self-reconfiguration capabilities of an MSRR system to take autonomy a step further.  The system uses perception of the environment to inform the choice of robot configuration, allowing the robot to adapt its abilities to surmount challenges arising from \textit{a priori} unknown features in the environment. Through hardware experiments, we demonstrate that autonomous self-reconfiguration allows our system to adapt to the environment to complete complex tasks.
 
 
 %     ____                  ____
@@ -1052,6 +1012,49 @@ Human Error & 4 & 16.7\% \\
 % /____/\__,_/ .___/ .___/_/\___/_/ /_/ /_/\___/_/ /_/\__/\__,_/_/   \__, /
 %           /_/   /_/                                               /____/
 \part*{Supplementary Materials}
+
+%     ____       __      __           __   _       __           __
+%    / __ \___  / /___ _/ /____  ____/ /  | |     / /___  _____/ /__
+%   / /_/ / _ \/ / __ `/ __/ _ \/ __  /   | | /| / / __ \/ ___/ //_/
+%  / _, _/  __/ / /_/ / /_/  __/ /_/ /    | |/ |/ / /_/ / /  / ,<
+% /_/ |_|\___/_/\__,_/\__/\___/\__,_/     |__/|__/\____/_/  /_/|_|
+
+\section{Additional Commentary on Related Work}\label{sec:related-work}
+%
+%
+%%% Paragraph from intro
+% The traditional approach to achieving flexible
+% robots is to build  monolithic systems that are highly capable, but also highly
+% complex (\emph{e.g.} large humanoids).  Self-reconfigurability is an elegant,
+% scalable alternative: since the shape of the robot is not fixed, each individual
+% task can be solved with a morphology that is only as complicated as it needs
+% to be.
+%%%
+
+% millibot
+The Millibot system demonstrated mapping when operating as a swarm. Certain members of the swarm are designated as ``beacons,'' and have known locations. The autonomy of the Millibot swarm is limited: a human operator makes all high-level decisions, and is responsible for navigation using a GUI \cite{Grabowski2000}.
+
+% swarm-bots
+The Swarm-Bots system has been applied in exploration \cite{Dorigo2005} and collective manipulation \cite{Mondada2005} scenarios.  Like the Millibots, some members of the swarm act as ``beacons'' that are assumed to have known location during exploration.  In a collective manipulation task, Swarm-Bots have limited autonomy, with a human operator specifying the location of the manipulation target and the global sequence of manipulation actions.
+
+%Swarm-Bots have demonstrated the capability to use self-assembly to solve low-level tasks, such as crossing a gap \cite{gross2006autonomous} or ascending a small hill \cite{o2010self}.  In these scenarios, ground proximity sensors and tilt sensors are used to trigger self-assembly.  In our work, 3D map data is used to characterize the environment, and the system autonomously selects specific morphologies that are appropriate to the task and environment. 
+%
+In \cite{o2010self}, Swarm-Bots demonstrate swarm self-assembly to climb a hill.  Robots exhibit phototaxis, with the goal of moving toward a light source.  When robots detect the presence of a hill (using tilt sensors), they aggregate to form a random connected structure to collectively surmount the hill. A similar strategy is employed to cross holes in the ground.  In each case, the swarm of robots is loaded with a single self-assembly controller specific to an \textit{a priori} known obstacle type (hill or hole).  The robots do not self-reconfigure between specific morphologies, but rather self-assemble, beginning as a disconnected swarm and coming together to form a random connected structure.  In our work, a modular robot completes high-level tasks by autonomously self-reconfiguring between specific morphologies with different capabilities.  Our system differentiates between several types of environments using RGB-D data, and may choose to use different morphologies to solve a given high-level task in different environments.    
+ 
+%swarmanoid
+The swarmanoid project (successor to the swarm-bots), uses a heterogeneous swarm of ground and flying robots (called ``hand-'', ``foot-'', and ``eye-'' bots) to perform exploration and object retrieval tasks  \cite{Dorigo2013}. Robotic elements of the swarmanoid system connect and disconnect to complete the task, but the decision to take this action is not made autonomously by the robot in response to sensed environment conditions. While the location of the object to be retrieved is unknown, the method for retrieval is known and constant.
+
+% CKbot, Conro, MTRAN
+Self-reconfiguration has been demonstrated with several other modular robot systems. CKbot, Conro, and MTRAN have all demonstrated the ability to join disconnected clusters of modules together \cite{Yim2007, Rubenstein2004,Murata2006}. In order to align, Conro uses infra-red sensors on the docking faces of the modules, while CKBot and MTRAN use a separate sensor module on each cluster.  In all cases, individual clusters locate and servo towards each other until they are close enough to dock. These experiments do not include any planning or sequencing of multiple reconfiguration actions in order to create a goal structure appropriate for a task.  Additionally,  modules are not individually mobile, and mobile clusters of modules are limited to slow crawling gaits.  Consequently, reconfiguration is very time consuming, with a single connection requiring 5-15 minutes.
+
+% TEMP
+Other work has focused on reconfiguration planning.  Paulos et al. present a system in which self-reconfigurable modular boats self-assemble into prescribed floating structures, such as a bridge \cite{Paulos2015}.  Individual boat modules are able to move about the pool, allowing for rapid reconfiguration.  In these experiments, the environment is known and external localization is provided by an overhead AprilTag system. 
+
+MSRR systems have demonstrated the ability to accomplish low-level tasks such as various modes of locomotion \cite{Yim1994}.
+Recent work includes a system which integrates many low-level capabilities of a MSRR system in a design library, and accomplishes high-level user-specified tasks by synthesizing elements of the library into a reactive state-machine \cite{Jing2016}. This system demonstrates autonomy with respect to task-related decision making, but is designed to operate in a fully known environment with external sensing.
+
+% Traditional systems and wrapup statement
+Our system goes beyond existing work by using self-reconfiguration capabilities of an MSRR system to take autonomy a step further.  The system uses perception of the environment to inform the choice of robot configuration, allowing the robot to adapt its abilities to surmount challenges arising from \textit{a priori} unknown features in the environment. Through hardware experiments, we demonstrate that autonomous self-reconfiguration allows our system to adapt to the environment to complete complex tasks.
 
 
 %     ______                     _                      __     ____                  ____
