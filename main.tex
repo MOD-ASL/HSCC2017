@@ -175,7 +175,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Science titling
 % Double-space the manuscript.
-\baselineskip24pt
+% \baselineskip24pt
 % Make the title.
 \maketitle 
 
@@ -292,6 +292,115 @@ Recent work includes a system which integrates many low-level capabilities of a 
 % Traditional systems and wrapup statement
 Our system goes beyond existing work by using self-reconfiguration capabilities of an MSRR system to take autonomy a step further.  The system uses perception of the environment to inform the choice of robot configuration, allowing the robot to adapt its abilities to surmount challenges arising from \textit{a priori} unknown features in the environment. Through hardware experiments, we demonstrate that autonomous self-reconfiguration allows our system to adapt to the environment to complete complex tasks.
 
+
+%     ____                  ____
+%    / __ \___  _______  __/ / /______
+%   / /_/ / _ \/ ___/ / / / / __/ ___/
+%  / _, _/  __(__  ) /_/ / / /_(__  )
+% /_/ |_|\___/____/\__,_/_/\__/____/
+\section{Results}
+\label{sec:results}
+%
+In three hardware experiments, we demonstrate how our system allows the robot to autonomously explore, decide how and when to reconfigure, and manipulate objects to complete tasks in unknown environments. In Experiment I, the robot completes a complex, multi-part object retrieval task that requires significant exploration, reactive decision-making, and reconfiguration in response to its environment. Experiments II and III give the robot the task of delivering an object to an \textit{a priori} unknown goal in two different environments.  The system reacts to the two scenarios by taking very different actions, both requiring reconfiguration.
+
+In Experiment I, the robot must find, retrieve, and deliver all pink- and green-colored metal garbage to a designated drop-off zone for recycling, which is marked with a blue square on the wall. The experiment environment contains two objects to be retrieved: a green soda can in an unobstructed area, and a pink spool of wire in a narrow gap between two trash cans. Various obstacles are placed in the environment to restrict navigation. When performing the task, the robot first explores using the ``Car'' configuration. Once it locates the pink object, it recognizes the surrounding environment as a ``tunnel'' type, and the high-level planner reactively directs the robot to reconfigure to the ``Proboscis'' configuration, which is then used to reach in between the trash cans and pull the object out in the open. The robot then reconfigures to the ``Car'', retrieves the object, and delivers it to the drop-off zone which the system had previously seen and marked during exploration.
+
+For Experiments II and III, the high-level task specification is the following: start with an object, explore until finding a delivery location, and deliver the object there. Each experiment uses a different environment. For Experiment II, the robot must place a circuit board in a mailbox (marked with pink-colored tape) at the top of a set of stairs with other obstacles in the environment. For Experiment III, the robot must place a postage stamp high up on the box that is sitting in the open.
+
+For Experiment II, the robot begins exploring in the ``Scorpion'' configuration. Shortly, the robot observes and recognizes the mailbox, and characterizes the surrounding environment as ``stairs''. Based on this characterization, the high-level planner directs the robot to use the ``Snake'' configuration to traverse the stairs. Using the 3D map and characterization of the environment surrounding the mail bin, the robot navigates to a point directly in front of the stairs, faces the bin, and reconfigures to the ``Snake'' configuration. The robot then executes the stair climbing gait to reach the mail bin, and drops the circuit successfully. It then descends the stairs and reconfigures back to the ``Scorpion'' configuration to end the mission.
+
+For Experiment III, the robot begins in the ``Car'' configuration, and cannot see the package from its starting location.  After a short exploration, the robot identifies the pink square marking the package.  The pink square is unobstructed, but is approximately 25cm above the ground; the system correctly characterizes this as the ``high''-type environment, and recognizes that reconfiguration will be needed to reach up and place the stamp on the target.  The robot navigates to a position directly in front of the package, reconfigures to the ``Proboscis'' configuration, and executes the ``highReach'' behavior to place the stamp on the target, completing its task.
+
+%
+%     ____  _                           _
+%    / __ \(_)___________  ____________(_)___  ____
+%   / / / / / ___/ ___/ / / / ___/ ___/ / __ \/ __ \
+%  / /_/ / (__  ) /__/ /_/ (__  |__  ) / /_/ / / / /
+% /_____/_/____/\___/\__,_/____/____/_/\____/_/ /_/
+\section{Discussion}
+\label{sec:discussion}
+The real-world experiments demonstrate that our system has the ability to autonomously reconfigure in response to observations in an \textit{a priori} unknown environment in order to perform high-level tasks. The system performs complex tasks, determining robot actions and reconfiguration online in response to observations of the environment. Experiments I and II/III demonstrate one system successfully performing two different high-level tasks (``retrieve all objects'' vs. ``deliver an object to a target''). Experiments II and III demonstrate that the same high-level task being performed in two different environments, with the robot autonomously adapting to the challenges presented by each environment. This is the first demonstration of a modular robot system autonomously completing multiple high-level tasks by reconfiguring to appropriate morphologies in response to the perceived environment.
+
+In addition to demonstrating novel system capabilities, the experiments revealed several insights related to perception-informed autonomy on MSRR systems. We encountered challenges with achieving robust performance, and discovered many limitations of the system implementation and modular robot hardware. %We hope to share these observations to aid those who may wish to implement our system or improve its robustness and capability.
+%
+\subsection{Single-Sensor Architecture Enables Autonomy}
+%
+Autonomy in unknown environments requires powerful sensing capabilities.  Our centralized sensing architecture allowed the robot to carry a single, powerful RGB-D camera, enabling sophisticated capabilities like Visual SLAM and environment characterization. In contrast, previous systems that used distributed sensing have been forced to rely on less sophisticated sensors that can be carried by each module in the cluster, limiting their ability to operate autonomously in unknown environments.   Our system has demonstrated more sensor-based autonomy than any previous modular robot, and we believe this is due in large part to the decision to use a single, powerful sensor module.
+
+Likewise, high-fidelity centralized sensing during reconfiguration, provided by AprilTags, allowed our implementation to transform between configurations quickly and reliably.  Each reconfiguration action (a module disconnecting, moving, and reattaching) takes about one minute, and succeeds about 85\% of the time.  In contrast, past systems required 5-15 minutes for single reconfiguration actions \cite{Yim2007, Rubenstein2004,Murata2006}, which would prohibit their use in the complex tasks and environments that our system demonstrated. 
+
+Centralized sensing has some drawbacks.  The sensor module is larger than a single SMORES-EP module, and is only compatible with configurations that can hold it in a good view of the robot's surroundings.  This also limits the kinds of behaviors that can be performed, because care must be taken to hold the sensor level and steady.  The configurations and behaviors used in our experiments move more slowly than in past experiments with SMORES-EP, in part for this reason. Supporting the sensor module while traversing obstacles and rough terrain is particularly challenging.  In Experiment II, rigid connectors were used to attach the sensor module to the surrounding SMORES-EP modules, in order to avoid connection breakage when climbing the stairs. 
+
+Centralized sensing also limits reconfiguration. Since modules can only move in 2D within the camera view,  some reconfigurations are not possible.  For example,  the ``Car'' cannot reconfigure into the ``Snake'' using  our implementation, because the camera cannot see the back wheels of the ``Car''. Consequently, if the robot had started out as the ``Car'' at the beginning of Task 3, it would not have been able to complete its task.
+
+%We believe the benefits provided to our system by centralized sensing outweigh the costs.
+The decision to use a centralized sensor module represents a tradeoff, sacrificing some of the flexibility of the modular system to achieve more capability and autonomy.%As future modular systems move out of the lab and into real-world deployment, it will become increasingly important for designers to consider similar tradeoffs.
+
+While our implementation relies in part on external computation and wireless network access, this is not a fundamental system requirement.   In fact,  in our implementation the majority of  heavy computation (mapping, navigation, video processing) was done onboard on the sensor module, with a few processes (high-level planner, reconfiguration planner, and next-best-view planner) run offboard, primarily for development convenience.%
+\subsection{Strengths - Reactive Capability}
+%
+%{\color{red}(Specifying high-level tasks:)}
+The high-level planner, environment characterization tools, and library work together to allow tasks to be represented in a flexible and reactive manner. For example, at the high level, Experiments II and III are the same task: deliver an object at a point of interest.  However, after characterizing the different environments (``High'' in II, ``Stairs'' in III), the system determines that different configurations and behaviors are required to complete each task:  the Proboscis to reach up high, and the Snake to climb the stairs. Similarly, in Experiment I there is no high-level distinction between the green and pink objects - the robot is simply asked to retrieve all objects it finds.  The sensed environment once again dictates the choice of behavior: the simple problem is solved in a simple way (green object), and the more difficult problem is solved in a more sophisticated way (pink object).
+
+%{\color{red}(Interacting:)}
+We selected the three scenarios in our experiments to showcase a range of different ways SMORES-EP can interact with environments and objects: movement over flat ground, fitting into tight spaces, reaching up high, and climbing over rough terrain, and manipulating objects.  This broad range of functionality is impressive for such a small robot, and is only accessible to SMORES-EP by reconfiguring between different morphologies.
+%
+\subsection{Major Challenge - Robustness}
+%
+% Experiment Failure Table
+%
+Our implementation is vulnerable to small errors, which could cause the task to fail. 
+Table \ref{table:errors} shows the causes of failure for 24 attempts of Experiment II (placing the stamp on the package).  
+Nearly all failures are due to an error in one of the low-level components the system relies upon, with
+42\% of failure due to hardware errors and 38\% due to failures in low-level software (object recognition, navigation, environment characterization). Because the successful cases demonstrated the key novelties of our MSRR, and because the robot hardware and software are research prototypes, these failures are deemed reasonable, and would be much improved with production hardware and software. 
+
+The simulator served as a valuable prototyping tool, but all behaviors required significant
+tuning in hardware before they would run reliably.  
+The open-loop\ behaviors used for stair-climbing and reaching up to place the stamp, and fairly
+inflexible with respect to environment conditions, and also vulnerable to hardware
+errors. % like poorly calibrated encoders.  
+Exploration and reconfiguration use the sensor module to close the
+loop, and are significantly less vulnerable to these kinds of errors.  
+However, these behaviors required much more up-front development effort.
+
+%Lack of robustness is  a weakness of the system architecture.
+The high-level planner assumes all underlying components are reliable and robust, so if any low-level component fails, the high-level planner might behave unexpected and the entire task may fail. Further development, with the failure-recovery framework introduced in \cite{Maniatopoulos16icra} would likely improve robustness of the system dramatically.
+
+%In the future, we will explore high-level strategies for error recovery: for example, recognizing that a module has failed and adapting the approach so that task will not fail entirely.
+%\TODO{From Mark C: Rather than use in the future, which you should not do in journal papers, can we reference a few of our papers and say that further development, with papers A, B and C would likely improve robustness dramatically. } 
+%
+\subsection{Challenges for Future Systems}
+%
+Based on our small-scale, proof of concept experiments, we believe this system has the potential to be scaled and deployed in a real-world setting. Our experiences have provided us with some insight into the challenges future systems might face.
+
+%{(\color{red} Gathering information:)}
+We opted to use simple techniques for navigation, object recognition, and differentiating between environments, which were suitable for our proof-of-concept experiments. To deploy a similar system in real life, more sophisticated techniques would be needed. Considering the ongoing trend towards high-performance sensors and computers at small sizes, we expect that implementing these sophisticated techniques onboard the sensor module will become easier over time.
+
+%{\color{red}(Moving around:)}
+The ability of the robot to move and maneuver in the environment relies heavily on the hardware.  The SMORES-EP designs we used for exploration move slowly, and can only drive over smooth, flat ground.  In a demanding real-world application like search-and-rescue, the hardware system would likely need to be able to move more quickly.  In general, real-world applications would require modules with more powerful actuators, and the ability to hold large payloads without breaking inter-module connections.
+
+In theory, the system architecture places no fundamental limitations on the kinds of gaits or behaviors used to locomote in the environment.  However, our architecture does require a suitable \textit{motion model} and \textit{path planner} for any behavior used for locomotion.  In practice, this means that while a modular robot may be capable of a large number of creative or unusual gaits for locomotion, those that conform to standard, well-understood motion models (like differential or holonomic drive) require much less effort to implement, and often end up being the most useful for actually accomplishing tasks.
+
+%In general, the range of ways in which the robot may interact with its environment is determined by the contents of the design library, which would ideally contain a large number of configurations and behaviors suitable for a diverse set of tasks.
+The fact that our architecture relies upon a discrete representation of behaviors could mean that a real-world implementation would require a very large library, which presents some challenges. To precisely describe capabilities and limits of each behavior, the system would need a large set of attributes when labeling library entries. 
+When searching the library for behaviors with user specified constraints, our method scales linearly with respect to the size of the library.%, which makes the system suitable in real-world experiments.
+
+It is important to consider how the presented system could be adapted to work with
+other modular robot hardware. Our system relies on a 3D sensor for performing RGB-D
+SLAM, sufficient onboard processing power for perception and control algorithms,
+and a robust modular hardware system with a versatile self-reconfiguration ability
+that doesn't rely on external sensors. As long as another MSRR system provides these
+features and its own hardware-specific and reconfiguration controllers, our system
+can be integrated into it for performing high-level tasks.
+%
+
+%     __  ___      __            _       __           __   __  ___     __  __              __
+%    /  |/  /___ _/ /____  _____(_)___ _/ /____     _/_/  /  |/  /__  / /_/ /_  ____  ____/ /____
+%   / /|_/ / __ `/ __/ _ \/ ___/ / __ `/ / ___/   _/_/   / /|_/ / _ \/ __/ __ \/ __ \/ __  / ___/
+%  / /  / / /_/ / /_/  __/ /  / / /_/ / (__  )  _/_/    / /  / /  __/ /_/ / / / /_/ / /_/ (__  )
+% /_/  /_/\__,_/\__/\___/_/  /_/\__,_/_/____/  /_/     /_/  /_/\___/\__/_/ /_/\____/\__,_/____/
+
+
 \section{Methods and Materials: System Architecture and Implementation}\label{sec:system}
 %
 %
@@ -322,9 +431,6 @@ The following sections discuss the role of each component within the general sys
 % \end{old}
 %
 % System Overview Figure
-
-
-%
 
 %     __  __               __
 %    / / / /___ __________/ /      ______ _________
@@ -624,184 +730,7 @@ If the current configuration cannot execute the behavior, the controller instruc
 %The system then maps the system proposition specified in the next state to its set of behavior properties, and selects a behavior from the design library which satisfies both the behavior properties and current environment properties.
 %If the robot is not currently in a configuration capable of executing the selected behavior, the system commands the robot to reconfigure. Finally, the behavior is executed, and the program continues on to the next iteration. 
 
-%     ______                     _                      __
-%    / ____/  ______  ___  _____(_)___ ___  ___  ____  / /______
-%   / __/ | |/_/ __ \/ _ \/ ___/ / __ `__ \/ _ \/ __ \/ __/ ___/
-%  / /____>  </ /_/ /  __/ /  / / / / / / /  __/ / / / /_(__  )
-% /_____/_/|_/ .___/\___/_/  /_/_/ /_/ /_/\___/_/ /_/\__/____/
-%           /_/
-\section{Results}
-\label{sec:results}
-%
-In three hardware experiments, we demonstrate how our system allows the robot to autonomously explore, decide how and when to reconfigure, and manipulate objects to complete tasks in unknown environments. In Experiment I, the robot completes a complex, multi-part object retrieval task that requires significant exploration, reactive decision-making, and reconfiguration in response to its environment. Experiments II and III give the robot the task of delivering an object to an \textit{a priori} unknown goal in two different environments.  The system reacts to the two scenarios by taking very different actions, both requiring reconfiguration.
-
-In Experiment I, the robot must find, retrieve, and deliver all pink- and green-colored metal garbage to a designated drop-off zone for recycling, which is marked with a blue square on the wall. The experiment environment contains two objects to be retrieved: a green soda can in an unobstructed area, and a pink spool of wire in a narrow gap between two trash cans. Various obstacles are placed in the environment to restrict navigation. When performing the task, the robot first explores using the ``Car'' configuration. Once it locates the pink object, it recognizes the surrounding environment as a ``tunnel'' type, and the high-level planner reactively directs the robot to reconfigure to the ``Proboscis'' configuration, which is then used to reach in between the trash cans and pull the object out in the open. The robot then reconfigures to the ``Car'', retrieves the object, and delivers it to the drop-off zone which the system had previously seen and marked during exploration.
-
-For Experiments II and III, the high-level task specification is the following: start with an object, explore until finding a delivery location, and deliver the object there. Each experiment uses a different environment. For Experiment II, the robot must place a circuit board in a mailbox (marked with pink-colored tape) at the top of a set of stairs with other obstacles in the environment. For Experiment III, the robot must place a postage stamp high up on the box that is sitting in the open.
-
-For Experiment II, the robot begins exploring in the ``Scorpion'' configuration. Shortly, the robot observes and recognizes the mailbox, and characterizes the surrounding environment as ``stairs''. Based on this characterization, the high-level planner directs the robot to use the ``Snake'' configuration to traverse the stairs. Using the 3D map and characterization of the environment surrounding the mail bin, the robot navigates to a point directly in front of the stairs, faces the bin, and reconfigures to the ``Snake'' configuration. The robot then executes the stair climbing gait to reach the mail bin, and drops the circuit successfully. It then descends the stairs and reconfigures back to the ``Scorpion'' configuration to end the mission.
-
-For Experiment III, the robot begins in the ``Car'' configuration, and cannot see the package from its starting location.  After a short exploration, the robot identifies the pink square marking the package.  The pink square is unobstructed, but is approximately 25cm above the ground; the system correctly characterizes this as the ``high''-type environment, and recognizes that reconfiguration will be needed to reach up and place the stamp on the target.  The robot navigates to a position directly in front of the package, reconfigures to the ``Proboscis'' configuration, and executes the ``highReach'' behavior to place the stamp on the target, completing its task.
-
-\section{Experiment Results}
-\label{sec:experiments}
-
-% Map Figure
-
-% Experiment 1 Figure
-%
-Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available at \url{https://youtu.be/eJsnG9DZjgM}. The robot starts in the ``Car'' configuration. The starting location prevents the robot from seeing the objects initially, forcing it to explore the environment. After a period of exploration, the robot locates the pink object. The characterization algorithm correctly classifies the surrounding environment as a ``tunnel'' type, and gives this classification to the high-level planner. Based on this classification, the high-level planner directs the robot to navigate in front of the object and reconfigure to the ``Proboscis'' configuration. The ``Proboscis'' then uses its long arm to reach into the tunnel and pull the object out into the open.
-
- The ``Proboscis'' only has behaviors to drive forwards and backwards (it has no turning behavior), so the robot concludes that it must reconfigure back to the ``Car'' to drive the object to the drop-off zone.  To do so, the robot drops the object, reconfigures, and picks the object back up. The ``Car'' then navigates to and drops off the object at the drop-off zone, which the robot previously located during exploration and recorded in the global map built by the SLAM algorithm.
-
-After delivering the pink object, the robot navigates directly to the green object, discovered while dropping off the pink object. The robot correctly determines that the green object is in a ``free'' environment, and picks it up without reconfiguring. The robot finishes the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows a volumetric map of the environment generated as the robot explores and delivers objects. The robot successfully completed all tasks in the experiment in approximately 26 minutes.
-
-Note that at one point in the video a person reaches onto the field to dislodge the green object from a crack in the floor.  This was due to a defect in the experimental setup (which is not supposed to have a crack in the floor) and not an error in the robot's performance.
-
-In three hardware experiments, we demonstrate how our system allows the robot to autonomously explore, decide how and when to reconfigure, and manipulate objects to complete tasks in unknown environments. Table \ref{table:task-compare} presents the environments and tasks in each experiment.
-In Experiment I, the robot completes a complex, multi-part object retrieval task that requires significant exploration, reactive decision-making, and reconfiguration in response to its environment.
-Experiments II and III give the robot the task of delivering an object to an \textit{a priori} unknown goal in two different environments.  The system reacts to the two scenarios by taking very different actions, both requiring reconfiguration.
-
-These experiments accomplish two goals.  First, they fill an experimental
-gap in the field, representing the first evidence of a modular robot autonomously reconfiguring in response to its perceived (\textit{a priori} unknown) environment in order to complete tasks.  Second, they provide observations and insights into the challenges presented by autonomous modular robot systems.  By discussing lessons learned, others may build on our work and create even more capable systems. 
-
-%As mentioned earlier, our work presents the first MSRR system that uses perception and reconfiguration to autonomously perform high-level tasks in unknown environments. We tested our system implementation on multiple, real-world tasks.
-%These experiments accomplish two goals: First, they demonstrate our system's ability to autonomously adapt to multiple unknown environments and to complete different tasks. 
-%Second, they provide new observations of challenges with fully autonomous MSRR systems. These observations provide insight on what can be improved in autonomous MSRR systems to make them more robust and versatile.
-
-%Three experiments were run, each time varying the environment and the type of task to be performed. Each experiment required the robot to explore an unknown environment to search for and identify one or more objects of interest, and then complete some manipulation task with those objects.
-
-% Environments and tasks table:
-
-\subsection{Experiment I}
-%
-Experiment I tasks the robot with cleaning a messy graduate student office.  Figure \ref{fig:map} illustrates the environment layout. The robot must explore the unknown office environment and search for any green- or pink-colored metal garbage that can be recycled.  The robot must find, retrieve, and deliver all metal garbage to a designated drop-off zone for recycling, which is marked with a blue square on the wall.
-
-The high-level task is compact, consisting of three sub-tasks: explore the environment, find and retrieve all metal objects, and deliver each to the drop-off zone.  Successful completion of the task in the given environment requires complex behavior that fully utilizes the robot's exploration, reconfiguration, and manipulation abilities. The environment contains two colored objects: a green soda can in the open (a ``free'' environment type), and a pink spool of wire in a narrow gap between two trash cans (a ``tunnel'' environment). Although the colors of the target objects are known \textit{a priori}, the types of environments surrounding the objects, the locations of the objects and drop-off zone, and obstacles in the environment are unknown \textit{a priori}.  Note that the object colors (pink and green) have no influence on environment characterization: in other words, the robot does not know that the pink object is in a ``tunnel''  before the experiment starts.  Both objects have small pieces of steel attached, giving the modules something to grasp using their magnetic connectors.
-
-Five SMORES-EP modules, one Sensor Module\footnote{This experiment uses an older version of the sensor module.}, and three passive cubes composed the robot for performing the task. The body is larger (160 $\times$ 80 $\times$ 80mm box), and it uses an older Asus Xtion Pro Live RGB-D camera, which is larger than the Orbecc Astra but provides similar data.  The only functional difference between this older sensor module and the version presented in Section~\ref{sec:sensor_module} is the larger size.
-During the experiment, the high-level planner used the library of configurations and behaviors described in Section \ref{sec:configuration-specifics}.
-
-% Map Figure
-
-% Experiment 1 Figure
-%
-Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available at \url{https://youtu.be/eJsnG9DZjgM}. The robot starts in the ``Car'' configuration. The starting location prevents the robot from seeing the objects initially, forcing it to explore the environment. After a period of exploration, the robot locates the pink object. The characterization algorithm correctly classifies the surrounding environment as a ``tunnel'' type, and gives this classification to the high-level planner. Based on this classification, the high-level planner directs the robot to navigate in front of the object and reconfigure to the ``Proboscis'' configuration. The ``Proboscis'' then uses its long arm to reach into the tunnel and pull the object out into the open.
-
- The ``Proboscis'' only has behaviors to drive forwards and backwards (it has no turning behavior), so the robot concludes that it must reconfigure back to the ``Car'' to drive the object to the drop-off zone.  To do so, the robot drops the object, reconfigures, and picks the object back up. The ``Car'' then navigates to and drops off the object at the drop-off zone, which the robot previously located during exploration and recorded in the global map built by the SLAM algorithm.
-
-After delivering the pink object, the robot navigates directly to the green object, discovered while dropping off the pink object. The robot correctly determines that the green object is in a ``free'' environment, and picks it up without reconfiguring. The robot finishes the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows a volumetric map of the environment generated as the robot explores and delivers objects. The robot successfully completed all tasks in the experiment in approximately 26 minutes.
-
-Note that at one point in the video a person reaches onto the field to dislodge the green object from a crack in the floor.  This was due to a defect in the experimental setup (which is not supposed to have a crack in the floor) and not an error in the robot's performance.
-%
-% Octomap figure
-
-\subsection{Experiment II}
-%
-In Experiments II and III, the robot helps researchers at the University of Pennsylvania mail a circuit board to collaborators at Cornell.  First, in Experiment II, the robot must place the circuit board in a mailbox, and then in Experiment III, the robot must place a postage stamp on the box so that it can be shipped.  Experiments I and II have the same high-level task specification: starting with an object in its possession, the robot must explore until finding a drop-off point, then deposit the object at the drop-off point.
-
-%%%%%%%%%%%%%%%
-
-%The second and third experiments were designed to demonstrate the breadth of our system's adaptive capabilities. As such, these two experiments included the same high-level task specification that is different from the task in Experiment I. However, differing environments between Experiment II and Experiment III force the robot to adapt differently while performing the task.
-%For Experiment II, the robot is given a circuit that needs to be shipped, and is tasked with finding the shipping bin in which to place the circuit.
-%The high-level task includes sub-tasks of exploring the unknown environment, locating and characterizing the environment surrounding the mail bin, and delivering the package to the bin.
-
-The environment setup for Experiment II (see Table \ref{table:task-compare}) includes an obstacle (cardboard box), a staircase, and the mailbox at the top of the staircase.  A pink rectangle indicates the mailbox.  Note that this scenario is identical to the mail delivery example mentioned as motivation earlier in the paper.
-
-%The full performance of the experiment is included in the video attachment to this paper.
-The robot begins the experiment in the ``Scorpion'' configuration with its view of the staircase and mailbox blocked by the cardboard box.  After a short period of exploration, the robot observes and recognizes the mailbox, and characterizes the surrounding environment as ``stairs''. Based on this characterization, the high-level planner directs the robot to use the ``Snake'' configuration to traverse the stairs. Using the 3D map and characterization of the environment surrounding the mail bin, the robot navigates to a point directly in front of the stairs, faces the bin, and reconfigures to the ``Snake'' configuration. The robot then executes the stair climbing gait to reach the mail bin, and drops the circuit successfully. It then descends the stairs and reconfigures back to the ``Scorpion'' configuration to end the mission.
-
-% Experiment 2 and 3 Figure
-
-\subsection{Experiment III}
-
-For the final experiment, a student gives the robot a postage stamp\footnote{The postage stamp has a thin steel backing, so that the robot can pick it up with its magnets, and so that it adheres to magnets on the package.} to place on the package so that it can be shipped to Cornell. The high-level task has the same specification as in Experiment II: explore the unknown environment, find the delivery goal indicated by a pink area, and place the object at the target. The environment is different, most significantly in that the delivery goal is in a ``high'' environment type instead of the ``stairs'' environment used in Experiment II (see Table \ref{table:task-compare}).
-
-%Please see the video attachment for the full performance of this experiment.
-The robot begins in the ``Car'' configuration, and cannot see the package from its starting location.  After a short exploration, the robot identifies the pink square marking the package.  The pink square is unobstructed, but is approximately 25cm above the ground; the system correctly characterizes this as the ``high''-type environment, and recognizes that reconfiguration will be needed to reach up and place the stamp on the target.  The robot navigates to a position directly in front of the package, reconfigures to the ``Proboscis'' configuration, and executes the ``highReach'' behavior to place the stamp on the target, completing its task.
-%
-%     ____  _                           _
-%    / __ \(_)___________  ____________(_)___  ____
-%   / / / / / ___/ ___/ / / / ___/ ___/ / __ \/ __ \
-%  / /_/ / (__  ) /__/ /_/ (__  |__  ) / /_/ / / / /
-% /_____/_/____/\___/\__,_/____/____/_/\____/_/ /_/
-\section{Discussion}
-\label{sec:discussion}
-The real-world experiments demonstrate that our system has the ability to autonomously reconfigure in response to observations in an \textit{a priori} unknown environment in order to perform high-level tasks. The system performs complex tasks, determining robot actions and reconfiguration online in response to observations of the environment. Experiments I and II/III demonstrate one system successfully performing two different high-level tasks (``retrieve all objects'' vs. ``deliver an object to a target''). Experiments II and III demonstrate that the same high-level task being performed in two different environments, with the robot autonomously adapting to the challenges presented by each environment. This is the first demonstration of a modular robot system autonomously completing multiple high-level tasks by reconfiguring to appropriate morphologies in response to the perceived environment.
-
-In addition to demonstrating novel system capabilities, the experiments revealed several insights related to perception-informed autonomy on MSRR systems. We encountered challenges with achieving robust performance, and discovered many limitations of the system implementation and modular robot hardware. %We hope to share these observations to aid those who may wish to implement our system or improve its robustness and capability.
-%
-\subsection{Single-Sensor Architecture Enables Autonomy}
-%
-Autonomy in unknown environments requires powerful sensing capabilities.  Our centralized sensing architecture allowed the robot to carry a single, powerful RGB-D camera, enabling sophisticated capabilities like Visual SLAM and environment characterization. In contrast, previous systems that used distributed sensing have been forced to rely on less sophisticated sensors that can be carried by each module in the cluster, limiting their ability to operate autonomously in unknown environments.   Our system has demonstrated more sensor-based autonomy than any previous modular robot, and we believe this is due in large part to the decision to use a single, powerful sensor module.
-
-Likewise, high-fidelity centralized sensing during reconfiguration, provided by AprilTags, allowed our implementation to transform between configurations quickly and reliably.  Each reconfiguration action (a module disconnecting, moving, and reattaching) takes about one minute, and succeeds about 85\% of the time.  In contrast, past systems required 5-15 minutes for single reconfiguration actions \cite{Yim2007, Rubenstein2004,Murata2006}, which would prohibit their use in the complex tasks and environments that our system demonstrated. 
-
-Centralized sensing has some drawbacks.  The sensor module is larger than a single SMORES-EP module, and is only compatible with configurations that can hold it in a good view of the robot's surroundings.  This also limits the kinds of behaviors that can be performed, because care must be taken to hold the sensor level and steady.  The configurations and behaviors used in our experiments move more slowly than in past experiments with SMORES-EP, in part for this reason. Supporting the sensor module while traversing obstacles and rough terrain is particularly challenging.  In Experiment II, rigid connectors were used to attach the sensor module to the surrounding SMORES-EP modules, in order to avoid connection breakage when climbing the stairs. 
-
-Centralized sensing also limits reconfiguration. Since modules can only move in 2D within the camera view,  some reconfigurations are not possible.  For example,  the ``Car'' cannot reconfigure into the ``Snake'' using  our implementation, because the camera cannot see the back wheels of the ``Car''. Consequently, if the robot had started out as the ``Car'' at the beginning of Task 3, it would not have been able to complete its task.
-
-%We believe the benefits provided to our system by centralized sensing outweigh the costs.
-The decision to use a centralized sensor module represents a tradeoff, sacrificing some of the flexibility of the modular system to achieve more capability and autonomy.%As future modular systems move out of the lab and into real-world deployment, it will become increasingly important for designers to consider similar tradeoffs.
-
-While our implementation relies in part on external computation and wireless network access, this is not a fundamental system requirement.   In fact,  in our implementation the majority of  heavy computation (mapping, navigation, video processing) was done onboard on the sensor module, with a few processes (high-level planner, reconfiguration planner, and next-best-view planner) run offboard, primarily for development convenience.%
-\subsection{Strengths - Reactive Capability}
-%
-%{\color{red}(Specifying high-level tasks:)}
-The high-level planner, environment characterization tools, and library work together to allow tasks to be represented in a flexible and reactive manner. For example, at the high level, Experiments II and III are the same task: deliver an object at a point of interest.  However, after characterizing the different environments (``High'' in II, ``Stairs'' in III), the system determines that different configurations and behaviors are required to complete each task:  the Proboscis to reach up high, and the Snake to climb the stairs. Similarly, in Experiment I there is no high-level distinction between the green and pink objects - the robot is simply asked to retrieve all objects it finds.  The sensed environment once again dictates the choice of behavior: the simple problem is solved in a simple way (green object), and the more difficult problem is solved in a more sophisticated way (pink object).
-
-%{\color{red}(Interacting:)}
-We selected the three scenarios in our experiments to showcase a range of different ways SMORES-EP can interact with environments and objects: movement over flat ground, fitting into tight spaces, reaching up high, and climbing over rough terrain, and manipulating objects.  This broad range of functionality is impressive for such a small robot, and is only accessible to SMORES-EP by reconfiguring between different morphologies.
-%
-\subsection{Major Challenge - Robustness}
-%
-% Experiment Failure Table
-%
-Our implementation is vulnerable to small errors, which could cause the task to fail. 
-Table \ref{table:errors} shows the causes of failure for 24 attempts of Experiment II (placing the stamp on the package).  
-Nearly all failures are due to an error in one of the low-level components the system relies upon, with
-42\% of failure due to hardware errors and 38\% due to failures in low-level software (object recognition, navigation, environment characterization). Because the successful cases demonstrated the key novelties of our MSRR, and because the robot hardware and software are research prototypes, these failures are deemed reasonable, and would be much improved with production hardware and software. 
-
-The simulator served as a valuable prototyping tool, but all behaviors required significant
-tuning in hardware before they would run reliably.  
-The open-loop\ behaviors used for stair-climbing and reaching up to place the stamp, and fairly
-inflexible with respect to environment conditions, and also vulnerable to hardware
-errors. % like poorly calibrated encoders.  
-Exploration and reconfiguration use the sensor module to close the
-loop, and are significantly less vulnerable to these kinds of errors.  
-However, these behaviors required much more up-front development effort.
-
-%Lack of robustness is  a weakness of the system architecture.
-The high-level planner assumes all underlying components are reliable and robust, so if any low-level component fails, the high-level planner might behave unexpected and the entire task may fail. Further development, with the failure-recovery framework introduced in \cite{Maniatopoulos16icra} would likely improve robustness of the system dramatically.
-
-%In the future, we will explore high-level strategies for error recovery: for example, recognizing that a module has failed and adapting the approach so that task will not fail entirely.
-%\TODO{From Mark C: Rather than use in the future, which you should not do in journal papers, can we reference a few of our papers and say that further development, with papers A, B and C would likely improve robustness dramatically. } 
-%
-\subsection{Challenges for Future Systems}
-%
-Based on our small-scale, proof of concept experiments, we believe this system has the potential to be scaled and deployed in a real-world setting. Our experiences have provided us with some insight into the challenges future systems might face.
-
-%{(\color{red} Gathering information:)}
-We opted to use simple techniques for navigation, object recognition, and differentiating between environments, which were suitable for our proof-of-concept experiments. To deploy a similar system in real life, more sophisticated techniques would be needed. Considering the ongoing trend towards high-performance sensors and computers at small sizes, we expect that implementing these sophisticated techniques onboard the sensor module will become easier over time.
-
-%{\color{red}(Moving around:)}
-The ability of the robot to move and maneuver in the environment relies heavily on the hardware.  The SMORES-EP designs we used for exploration move slowly, and can only drive over smooth, flat ground.  In a demanding real-world application like search-and-rescue, the hardware system would likely need to be able to move more quickly.  In general, real-world applications would require modules with more powerful actuators, and the ability to hold large payloads without breaking inter-module connections.
-
-In theory, the system architecture places no fundamental limitations on the kinds of gaits or behaviors used to locomote in the environment.  However, our architecture does require a suitable \textit{motion model} and \textit{path planner} for any behavior used for locomotion.  In practice, this means that while a modular robot may be capable of a large number of creative or unusual gaits for locomotion, those that conform to standard, well-understood motion models (like differential or holonomic drive) require much less effort to implement, and often end up being the most useful for actually accomplishing tasks.
-
-%In general, the range of ways in which the robot may interact with its environment is determined by the contents of the design library, which would ideally contain a large number of configurations and behaviors suitable for a diverse set of tasks.
-The fact that our architecture relies upon a discrete representation of behaviors could mean that a real-world implementation would require a very large library, which presents some challenges. To precisely describe capabilities and limits of each behavior, the system would need a large set of attributes when labeling library entries. 
-When searching the library for behaviors with user specified constraints, our method scales linearly with respect to the size of the library.%, which makes the system suitable in real-world experiments.
-
-It is important to consider how the presented system could be adapted to work with
-other modular robot hardware. Our system relies on a 3D sensor for performing RGB-D
-SLAM, sufficient onboard processing power for perception and control algorithms,
-and a robust modular hardware system with a versatile self-reconfiguration ability
-that doesn't rely on external sensors. As long as another MSRR system provides these
-features and its own hardware-specific and reconfiguration controllers, our system
-can be integrated into it for performing high-level tasks.
-%
-\subsection{Conclusion}
+\section{Conclusion}
 %
 To conclude, this paper presents the first modular self-reconfigurable robot system that uses perception of an unknown environment to reactively perform complex high-level tasks using intelligent reconfiguration. Experiments I and II/III demonstrate
 the system successfully performing two different high-level tasks (``retrieve
@@ -1115,6 +1044,103 @@ Human Error & 4 & 16.7\% \\
 \label{table:errors}
 \end{table}
 
+
+%    _____                   __                          __
+%   / ___/__  ______  ____  / /__  ____ ___  ___  ____  / /_____ ________  __
+%   \__ \/ / / / __ \/ __ \/ / _ \/ __ `__ \/ _ \/ __ \/ __/ __ `/ ___/ / / /
+%  ___/ / /_/ / /_/ / /_/ / /  __/ / / / / /  __/ / / / /_/ /_/ / /  / /_/ /
+% /____/\__,_/ .___/ .___/_/\___/_/ /_/ /_/\___/_/ /_/\__/\__,_/_/   \__, /
+%           /_/   /_/                                               /____/
+\part*{Supplementary Materials}
+
+
+%     ______                     _                      __     ____                  ____
+%    / ____/  ______  ___  _____(_)___ ___  ___  ____  / /_   / __ \___  _______  __/ / /______
+%   / __/ | |/_/ __ \/ _ \/ ___/ / __ `__ \/ _ \/ __ \/ __/  / /_/ / _ \/ ___/ / / / / __/ ___/
+%  / /____>  </ /_/ /  __/ /  / / / / / / /  __/ / / / /_   / _, _/  __(__  ) /_/ / / /_(__  )
+% /_____/_/|_/ .___/\___/_/  /_/_/ /_/ /_/\___/_/ /_/\__/  /_/ |_|\___/____/\__,_/_/\__/____/
+%           /_/
+\section{Experiment Results}
+\label{sec:experiments}
+
+\begin{notes}
+This is the old Experiment Results section from the TRO paper
+
+\end{notes}
+
+% Map Figure
+
+% Experiment 1 Figure
+%
+Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available at \url{https://youtu.be/eJsnG9DZjgM}. The robot starts in the ``Car'' configuration. The starting location prevents the robot from seeing the objects initially, forcing it to explore the environment. After a period of exploration, the robot locates the pink object. The characterization algorithm correctly classifies the surrounding environment as a ``tunnel'' type, and gives this classification to the high-level planner. Based on this classification, the high-level planner directs the robot to navigate in front of the object and reconfigure to the ``Proboscis'' configuration. The ``Proboscis'' then uses its long arm to reach into the tunnel and pull the object out into the open.
+
+ The ``Proboscis'' only has behaviors to drive forwards and backwards (it has no turning behavior), so the robot concludes that it must reconfigure back to the ``Car'' to drive the object to the drop-off zone.  To do so, the robot drops the object, reconfigures, and picks the object back up. The ``Car'' then navigates to and drops off the object at the drop-off zone, which the robot previously located during exploration and recorded in the global map built by the SLAM algorithm.
+
+After delivering the pink object, the robot navigates directly to the green object, discovered while dropping off the pink object. The robot correctly determines that the green object is in a ``free'' environment, and picks it up without reconfiguring. The robot finishes the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows a volumetric map of the environment generated as the robot explores and delivers objects. The robot successfully completed all tasks in the experiment in approximately 26 minutes.
+
+Note that at one point in the video a person reaches onto the field to dislodge the green object from a crack in the floor.  This was due to a defect in the experimental setup (which is not supposed to have a crack in the floor) and not an error in the robot's performance.
+
+In three hardware experiments, we demonstrate how our system allows the robot to autonomously explore, decide how and when to reconfigure, and manipulate objects to complete tasks in unknown environments. Table \ref{table:task-compare} presents the environments and tasks in each experiment.
+In Experiment I, the robot completes a complex, multi-part object retrieval task that requires significant exploration, reactive decision-making, and reconfiguration in response to its environment.
+Experiments II and III give the robot the task of delivering an object to an \textit{a priori} unknown goal in two different environments.  The system reacts to the two scenarios by taking very different actions, both requiring reconfiguration.
+
+These experiments accomplish two goals.  First, they fill an experimental
+gap in the field, representing the first evidence of a modular robot autonomously reconfiguring in response to its perceived (\textit{a priori} unknown) environment in order to complete tasks.  Second, they provide observations and insights into the challenges presented by autonomous modular robot systems.  By discussing lessons learned, others may build on our work and create even more capable systems. 
+
+%As mentioned earlier, our work presents the first MSRR system that uses perception and reconfiguration to autonomously perform high-level tasks in unknown environments. We tested our system implementation on multiple, real-world tasks.
+%These experiments accomplish two goals: First, they demonstrate our system's ability to autonomously adapt to multiple unknown environments and to complete different tasks. 
+%Second, they provide new observations of challenges with fully autonomous MSRR systems. These observations provide insight on what can be improved in autonomous MSRR systems to make them more robust and versatile.
+
+%Three experiments were run, each time varying the environment and the type of task to be performed. Each experiment required the robot to explore an unknown environment to search for and identify one or more objects of interest, and then complete some manipulation task with those objects.
+
+% Environments and tasks table:
+
+\subsection{Experiment I}
+%
+Experiment I tasks the robot with cleaning a messy graduate student office.  Figure \ref{fig:map} illustrates the environment layout. The robot must explore the unknown office environment and search for any green- or pink-colored metal garbage that can be recycled.  The robot must find, retrieve, and deliver all metal garbage to a designated drop-off zone for recycling, which is marked with a blue square on the wall.
+
+The high-level task is compact, consisting of three sub-tasks: explore the environment, find and retrieve all metal objects, and deliver each to the drop-off zone.  Successful completion of the task in the given environment requires complex behavior that fully utilizes the robot's exploration, reconfiguration, and manipulation abilities. The environment contains two colored objects: a green soda can in the open (a ``free'' environment type), and a pink spool of wire in a narrow gap between two trash cans (a ``tunnel'' environment). Although the colors of the target objects are known \textit{a priori}, the types of environments surrounding the objects, the locations of the objects and drop-off zone, and obstacles in the environment are unknown \textit{a priori}.  Note that the object colors (pink and green) have no influence on environment characterization: in other words, the robot does not know that the pink object is in a ``tunnel''  before the experiment starts.  Both objects have small pieces of steel attached, giving the modules something to grasp using their magnetic connectors.
+
+Five SMORES-EP modules, one Sensor Module\footnote{This experiment uses an older version of the sensor module.}, and three passive cubes composed the robot for performing the task. The body is larger (160 $\times$ 80 $\times$ 80mm box), and it uses an older Asus Xtion Pro Live RGB-D camera, which is larger than the Orbecc Astra but provides similar data.  The only functional difference between this older sensor module and the version presented in Section~\ref{sec:sensor_module} is the larger size.
+During the experiment, the high-level planner used the library of configurations and behaviors described in Section \ref{sec:configuration-specifics}.
+
+% Map Figure
+
+% Experiment 1 Figure
+%
+Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available at \url{https://youtu.be/eJsnG9DZjgM}. The robot starts in the ``Car'' configuration. The starting location prevents the robot from seeing the objects initially, forcing it to explore the environment. After a period of exploration, the robot locates the pink object. The characterization algorithm correctly classifies the surrounding environment as a ``tunnel'' type, and gives this classification to the high-level planner. Based on this classification, the high-level planner directs the robot to navigate in front of the object and reconfigure to the ``Proboscis'' configuration. The ``Proboscis'' then uses its long arm to reach into the tunnel and pull the object out into the open.
+
+ The ``Proboscis'' only has behaviors to drive forwards and backwards (it has no turning behavior), so the robot concludes that it must reconfigure back to the ``Car'' to drive the object to the drop-off zone.  To do so, the robot drops the object, reconfigures, and picks the object back up. The ``Car'' then navigates to and drops off the object at the drop-off zone, which the robot previously located during exploration and recorded in the global map built by the SLAM algorithm.
+
+After delivering the pink object, the robot navigates directly to the green object, discovered while dropping off the pink object. The robot correctly determines that the green object is in a ``free'' environment, and picks it up without reconfiguring. The robot finishes the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows a volumetric map of the environment generated as the robot explores and delivers objects. The robot successfully completed all tasks in the experiment in approximately 26 minutes.
+
+Note that at one point in the video a person reaches onto the field to dislodge the green object from a crack in the floor.  This was due to a defect in the experimental setup (which is not supposed to have a crack in the floor) and not an error in the robot's performance.
+%
+% Octomap figure
+
+\subsection{Experiment II}
+%
+In Experiments II and III, the robot helps researchers at the University of Pennsylvania mail a circuit board to collaborators at Cornell.  First, in Experiment II, the robot must place the circuit board in a mailbox, and then in Experiment III, the robot must place a postage stamp on the box so that it can be shipped.  Experiments I and II have the same high-level task specification: starting with an object in its possession, the robot must explore until finding a drop-off point, then deposit the object at the drop-off point.
+
+%%%%%%%%%%%%%%%
+
+%The second and third experiments were designed to demonstrate the breadth of our system's adaptive capabilities. As such, these two experiments included the same high-level task specification that is different from the task in Experiment I. However, differing environments between Experiment II and Experiment III force the robot to adapt differently while performing the task.
+%For Experiment II, the robot is given a circuit that needs to be shipped, and is tasked with finding the shipping bin in which to place the circuit.
+%The high-level task includes sub-tasks of exploring the unknown environment, locating and characterizing the environment surrounding the mail bin, and delivering the package to the bin.
+
+The environment setup for Experiment II (see Table \ref{table:task-compare}) includes an obstacle (cardboard box), a staircase, and the mailbox at the top of the staircase.  A pink rectangle indicates the mailbox.  Note that this scenario is identical to the mail delivery example mentioned as motivation earlier in the paper.
+
+%The full performance of the experiment is included in the video attachment to this paper.
+The robot begins the experiment in the ``Scorpion'' configuration with its view of the staircase and mailbox blocked by the cardboard box.  After a short period of exploration, the robot observes and recognizes the mailbox, and characterizes the surrounding environment as ``stairs''. Based on this characterization, the high-level planner directs the robot to use the ``Snake'' configuration to traverse the stairs. Using the 3D map and characterization of the environment surrounding the mail bin, the robot navigates to a point directly in front of the stairs, faces the bin, and reconfigures to the ``Snake'' configuration. The robot then executes the stair climbing gait to reach the mail bin, and drops the circuit successfully. It then descends the stairs and reconfigures back to the ``Scorpion'' configuration to end the mission.
+
+% Experiment 2 and 3 Figure
+
+\subsection{Experiment III}
+
+For the final experiment, a student gives the robot a postage stamp\footnote{The postage stamp has a thin steel backing, so that the robot can pick it up with its magnets, and so that it adheres to magnets on the package.} to place on the package so that it can be shipped to Cornell. The high-level task has the same specification as in Experiment II: explore the unknown environment, find the delivery goal indicated by a pink area, and place the object at the target. The environment is different, most significantly in that the delivery goal is in a ``high'' environment type instead of the ``stairs'' environment used in Experiment II (see Table \ref{table:task-compare}).
+
+%Please see the video attachment for the full performance of this experiment.
+The robot begins in the ``Car'' configuration, and cannot see the package from its starting location.  After a short exploration, the robot identifies the pink square marking the package.  The pink square is unobstructed, but is approximately 25cm above the ground; the system correctly characterizes this as the ``high''-type environment, and recognizes that reconfiguration will be needed to reach up and place the stamp on the target.  The robot navigates to a position directly in front of the package, reconfigures to the ``Proboscis'' configuration, and executes the ``highReach'' behavior to place the stamp on the target, completing its task.
 %     ______          __
 %    / ____/___  ____/ /
 %   / __/ / __ \/ __  /
