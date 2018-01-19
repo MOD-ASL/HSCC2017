@@ -244,37 +244,15 @@ We validate our system in three hardware experiments, demonstrating that, based 
 %%%%% Compression Attempt 2
 We demonstrate an autonomous, perception-informed, modular robot system that can reactively adapt to unknown environments via reconfiguration in order to perform complex tasks. The system hardware consists of a set of \textbf{robot modules} (that can move independently and dock with each other to form larger morphologies), and a \textbf{sensor module} that contains multiple cameras and small computer for collecting and processing data from the environment. Software components consist of a \textbf{high-level planner} to direct robot actions and reconfiguration, and \textbf{perception algorithms} to perform mapping, navigation, and classification of the environment.
 
-Our system is the first to show that modular robots can autonomously complete high-level, complex tasks by reconfiguring to appropriate morphologies in response to the perceived environment. We demonstrate this ability with three hardware experiments using two different tasks. In Experiment I, the robot must find, retrieve, and deliver all pink- and green-colored metal garbage to a designated drop-off zone for recycling, which is marked with a blue square on the wall. The experiment environment contains two objects to be retrieved: a green soda can in an unobstructed area, and a pink spool of wire in a narrow gap between two trash cans. Various obstacles are placed in the environment to restrict navigation. When performing the task, the robot first explores using the ``Car'' configuration. Once it locates the pink object, it recognizes the surrounding environment as a ``tunnel'' type, and the high-level planner reactively directs the robot to reconfigure to the ``Proboscis'' configuration, which is then used to reach in between the trash cans and pull the object out in the open. The robot then reconfigures to the ``Car'', retrieves the object, and delivers it to the drop-off zone which the system had previously seen and marked during exploration.
+Our system is the first to show that modular robots can autonomously complete high-level, complex tasks by reconfiguring to appropriate morphologies in response to the perceived environment. We demonstrate this ability with three hardware experiments using two different tasks. For each experiment, the environment is unknown \textit{a priori}, and the robot must explore and reactively reconfigure to adapt to discovered environmental challenges. Figure \ref{fig:envs} shows the environments used for each experiment, and Figure \ref{fig:experiments} shows snapshots during each of the experiments. A video of all three experiments is available at \url{https://youtu.be/eJsnG9DZjgM}.
+
+In Experiment I, the robot must find, retrieve, and deliver all pink- and green-colored metal garbage to a designated drop-off zone for recycling, which is marked with a blue square on the wall. The experiment environment contains two objects to be retrieved: a green soda can in an unobstructed area, and a pink spool of wire in a narrow gap between two trash cans. Various obstacles are placed in the environment to restrict navigation. When performing the task, the robot first explores using the ``Car'' configuration. Once it locates the pink object, it recognizes the surrounding environment as a ``tunnel'' type, and the high-level planner reactively directs the robot to reconfigure to the ``Proboscis'' configuration, which is then used to reach in between the trash cans and pull the object out in the open. The robot then reconfigures to the ``Car'', retrieves the object, and delivers it to the drop-off zone which the system had previously seen and marked during exploration. Figure \ref{fig:octomap} shows the resulting 3D map created from SLAM during the experiment.
 
 For Experiments II and III, the high-level task specification is the following: start with an object, explore until finding a delivery location, and deliver the object there. Each experiment uses a different environment. For Experiment II, the robot must place a circuit board in a mailbox (marked with pink-colored tape) at the top of a set of stairs with other obstacles in the environment. For Experiment III, the robot must place a postage stamp high up on the box that is sitting in the open.
 
 For Experiment II, the robot begins exploring in the ``Scorpion'' configuration. Shortly, the robot observes and recognizes the mailbox, and characterizes the surrounding environment as ``stairs''. Based on this characterization, the high-level planner directs the robot to use the ``Snake'' configuration to traverse the stairs. Using the 3D map and characterization of the environment surrounding the mail bin, the robot navigates to a point directly in front of the stairs, faces the bin, and reconfigures to the ``Snake'' configuration. The robot then executes the stair climbing gait to reach the mail bin, and drops the circuit successfully. It then descends the stairs and reconfigures back to the ``Scorpion'' configuration to end the mission.
 
 For Experiment III, the robot begins in the ``Car'' configuration, and cannot see the package from its starting location.  After a short period of exploration, the robot identifies the pink square marking the package.  The pink square is unobstructed, but is approximately 25cm above the ground; the system correctly characterizes this as the ``high''-type environment, and recognizes that reconfiguration will be needed to reach up and place the stamp on the target.  The robot navigates to a position directly in front of the package, reconfigures to the ``Proboscis'' configuration, and executes the ``highReach'' behavior to place the stamp on the target, completing its task.
-
-\section{Old Results}
-%%%%% From System section:
-Our system is capable of operating in home- or office-like environments with arbitrary static obstacles. Given a high-level task, our system allows the robot to enter an unknown environment (with no \textit{a priori} knowledge of the map), autonomously explore, visually locate objects and regions of interest, and reactively employ manipulation and movement behaviors to interact with objects and obstacles. The system processes RGB-D sensor data to characterize features of the environment, and uses this information to autonomously reconfigure when it determines that a particular configuration is needed.
-While other systems have demonstrated reconfiguration, ours is the first to autonomously complete high-level, complex tasks by reconfiguring to appropriate morphologies in response to the perceived environment. 
-
-Figure~\ref{fig:overview} illustrates the system architecture.
-The physical robot consists of a set of \textbf{Robot Modules} (which can move, and connect to one another) and a single \textbf{Sensor Module} (which includes environment sensors and a computer).
-The \textbf{High-Level Planner} allows tasks to be specified at a high level using a formal language, which is compiled into a provably-correct controller.
-\textbf{Active Perception} components perform Simultaneous Localization and Mapping (SLAM), plan waypoints for the robot to explore its environment, and identify features of the environment relevant to the high-level task. They also characterize the environment in terms of robot capabilities.
-Based on the task requirements and observed environment, the high-level planner selects an appropriate behavior for the robot from the \textbf{Library}.
-If the current configuration of the robot cannot execute the desired behavior, the high-level planner will command the \textbf{Reconfiguration subsystem} to transform the robot into a configuration that can execute the behavior.
-
-%%%%% From Experiments section:
-In three hardware experiments, we demonstrate how our system allows the robot to autonomously explore, decide how and when to reconfigure, and manipulate objects to complete tasks in unknown environments. In Experiment I, the robot completes a complex, multi-part object retrieval task that requires significant exploration, reactive decision-making, and reconfiguration in response to its environment. Experiments II and III give the robot the task of delivering an object to an \textit{a priori} unknown goal in two different environments.  The system reacts to the two scenarios by taking very different actions, both requiring reconfiguration.
-
-In Experiment I, the robot must find, retrieve, and deliver all pink- and green-colored metal garbage to a designated drop-off zone for recycling, which is marked with a blue square on the wall. The experiment environment contains two objects to be retrieved: a green soda can in an unobstructed area, and a pink spool of wire in a narrow gap between two trash cans. Various obstacles are placed in the environment to restrict navigation. When performing the task, the robot first explores using the ``Car'' configuration. Once it locates the pink object, it recognizes the surrounding environment as a ``tunnel'' type, and the high-level planner reactively directs the robot to reconfigure to the ``Proboscis'' configuration, which is then used to reach in between the trash cans and pull the object out in the open. The robot then reconfigures to the ``Car'', retrieves the object, and delivers it to the drop-off zone which the system had previously seen and marked during exploration.
-
-For Experiments II and III, the high-level task specification is the following: start with an object, explore until finding a delivery location, and deliver the object there. Each experiment uses a different environment. For Experiment II, the robot must place a circuit board in a mailbox (marked with pink-colored tape) at the top of a set of stairs with other obstacles in the environment. For Experiment III, the robot must place a postage stamp high up on the box that is sitting in the open.
-
-For Experiment II, the robot begins exploring in the ``Scorpion'' configuration. Shortly, the robot observes and recognizes the mailbox, and characterizes the surrounding environment as ``stairs''. Based on this characterization, the high-level planner directs the robot to use the ``Snake'' configuration to traverse the stairs. Using the 3D map and characterization of the environment surrounding the mail bin, the robot navigates to a point directly in front of the stairs, faces the bin, and reconfigures to the ``Snake'' configuration. The robot then executes the stair climbing gait to reach the mail bin, and drops the circuit successfully. It then descends the stairs and reconfigures back to the ``Scorpion'' configuration to end the mission.
-
-For Experiment III, the robot begins in the ``Car'' configuration, and cannot see the package from its starting location.  After a short period of exploration, the robot identifies the pink square marking the package.  The pink square is unobstructed, but is approximately 25cm above the ground; the system correctly characterizes this as the ``high''-type environment, and recognizes that reconfiguration will be needed to reach up and place the stamp on the target.  The robot navigates to a position directly in front of the package, reconfigures to the ``Proboscis'' configuration, and executes the ``highReach'' behavior to place the stamp on the target, completing its task.
-
 %
 %     ____  _                           _
 %    / __ \(_)___________  ____________(_)___  ____
@@ -728,9 +706,10 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
   \setlength{\tabcolsep}{6pt} % resetting to default
   %
 \caption{Environments and Tasks for Experiments}
+\label{fig:envs}
 \end{figure}
 
-\begin{figure}
+\begin{figure*}
 %
   \begin{subfigure}{\columnwidth}
   % Experiment 1 Figure
@@ -760,8 +739,8 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
         6. Retrieving green object}
   \end{tabular}
   \end{small}
-  \caption{Phases of Experiment I.}
-  \label{fig:demo}
+  	\caption{Phases of Experiment I.}
+  	%\label{fig:demo}
   \end{subfigure}
   %
   % Experiment 2 and 3 Figure
@@ -789,11 +768,11 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
     \end{tabular}
     \end{small}
       \caption{Experiments II and III.}
-      \label{fig:exps}
+      %\label{fig:exps}
   \end{subfigure}  
-  %
   \caption{Experiments 1, 2, and 3}
-\end{figure}
+  \label{fig:experiments}
+\end{figure*}
 
 %   ______      __    __
 %  /_  __/___ _/ /_  / /__  ______
