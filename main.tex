@@ -447,22 +447,24 @@ To enable the high-level planner to choose appropriate configurations for a task
 \subsection{Library of Configurations and Behaviors}
 \label{sec:configuration-specifics}
 
-All robot configurations and behaviors used in this work, such as driving and pick up items, are included in a design library for modular robots.
-We created a open-source computer design tool VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}) and made it available online.
-Users can use VSPARC to create robot configurations and behaviors in a simulated environments with an intuitive graphical user interface.
-Moreover, VSPARC includes a physics-based simulator that can help users to simulate and test designs in a various environment scenarios.
-Users can save and share their designs with us and with other users.
-More importantly, all behaviors designed in VSPARC can be used to directly control our SMORES-EP robot system to perform the same action.
-We hosted several design competitions and invites students to create different robot configurations and behaviors for different environments.
-The library introduced currently has 57 robot configurations and 97 behaviors.
-Table~\ref{table:1} lists 10 entries for four different configurations that are used in this work. \TODO{Make sure the table reference is still valid in the main section}
+In this work, we use user designed configurations and behaviors to build and control the SMORES-EP system.
+We present a library-based framework for organizing configurations and behaviors.
+Users can create designs for modular robot using our simulation tool and save designs to a library.
+We label each configuration and behavior with properties, which are high-level descriptions of behaviors.
+Specifically, environment properties specify the appropriate environment that the behavior is designed for (e.g. a 3 module-high ledge) and behavior properties specify the capabilities of the behavior (e.g. climb). 
+Therefore in this framework, a library entry is defined as $l = (C,B_C,P_b,P_e)$ where $C$ is a robot configuration, $B_C$ is the behavior of $C$, $P_b$ is a set of behavior properties, and $P_e$ is a set of environment properties.
 
-To better organize the library of configurations and behaviors, we label each configuration and behavior with properties, which are high-level descriptions of behaviors.
-Specifically, environment properties specify the appropriate environment that the behavior is designed for and behavior properties specify the capabilities of the behavior. 
 The high-level planner then can select appropriate configurations and behaviors based on given task specifications and environment information from the perception subsystem to accomplish the robot tasks.
 In our Experiment II, the task specifications require the robot to deliver an object to a mailbox and the environment characterization algorithm reports that the mailbox is in a ``stairs''-type environment.
 Then the high-level planner search the design library for a configuration and behavior that is capable to climb stairs with the object.
 
+To aid users to design configurations and behaviors, we created a open-source computer design tool VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}) and made it available online.
+Users can use VSPARC to create, simulate and test designs in various environment scenarios with included physics engine.
+Moreover, users can save and share their designs with us and with other users.
+More importantly, all behaviors designed in VSPARC can be used to directly control our SMORES-EP robot system to perform the same action.
+We hosted several design competitions and invites students to create different robot configurations and behaviors for different environments.
+The library introduced currently has 57 robot configurations and 97 behaviors.
+Table~\ref{table:1} lists 10 entries for four different configurations that are used in this work. \TODO{Make sure the table reference is still valid in the main section}
 
 
 %     ____                        _____                        __  _
@@ -491,14 +493,17 @@ Figure~\ref{fig:reconf} shows reconfiguration from the ``Car'' to the ``Probosci
 
 In our architecture, the high-level planner subsystem provides a framework for users to specify robot tasks using a formal language, and generates a centralized controller that directs robot motion and actions based on environment information.
 Users do not specify the exact configurations and behaviors used to complete tasks, but rather describe desired actions using the properties from the robot design library.
-In Experiment II, the user indicates that the robot should \textbf{explore} until it locates the \textbf{mailBox}, then \textbf{drop} the object off.  The sequence of configurations and behaviors used to complete this task is not specified by the user, but instead determined by the high-level planner as it continually reacts to the sensed environment.
+The sequence of configurations and behaviors used to complete this task is not specified by the user, but instead determined by the high-level planner as it continually reacts to the sensed environment.
 
-To generate the centralized controller, users provide task specifications and describe desired robot actions in terms of properties from the library.
+Consider the robot task in Experiment II, the user indicates that the robot should \textbf{explore} until it locates the \textbf{mailBox}, then \textbf{drop} the object off.
+In addition, user describes desired robot actions in terms of properties from the library.
 The high-level planner then generates a discrete robot controller that satisfies the given specifications.
 If no controller can be found, users are advised to change the task specifications or add more behaviors to the design library.
 
 The high-level planner coordinates each component of the system to control our MSRR to achieve complex tasks.
 At system level, the sensing components gather and process environment information for the high-level planner, which then takes actions based on the given robot tasks by invoking appropriate low-level behaviors.
+In Experiment II, when the robot is asked to deliver the object, the perception subsystem informs the robot that the mailbox is in a ``stairs''-type environment.
+Therefore, the robot self-reconfigures to a ``Snake'' configuration to climb the stairs and deliver the object.
 
 Our implementation employs an existing tool called LTLMoP (Linear Temporal Logic MissiOn Planning) to automatically generate robot controllers from user-specified high-level instructions using logic synthesis \cite{DBLP:conf/iros/FinucaneJK10,DBLP:journals/trob/Kress-GazitFP09}.
 
@@ -912,17 +917,16 @@ In the case of our mail delivery example, when the environment characterization 
 Since the library indicates that current configuration is only capable of driving on flat ground, the high-level planner opts to reconfigure to the stair-climber configuration, and executes its \textbf{climbUp} behavior.
 
 Our implementation relies on a framework first presented in \cite{Jing2016}, which is summarized here.
-In this framework, a library entry is defined as $l = (C,B_C,P_b,T_e)$ where:
+In this framework, a library entry is defined as $l = (C,B_C,P_b,P_e)$ where:
 \begin{itemize}
 \item $C$ is the robot \emph{configuration}, specified by the connected structure of the modules.
 \item $B_C$ is a \emph{behavior} that $C$ can perform. A behavior is a controller that specifies commands for robot joints to perform a specific action. 
 \item $P_b$ is a set of \emph{behavior properties} that describes what $B_C$ does. 
-\item $T_e$ is a set of \emph{environment types} that describe the environments in which this library entry is suitable. 
+\item $P_e$ is a set of \emph{environment types} that describe the environments in which this library entry is suitable. 
 \end{itemize} 
 %
 To specify tasks at the high level, behavior properties $P_b$ describes a desired robot action without explicitly specifying a configuration or behavior.
-Environment types $T_e$ specify the conditions under which a behavior can be used.
-%, and are determined through the environment characterization processes described in Section~\ref{sec:exploration}.
+Environment types $P_e$ specify the conditions under which a behavior can be used.
 
 To create robot configurations and behaviors, users can utilize the VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}) simulator presented in \cite{Jing2016}.
 VSPARC allows users to design, simulate and test configurations and behaviors for the SMORES-EP robot system.
@@ -935,13 +939,13 @@ In this work, we expand the type of behaviors in the library by using \textit{pa
 Parametric behaviors have joint commands that can be altered during run-time, and therefore allow a wider range of motions.
 For example, a parametric behavior for a car configuration can be a driving action with two parameters: turning angle and driving velocity.  
 The system associates a parametric behavior with a program that generates values of joint commands based on environment information and current robot tasks.
-Recall the mail delivery task, based on the sensed environment, the perception and exploration subsystem (Section~\ref{sec:exploration}) can generate a collision-free path, which is used to calculate real-time velocity for the robot.
+Based on the sensed environment, the perception and exploration subsystem (Section~\ref{sec:exploration}) can generate a collision-free path, which is used to calculate real-time velocity for the robot.
 The system then converts the robot velocity to joint values in parametric behaviors during run-time.
 
-The library introduced in \cite{Jing2016} has 57 robot configurations and 97 behaviors.
-Table~\ref{table:1} lists 10 entries for four different configurations that are used in this work.
+%The library introduced in \cite{Jing2016} has 57 robot configurations and 97 behaviors.
+%Table~\ref{table:1} lists 10 entries for four different configurations that are used in this work.
 %This library was created to enables the robot to explore and interact with the environment and objects, but the library can be expanded to include more entries for other environments and tasks. 
-Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use the perception algorithm described in Section \ref{sec:exploration}.
+%Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use the perception algorithm described in Section \ref{sec:exploration}.
 
 To provide an illustrative example, this paper discusses two configurations and their capabilities in detail.
 The ``Car'' configuration shown in Figure~\ref{fig:demo}-5 is capable of picking
@@ -997,19 +1001,20 @@ When a module disconnects from the cluster, the electro-permanent magnets on the
 \subsection{High-Level Planner}
 \label{sec:high-level}
 
-We abstract the robot and environment status as a set of Boolean propositions.
-In the mailbox example, the robot action \textbf{drop} is \lt if the robot is currently dropping an object to the mailbox (and \lf otherwise) and the environment proposition \textbf{mailBox} is \lt if the robot is currently sensing a mailbox (and \lf otherwise).
+In order to generate controllers from high-level task specifications, we first abstract the robot and environment status as a set of Boolean propositions.
+In Experiment II, the robot action \textbf{drop} is \lt if the robot is currently dropping an object to the mailbox (and \lf otherwise) and the environment proposition \textbf{mailBox} is \lt if the robot is currently sensing a mailbox (and \lf otherwise).
 Moreover the proposition \textbf{explore} encodes whether or not the robot is currently searching for the target, the mailbox in this case.
+
 %A wide range of reactive robotic tasks can be specified in terms of these propositions.
 By using a library of robot configurations and behaviors as well as environment characterization tools, we can map these high-level abstraction to low-level sensing programs and robot controllers.
-%To see how this works, consider Specification~\ref{spec:experiment}, which shows  high-level instructions from the user that direct the robot to explore a room, search, and move any object of interest to a drop-off zone.
 As discussed in Section~\ref{sec:configuration-specifics}, the user specifies high-level robot actions in terms of behavior properties from the library. 
-In the mail delivery example, our system can choose to do a drop action by executing any behavior from the library which has the behavior property \textbf{drop}, and which also satisfies the current ``stairs''-type environment. If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.  In this way, the system autonomously chooses to implement  \textbf{drop}  appropriately in response to the sensed environment.
+In Experiment II, our system can choose to do a drop action by executing any behavior from the library which has the behavior property \textbf{drop}, and which also satisfies the current ``stairs''-type environment. If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.  In this way, the system autonomously chooses to implement  \textbf{drop}  appropriately in response to the sensed environment.
 Our system evaluates propositions related to the state of the environment using perception and environment characterization tools in Section~\ref{sec:exploration}. For example, users can map proposition \textbf{mailBox} to the color tracking function in our perception subsystem, which assign the value \lt to \textbf{mailBox} if and only if the robot is currently seeing a mailbox with the onboard camera.
 The system treats propositions, such as \textbf{explore}, that require the robot to navigate in the workspace differently from the other simple robot actions, such as \textbf{drop}.
 In this example, users can map \textbf{explore} to behavior property \textbf{drive}, which represents a set of parametric behaviors as discussed in Section~\ref{sec:configuration-specifics}.
 In order to obtain joint values for behaviors at run-time, a path planner in the perception and planning subsystem (Section~\ref{sec:exploration}) takes into account the robot goal as well as the current environment information from the perception subsystem, and generates a collision-free path for the robot to follow.
 Our system then converts this path to joint values, which are used to execute the \textbf{drive} behaviors.
+
 %in Specification~\ref{spec:experiment}, the proposition \textbf{arrived} is \lt if the robot arrives at its target location, which is determined by consulting the robot's position in the map generated by SLAM. The proposition \textbf{dropoffZone} is \lt if the robot is currently sensing a drop-off zone, which is determined by consulting both the map and color tracking functions.
 
 %The user specifies high-level robot actions in terms of behavior properties from the library.  For example, Line 7 in Specification~\ref{spec:experiment} specifies that under certain conditions, the robot should do \textbf{pickUp}.  As discussed in Section~\ref{sec:configuration-specifics}, our system can choose to do \textbf{pickUp} by executing any behavior from the library which has the behavior property \textbf{pickUp}, and which also satisfies the current environment characteristics. If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.  In this way, the system autonomously chooses to implement  \textbf{pickUp}  appropriately in response to the sensed environment.
