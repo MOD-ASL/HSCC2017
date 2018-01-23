@@ -261,11 +261,43 @@ For Experiment III, the robot begins in the ``Car'' configuration, and cannot se
 % /_____/_/____/\___/\__,_/____/____/_/\____/_/ /_/
 \section{Discussion}
 \label{sec:discussion}
+
+
+
+Modular self-reconfigurable robots are by their nature mechanically distributed, and as a result lend themselves naturally to research in distributed planning, sensing, and control.  Many modular self-reconfigurable systems of the past have taken a distributed approach to system design, demonstrating self-assembly and reconfiguration through distributed sensing, computation, and control \cite{Yim2007, Rubenstein2004,Murata2006}, and addressing simple tasks through emergent behaviors from fully distributed control \cite{Dorigo2005,Mondada2005,o2010self}.
+Our system is designed differently.  It is distributed at the low level, but
+centralized at the high level, leveraging the advantages of both design paradigms.
+
+Mechanically (at the low level), our system maintains the distributed characteristics that make modular systems flexible: the body of the robot is composed identical modules that reconfigure to form a variety of physical morphologies.
+We selected the three scenarios in our experiments to showcase a range of different ways SMORES-EP can interact with environments and objects: movement over flat ground, fitting into tight spaces, reaching up high, and climbing over rough terrain, and manipulating objects.  This broad range of functionality is impressive for such a small robot, and is only accessible to SMORES-EP by reconfiguring between different morphologies.
+
+For sensing, planning, and control (at the high level), we utilize a centralized framework.  This provides advantages in terms of the complexity of the tasks that can be represented, information that can be gathered, and organized behaviors the robots can utilize to address the task.
+This represents a departure from prior work, where distributed control enabled simple tasks to be addressed through emergent cluster behaviors.  For example, in \cite{o2010self}, Swarm-Bots self-assemble into random structures that allow them to ascend a slope too steep for a single robot.  In contrast, our system's centralized architecture facilitates the use of more complex morphologies with specialized functionalities, and sophisticated decision-making that links high-level tasks to configurations and behaviors that can complete them.
+The high-level planner, environment characterization tools, and library work together to allow tasks to be represented in a flexible and reactive manner. For example, at the high level, Experiments II and III are the same task: deliver an object at a point of interest.  However, after characterizing the different environments (``High'' in II, ``Stairs'' in III), the system determines that different configurations and behaviors are required to complete each task:  the Proboscis to reach up high, and the Snake to climb the stairs.  
+Similarly, in Experiment I there is no high-level distinction between the green and pink objects - the robot is simply asked to retrieve all objects it finds.  The sensed environment once again dictates the choice of behavior: the simple problem (object in the open) is solved in a simple way (with the Car configuration), and the more difficult problem (object in tunnel) is solved in a more sophisticated way (by reconfiguring into the Proboscis).  Achieving this level of sophistication in control and decision-making through a distributed architecture would have been significantly more difficult.
+
+High-fidelity centralized sensing during reconfiguration, provided by AprilTags, allowed our implementation to transform between configurations quickly and reliably.  Each reconfiguration action (a module disconnecting, moving, and reattaching) takes about one minute.  In contrast, past systems that utilized distributed sensing and control required 5-15 minutes for single reconfiguration actions \cite{Yim2007, Rubenstein2004,Murata2006}, which would prohibit their use in the complex tasks and environments that our system demonstrated.
+
+
+\subsection{Weaknesses and Challenges}
+%
+% Homogeneity/Heterogeneity
+All SMORES-EP body modules are identical, and therefore interchangeable for the purposes of reconfiguration.  However, the sensor module has a significantly different shape than a SMORES-EP body module, which introduces heterogeneity in a way that complicates motion planning and reconfiguration planning.  Configurations and behaviors must be designed to provide the sensor module with an adequate view, and to support its weight and elongated shape.  Centralizing sensing also limits reconfiguration: modules can only drive independently in the vicinity of the sensor module, preventing the robot from operating as multiple disparate clusters. 
+
+Our high-level planner assumes all underlying components are reliable and robust, so failure of a low-level component can cause the high-level planner to behave unexpectedly, and result in failure of the entire task.  Table \ref{table:errors} shows the causes of failure for 24 attempts of Experiment II (placing the stamp on the package).  
+Nearly all failures are due to an error in one of the low-level components the system relies upon, with
+42\% of failure due to hardware errors and 38\% due to failures in low-level software (object recognition, navigation, environment characterization).
+This kind of cascading failure is a weakness of centralized, hierarchical systems: distributed systems are often designed so that failure of a single unit can be compensated for by other units, and does not result in global failure.
+
+This lack of robustness represents a challenge, but steps can be taken to address it.  Unsurprisingly, open-loop behaviors (like stair-climbing and reaching up to place the stamp) were the least robust, and vulnerable to small hardware errors.  Closing the loop using sensing made exploration and reconfiguration significantly less vulnerable to error.  Future systems could be made more robust by introducing more feedback from low-level components to high-level decisions making processes.  Existing high-level failure-recovery frameworks could also be incorporated \cite{Maniatopoulos16icra}. 
+
+\section{Old Discussion}
+\label{sec:old-discussion}
 The real-world experiments demonstrate that our system has the ability to autonomously reconfigure in response to observations in an \textit{a priori} unknown environment in order to perform high-level tasks. The system performs complex tasks, determining robot actions and reconfiguration online in response to observations of the environment. Experiments I and II/III demonstrate one system successfully performing two different high-level tasks (``retrieve all objects'' vs. ``deliver an object to a target''). Experiments II and III demonstrate that the same high-level task being performed in two different environments, with the robot autonomously adapting to the challenges presented by each environment. This is the first demonstration of a modular robot system autonomously completing multiple high-level tasks by reconfiguring to appropriate morphologies in response to the perceived environment.
 
 In addition to demonstrating novel system capabilities, the experiments revealed several insights related to perception-informed autonomy on MSRR systems. We encountered challenges with achieving robust performance, and discovered limitations of the system implementation and modular robot hardware. %We hope to share these observations to aid those who may wish to implement our system or improve its robustness and capability.
 %
-\subsection{Single-Sensor Architecture Enables Autono my}
+\subsection{Single-Sensor Architecture Enables Autonomy}
 %
 Autonomy in unknown environments requires powerful sensing capabilities.  Our centralized sensing architecture allowed the robot to carry a single, powerful RGB-D camera, enabling sophisticated capabilities like Visual SLAM and environment characterization. In contrast, previous systems that used distributed sensing have been forced to rely on less sophisticated sensors that can be carried by each module in the cluster, limiting their ability to operate autonomously in unknown environments.   Our system has demonstrated more sensor-based autonomy than any previous modular robot, and we believe this is due in large part to the decision to use a single, powerful sensor module.
 
@@ -278,7 +310,8 @@ Centralized sensing also limits reconfiguration. Since modules can only move in 
 %We believe the benefits provided to our system by centralized sensing outweigh the costs.
 The decision to use a centralized sensor module represents a tradeoff, sacrificing some of the flexibility of the modular system to achieve more capability and autonomy.%As future modular systems move out of the lab and into real-world deployment, it will become increasingly important for designers to consider similar tradeoffs.
 
-While our implementation relies in part on external computation and wireless network access, this is not a fundamental system requirement.   In fact,  in our implementation the majority of  heavy computation (mapping, navigation, video processing) was done onboard on the sensor module, with a few processes (high-level planner, reconfiguration planner, and next-best-view planner) run offboard, primarily for development convenience.%
+While our implementation relies in part on external computation and wireless network access, this is not a fundamental system requirement.   In fact,  in our implementation the majority of  heavy computation (mapping, navigation, video processing) was done onboard on the sensor module, with a few processes (high-level planner, reconfiguration planner, and next-best-view planner) run offboard, primarily for development convenience.
+%
 \subsection{Strengths - Reactive Capability}
 %
 %{\color{red}(Specifying high-level tasks:)}
@@ -298,7 +331,7 @@ Nearly all failures are due to an error in one of the low-level components the s
 
 The simulator served as a valuable prototyping tool, but all behaviors required significant
 tuning in hardware before they would run reliably.  
-The open-loop\ behaviors used for stair-climbing and reaching up to place the stamp, and fairly
+The open-loop behaviors used for stair-climbing and reaching up to place the stamp, and fairly
 inflexible with respect to environment conditions, and also vulnerable to hardware
 errors. % like poorly calibrated encoders.  
 Exploration and reconfiguration use the sensor module to close the
@@ -739,8 +772,8 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
         6. Retrieving green object}
   \end{tabular}
   \end{small}
-  	\caption{Phases of Experiment I.}
-  	%\label{fig:demo}
+        \caption{Phases of Experiment I.}
+        %\label{fig:demo}
   \end{subfigure}
   %
   % Experiment 2 and 3 Figure
