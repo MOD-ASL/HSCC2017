@@ -262,13 +262,13 @@ For Experiment III, the robot begins in the ``Car'' configuration, and cannot se
 \section{Discussion}
 \label{sec:discussion}
 
-
+\subsection{Balancing Distributed and Centralized Architectures}
 
 Modular self-reconfigurable robots are by their nature mechanically distributed, and as a result lend themselves naturally to research in distributed planning, sensing, and control.  Many modular self-reconfigurable systems of the past have taken a distributed approach to system design, demonstrating self-assembly and reconfiguration through distributed sensing, computation, and control \cite{Yim2007, Rubenstein2004,Murata2006}, and addressing simple tasks through emergent behaviors from distributed control \cite{Dorigo2005,Mondada2005,o2010self}.
 Our system is designed differently.  It is distributed at the low level, but
 centralized at the high level, leveraging the advantages of both design paradigms.
 
-Mechanically (at the low level), our system maintains the distributed characteristics that make modular systems flexible: the body of the robot is composed identical modules that reconfigure to form a variety of physical morphologies.
+Mechanically (at the low level), our system maintains the distributed characteristics that make modular systems flexible: the body of the robot is composed of identical modules that reconfigure to form a variety of physical morphologies.
 We selected the three scenarios in our experiments to showcase a range of different ways SMORES-EP can interact with environments and objects: movement over flat ground, fitting into tight spaces, reaching up high, and climbing over rough terrain, and manipulating objects.  This broad range of functionality is impressive for such a small robot, and is only accessible to SMORES-EP by reconfiguring between different morphologies.
 
 For sensing, planning, and control (at the high level), we utilize a centralized framework.  This provides advantages in terms of the complexity of the tasks that can be represented, information that can be gathered, and organized behaviors the robots can utilize to address the task.
@@ -295,7 +295,7 @@ This lack of robustness represents a challenge, but steps can be taken to addres
 
 \subsection{Summary of Contributions}
 %
-This paper presents the first clear example of how a modular robot system should be designed in order to leverage reconfigurability to reactively address tasks in an unknown environment.  This fulfills a long-standing promise, and marks a significant milestone in the field.
+This paper presents the first system allowing modular robots to autonomously complete high-level tasks by reconfiguring in response to their perceived environment and task requirements.  This completes a long-standing goal of the field, and represents the state-of-the-art of modern self-reconfigurable robotics.
 
 The success of our system is a product of the guiding principles used in its design.  Our centralized planning, control, and sensing framework represents a departure from the distributed frameworks typical of earlier MSRR systems, and has commonalities with frameworks employed successfully in many single-robot and non-modular multi-robot systems.  Combining this centralized control framework with largely homogeneous, distributed mechanical design maximizes the effectiveness of the total system in addressing tasks.
 
