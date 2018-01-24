@@ -501,12 +501,11 @@ The high-level planner then can select appropriate configurations and behaviors 
 In our Experiment II, the task specifications require the robot to deliver an object to a mailbox and the environment characterization algorithm reports that the mailbox is in a ``stairs''-type environment.
 Then the high-level planner search the design library for a configuration and behavior that is capable to climb stairs with the object.
 
-To aid users to design configurations and behaviors, we created a open-source computer design tool VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}) and made it available online.
+To aid users to populate the library with configurations and behaviors, we created a open-source computer design tool VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}) and made it available online.
 Users can use VSPARC to create, simulate and test designs in various environment scenarios with included physics engine.
 Moreover, users can save and share their designs with us and with other users.
 More importantly, all behaviors designed in VSPARC can be used to directly control our SMORES-EP robot system to perform the same action.
 We hosted several design competitions and invites students to create different robot configurations and behaviors for different environments.
-The library introduced currently has 57 robot configurations and 97 behaviors.
 Table~\ref{table:1} lists 10 entries for four different configurations that are used in this work.
 
 %     ____                        _____                        __  _
@@ -521,7 +520,7 @@ Table~\ref{table:1} lists 10 entries for four different configurations that are 
 %
 When the high-level planner decides to use a new configuration during a task, the robot must reconfigure.
 We have implemented tools for driving-based reconfiguration with SMORES-EP, taking advantage of the fact that individual modules can drive on flat surfaces.
-As discussed in Section~\ref{sec:hardware}, a downward-facing camera on the Sensor Module provides a view of a $0.75\text{m}\times0.5\text{m}$ area on the ground in front of the sensor module.  
+As discussed in Section~\ref{sec:hardware}, a downward-facing camera on the Sensor Module provides a view of a $0.75\text{m}\times0.5\text{m}$ area on the ground in front of the sensor module.
 Within this area, the localization system provides pose for any module equipped with an AprilTag marker to perform reconfiguration. 
 %\subsection{Reconfiguration Procedure}
 Given an initial configuration and a goal configuration, the reconfiguration controller commands a set of modules to disconnect, move and reconnect to form the new topology of the goal configuration. 
