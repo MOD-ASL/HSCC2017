@@ -488,7 +488,7 @@ To enable the high-level planner to choose appropriate configurations for a task
 %                        /____/        /_/
 
 \subsection{Library of Configurations and Behaviors}
-\label{sec:configuration-specifics}
+\label{sec:configuration-specifics-supplement}
 
 In this work, we use user designed configurations and behaviors to build and control the SMORES-EP system.
 We present a library-based framework for organizing configurations and behaviors.
@@ -506,7 +506,6 @@ Users can use VSPARC to create, simulate and test designs in various environment
 Moreover, users can save and share their designs with us and with other users.
 More importantly, all behaviors designed in VSPARC can be used to directly control our SMORES-EP robot system to perform the same action.
 We hosted several design competitions and invites students to create different robot configurations and behaviors for different environments.
-The library introduced currently has 57 robot configurations and 97 behaviors.
 Table~\ref{table:1} lists 10 entries for four different configurations that are used in this work.
 
 %     ____                        _____                        __  _
@@ -531,7 +530,7 @@ Figure~\ref{fig:reconf} shows reconfiguration from the ``Car'' to the ``Probosci
 % Reconfiguration Figure
 
 \subsection{High-Level Planner}
-\label{sec:high-level}
+\label{sec:high-level-supplement}
 
 In our architecture, the high-level planner subsystem provides a framework for users to specify robot tasks using a formal language, and generates a centralized controller that directs robot motion and actions based on environment information.
 Users do not specify the exact configurations and behaviors used to complete tasks, but rather describe desired actions using the properties from the robot design library.
@@ -952,7 +951,7 @@ Based on the environment characterization and target location, the algorithm als
 In this work, we use the architecture introduced in \cite{Jing2016}. We encode the full set of capabilities of the modular robot, such as driving and picking up items, in a library of robot configurations and behaviors.
 Specifically, the library labels each entry with attributes that describe the behavior's capabilities and environment conditions. 
 This allows the high-level planner to match environment characterizations from the perception subsystem with configurations and behaviors that can perform the task in the current environment. 
-In the case of our mail delivery example, when the environment characterization algorithm reports that the mailbox is located in a ``stairs''-type environment, the high-level planner queries the library for configurations that can climb stairs.  
+In Experiment II, when the environment characterization algorithm reports that the mailbox is located in a ``stairs''-type environment, the high-level planner queries the library for configurations that can climb stairs.  
 Since the library indicates that current configuration is only capable of driving on flat ground, the high-level planner opts to reconfigure to the stair-climber configuration, and executes its \textbf{climbUp} behavior.
 
 Our implementation relies on a framework first presented in \cite{Jing2016}, which is summarized here.
@@ -969,7 +968,9 @@ Environment types $P_e$ specify the conditions under which a behavior can be use
 
 To create robot configurations and behaviors, users can utilize the VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}) simulator presented in \cite{Jing2016}.
 VSPARC allows users to design, simulate and test configurations and behaviors for the SMORES-EP robot system.
-The system can then use the behavior designs to control the physical SMORES-EP robot to perform various actions.
+All designs are organized in a library of configurations and behaviors.
+The library currently has 57 robot configurations and 97 behaviors.
+The system can then use the design library to control the physical SMORES-EP robot to perform various actions.
 
 In \cite{Jing2016}, all robot behaviors are \textit{static} behaviors.
 That is, once users create a behavior in VSPARC, joint values for each module are fixed and cannot be modified during behavior execution.
