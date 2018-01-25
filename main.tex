@@ -229,8 +229,12 @@ Continued research in  MSRR has resulted in substantial advancement.  Existing r
 However, achieving autonomous operation of a self-reconfigurable robot in unknown environments requires a system with the ability to explore, gather information about the environment, consider the requirements of a high-level task, select configurations whose capabilities match the requirements of task and environment, transform, and perform actions (like manipulating objects) to complete tasks.  Existing systems provide partial sets of these capabilities.
 Many systems have demonstrated limited autonomy, relying on beacons for mapping  \cite{Grabowski2000,Dorigo2005} and human input for high-level decision making \cite{Mondada2005,Dorigo2013}. Others have demonstrated swarm self-assembly to address basic tasks like hill-climbing and gap-crossing \cite{gross2006autonomous,o2010self}.  While these existing systems all represent advancements, none have demonstrated fully autonomous, reactive self-reconfiguration to address high-level tasks.
 
-For the first time, this paper presents a system that allows modular robots to autonomously complete complex high-level tasks by reconfiguring in response to their perceived environment and task requirements.  Our novel system architecture integrates modular robot hardware with tools for high-level mission planning, perception, and autonomy.  
-We validate our system in three hardware experiments, demonstrating that, based on a high-level task specification, the modular robot autonomously explores an unknown environment, decides when and how to reconfigure, and manipulates objects to complete its task.  This result marks a milestone in the field, and demonstrates mature technology which represents the state-of-the-art of modern self-reconfigurable robotics.
+For the first time, this paper presents a system that allows modular robots to autonomously complete complex high-level tasks by reconfiguring in response to their perceived environment and task requirements.
+The success of our system is a product of our choice of system architecture, which balances distributed and centralized elements.  Distributed, homogeneous robot modules provide flexibility, reconfiguring between morphologies to access a range of physical capabilities.  Centralized sensing, perception, and high-level mission planning components provide autonomy and decision-making capabilities.  Tight integration between the distributed low-level and centralized high-level elements allows us to leverage the biggest advantages of distributed and centralized architectures.
+
+We validate our system in three hardware experiments, demonstrating that, based on a high-level task specification, the modular robot autonomously explores an unknown environment, decides when and how to reconfigure in order to access the capabilities needed to complete its task, and manipulates objects to complete its task. 
+This result marks a milestone in the field, and demonstrates mature technology which represents the state-of-the-art of modern self-reconfigurable robotics.
+
 
 
 %     ____                  ____
@@ -488,7 +492,7 @@ To enable the high-level planner to choose appropriate configurations for a task
 %                        /____/        /_/
 
 \subsection{Library of Configurations and Behaviors}
-\label{sec:configuration-specifics-supplement}
+\label{sec:configuration-specifics}
 
 In this work, we use user designed configurations and behaviors to build and control the SMORES-EP system.
 We present a library-based framework for organizing configurations and behaviors.
@@ -501,12 +505,14 @@ The high-level planner then can select appropriate configurations and behaviors 
 In our Experiment II, the task specifications require the robot to deliver an object to a mailbox and the environment characterization algorithm reports that the mailbox is in a ``stairs''-type environment.
 Then the high-level planner search the design library for a configuration and behavior that is capable to climb stairs with the object.
 
-To aid users to populate the library with configurations and behaviors, we created a open-source computer design tool VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}) and made it available online.
+To aid users to design configurations and behaviors, we created a open-source computer design tool VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}) and made it available online.
 Users can use VSPARC to create, simulate and test designs in various environment scenarios with included physics engine.
 Moreover, users can save and share their designs with us and with other users.
 More importantly, all behaviors designed in VSPARC can be used to directly control our SMORES-EP robot system to perform the same action.
 We hosted several design competitions and invites students to create different robot configurations and behaviors for different environments.
-Table~\ref{table:1} lists 10 entries for four different configurations that are used in this work.
+The library introduced currently has 57 robot configurations and 97 behaviors.
+Table~\ref{table:1} lists 10 entries for four different configurations that are used in this work. \TODO{Make sure the table reference is still valid in the main section}
+
 
 %     ____                        _____                        __  _
 %    / __ \___  _________  ____  / __(_)___ ___  ___________ _/ /_(_)___  ____
@@ -520,17 +526,17 @@ Table~\ref{table:1} lists 10 entries for four different configurations that are 
 %
 When the high-level planner decides to use a new configuration during a task, the robot must reconfigure.
 We have implemented tools for driving-based reconfiguration with SMORES-EP, taking advantage of the fact that individual modules can drive on flat surfaces.
-As discussed in Section~\ref{sec:hardware}, a downward-facing camera on the Sensor Module provides a view of a $0.75\text{m}\times0.5\text{m}$ area on the ground in front of the sensor module.
+As discussed in Section~\ref{sec:hardware}, a downward-facing camera on the Sensor Module provides a view of a $0.75\text{m}\times0.5\text{m}$ area on the ground in front of the sensor module.  
 Within this area, the localization system provides pose for any module equipped with an AprilTag marker to perform reconfiguration. 
 %\subsection{Reconfiguration Procedure}
 Given an initial configuration and a goal configuration, the reconfiguration controller commands a set of modules to disconnect, move and reconnect to form the new topology of the goal configuration. 
-Currently, reconfiguration plans from one configuration to another are created manually and stored in the library. However the framework can work with existing assembly planning algorithms \cite{Werfel2007,Seo2013} to generate reconfiguration plans automatically.
+Currently, reconfiguration plans from one configuration to another are created manually and stored in the library. However the framework can work with existing assembly planning algorithms (\cite{Werfel2007,Seo2013}) to generate reconfiguration plans automatically.
 Figure~\ref{fig:reconf} shows reconfiguration from the ``Car'' to the ``Proboscis'' during Experiment 1.
 %
 % Reconfiguration Figure
 
 \subsection{High-Level Planner}
-\label{sec:high-level-supplement}
+\label{sec:high-level}
 
 In our architecture, the high-level planner subsystem provides a framework for users to specify robot tasks using a formal language, and generates a centralized controller that directs robot motion and actions based on environment information.
 Users do not specify the exact configurations and behaviors used to complete tasks, but rather describe desired actions using the properties from the robot design library.
@@ -951,7 +957,7 @@ Based on the environment characterization and target location, the algorithm als
 In this work, we use the architecture introduced in \cite{Jing2016}. We encode the full set of capabilities of the modular robot, such as driving and picking up items, in a library of robot configurations and behaviors.
 Specifically, the library labels each entry with attributes that describe the behavior's capabilities and environment conditions. 
 This allows the high-level planner to match environment characterizations from the perception subsystem with configurations and behaviors that can perform the task in the current environment. 
-In Experiment II, when the environment characterization algorithm reports that the mailbox is located in a ``stairs''-type environment, the high-level planner queries the library for configurations that can climb stairs.  
+In the case of our mail delivery example, when the environment characterization algorithm reports that the mailbox is located in a ``stairs''-type environment, the high-level planner queries the library for configurations that can climb stairs.  
 Since the library indicates that current configuration is only capable of driving on flat ground, the high-level planner opts to reconfigure to the stair-climber configuration, and executes its \textbf{climbUp} behavior.
 
 Our implementation relies on a framework first presented in \cite{Jing2016}, which is summarized here.
@@ -968,9 +974,7 @@ Environment types $P_e$ specify the conditions under which a behavior can be use
 
 To create robot configurations and behaviors, users can utilize the VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}) simulator presented in \cite{Jing2016}.
 VSPARC allows users to design, simulate and test configurations and behaviors for the SMORES-EP robot system.
-All designs are organized in a library of configurations and behaviors.
-The library currently has 57 robot configurations and 97 behaviors.
-The system can then use the design library to control the physical SMORES-EP robot to perform various actions.
+The system can then use the behavior designs to control the physical SMORES-EP robot to perform various actions.
 
 In \cite{Jing2016}, all robot behaviors are \textit{static} behaviors.
 That is, once users create a behavior in VSPARC, joint values for each module are fixed and cannot be modified during behavior execution.
