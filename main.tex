@@ -204,9 +204,10 @@ The success of our system is a product of our choice of architecture, which bala
 %  _/ // / / / /_/ /  / /_/ / /_/ / /_/ / /__/ /_/ / /_/ / / / /
 % /___/_/ /_/\__/_/   \____/\__,_/\__,_/\___/\__/_/\____/_/ /_/
 %
-
-
-Modular self-reconfigurable robot (MSRR) systems are composed of repeated robot elements (called \textit{modules}) that connect together to form larger robotic structures, and can \textit{self-reconfigure}, changing the connective arrangement of their own modules to form different structures with different capabilities.  Since the field of modular robotics was in its nascence, researchers have presented a vision that promised flexible, reactive systems capable of operating in unknown environments.  Modular self-reconfigurable robots would be able to enter unknown environments, assess their surroundings, and self-reconfigure to take on a form suitable to the task and environment at hand \cite{Yim1994}.  Today, this vision remains a major motivator for work in the field \cite{Yim2007a}.  
+\section{Introduction}
+\label{sec:introduction}
+%
+Modular self-reconfigurable robot (MSRR) systems are composed of repeated robot elements (called \textit{modules}) that connect together to form larger robotic structures, and can \textit{self-reconfigure}, changing the connective arrangement of their own modules to form different structures with different capabilities.  Since the field was in its nascence, researchers have presented a vision that promised flexible, reactive systems capable of operating in unknown environments.  Modular self-reconfigurable robots would be able to enter unknown environments, assess their surroundings, and self-reconfigure to take on a form suitable to the task and environment at hand \cite{Yim1994}.  Today, this vision remains a major motivator for work in the field \cite{Yim2007a}.  
 
 Continued research in  MSRR has resulted in substantial advancement.  Existing research has demonstrated MSRR self-reconfiguring, assuming interesting morphologies, and exhibiting various forms of locomotion, as well as methods for programming, controlling, and simulating modular robots \cite{Yim2007, Rubenstein2004,Murata2006,Paulos2015,Yim1994,Jing2016}.
 However, achieving autonomous operation of a self-reconfigurable robot in unknown environments requires a system with the ability to explore, gather information about the environment, consider the requirements of a high-level task, select configurations whose capabilities match the requirements of task and environment, transform, and perform actions (like manipulating objects) to complete tasks.  Existing systems provide partial sets of these capabilities.
@@ -216,8 +217,6 @@ For the first time, this paper presents a system that allows modular robots to a
 The success of our system is a product of our choice of system architecture, which balances distributed and centralized elements.  Distributed, homogeneous robot modules provide flexibility, reconfiguring between morphologies to access a range of physical capabilities.  Centralized sensing, perception, and high-level mission planning components provide autonomy and decision-making capabilities.  Tight integration between the distributed low-level and centralized high-level elements allows us to leverage the biggest advantages of distributed and centralized architectures.
 
 We validate our system in three hardware experiments, demonstrating that, based on a high-level task specification, the modular robot autonomously explores an unknown environment, decides when and how to reconfigure, and manipulates objects to complete its task.  This result marks a milestone in the field, and demonstrates mature technology which represents the state-of-the-art of modern self-reconfigurable robotics.
-
-
 
 %     ____                  ____
 %    / __ \___  _______  __/ / /______
@@ -272,15 +271,8 @@ This kind of cascading failure is a weakness of centralized, hierarchical system
 
 This lack of robustness represents a challenge, but steps can be taken to address it.  Unsurprisingly, open-loop behaviors (like stair-climbing and reaching up to place the stamp) were the least robust, and vulnerable to small hardware errors.  Closing the loop using sensing made exploration and reconfiguration significantly less vulnerable to error.  Future systems could be made more robust by introducing more feedback from low-level components to high-level decisions making processes.  Existing high-level failure-recovery frameworks could also be incorporated \cite{Maniatopoulos16icra}.
 
-%This paper presents the first modular robot system to autonomously complete high-level tasks by reactively reconfiguring in response to its perceived environment and task requirements. In addition, putting the entire system to the test in hardware experiments revealed several opportunities for future improvement in such systems.
+This paper presents the first modular robot system to autonomously complete high-level tasks by reactively reconfiguring in response to its perceived environment and task requirements. In addition, putting the entire system to the test in hardware experiments revealed several opportunities for future improvement in such systems.
 
-\subsection{Impact}
-%
-This paper presents the first system allowing modular robots to autonomously complete high-level tasks by reconfiguring in response to their perceived environment and task requirements.  This completes a long-standing goal of the field, and represents the state-of-the-art of modern self-reconfigurable robotics.
-
-The success of our system is a product of the guiding principles used in its design.  Our centralized high-level framework represents a departure from the distributed frameworks typical of earlier MSRR systems, and has commonalities with frameworks employed successfully in some non-modular multi-robot systems \cite{Grabowski2000} {\color{red} cite more}.  This has implications for research both in modular self-reconfigurable systems and the larger field of multi-robot systems: first, researchers in MSRR might consider adopting a similar architecture in the design of their systems; and  second, researchers in multi-robot systems might consider utilizing elements of physical connection and self-reconfigurability as a strategy to address tasks. 
-
-The following section presents the structure of our system, discusses the role of each component, and highlights key implementation details.  By providing a clear example of how a  system can be designed to leverage reactive reconfigurability in unknown environments, we have begun to blaze the path for reconfigurable systems to exit the lab, enter the real world, and make impact on our daily lives.
 %     __  ___      __            _       __           __   __  ___     __  __              __
 %    /  |/  /___ _/ /____  _____(_)___ _/ /____     _/_/  /  |/  /__  / /_/ /_  ____  ____/ /____
 %   / /|_/ / __ `/ __/ _ \/ ___/ / __ `/ / ___/   _/_/   / /|_/ / _ \/ __/ __ \/ __ \/ __  / ___/
@@ -791,6 +783,8 @@ Human Error & 4 & 16.7\% \\
 %%%
 
 % millibot
+Here we provide a more detailed overview of prior work in MSRR systems.  These systems provide partial sets of the capabilities of our system.
+ 
 The Millibot system demonstrated mapping when operating as a swarm. Certain members of the swarm are designated as ``beacons,'' and have known locations. The autonomy of the Millibot swarm is limited: a human operator makes all high-level decisions, and is responsible for navigation using a GUI \cite{Grabowski2000}.
 
 % swarm-bots
