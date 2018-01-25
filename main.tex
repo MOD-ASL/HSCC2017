@@ -262,7 +262,34 @@ For Experiment III, the robot begins in the ``Car'' configuration, and cannot se
 \section{Discussion}
 \label{sec:discussion}
 
+Modular robots promise the potential to create a new frontier in autonomous robotics with the ability to adapt to overcome challenges encountered in their environments. This paper presents a breakthrough in the state of the art by demonstrating an integrated hardware, planning, and perception system that can reactively adapt to observations of an \textit{a priori} unknown environment to accomplish complex tasks. Due to the distributed nature of the hardware, most past work in autonomous modular robots use entirely distributed frameworks \cite{Yim2007, Rubenstein2004,Murata2006,Dorigo2005,Mondada2005,o2010self}. Our system is designed differently.  It is distributed at the low level hardware, but centralized at the high level planning and perception algorithms, leveraging the advantages of both design paradigms.
 
+We selected the three scenarios in our experiments to showcase a range of different ways SMORES-EP can interact with environments and objects: movement over flat ground, fitting into tight spaces, reaching up high, and climbing over rough terrain, and manipulating objects.  This broad range of functionality is impressive for such a small robot, and is only accessible to SMORES-EP by reconfiguring between different morphologies.
+
+The high-level planner, environment characterization tools, and library work together to allow tasks to be represented in a flexible and reactive manner. For example, at the high level, Experiments II and III are the same task: deliver an object at a point of interest.  However, after characterizing the different environments (``High'' in II, ``Stairs'' in III), the system determines that different configurations and behaviors are required to complete each task:  the Proboscis to reach up high, and the Snake to climb the stairs.  
+Similarly, in Experiment I there is no high-level distinction between the green and pink objects - the robot is simply asked to retrieve all objects it finds.  The sensed environment once again dictates the choice of behavior: the simple problem (object in the open) is solved in a simple way (with the Car configuration), and the more difficult problem (object in tunnel) is solved in a more sophisticated way (by reconfiguring into the Proboscis).  Achieving this level of sophistication in control and decision-making through a distributed architecture would have been significantly more difficult.
+
+Centralized sensing and control during reconfiguration, provided by AprilTags and a centralized path planner, allowed our implementation to transform between configurations more rapidly than previous distributed systems. 
+Each reconfiguration action (a module disconnecting, moving, and reattaching) takes about one minute.  In contrast, past systems that utilized distributed sensing and control required 5-15 minutes for single reconfiguration actions \cite{Yim2007, Rubenstein2004,Murata2006}, which would prohibit their use in the complex tasks and environments that our system demonstrated.
+
+
+\subsection{Challenges and Observations}
+%
+% Homogeneity/Heterogeneity
+
+Through the hardware experiments performed with our system, we observed several challenges and opportunities for future improvement with autonomous perception-informed modular systems. All SMORES-EP body modules are identical, and therefore interchangeable for the purposes of reconfiguration.  However, the sensor module has a significantly different shape than a SMORES-EP body module, which introduces heterogeneity in a way that complicates motion planning and reconfiguration planning.  Configurations and behaviors must be designed to provide the sensor module with an adequate view, and to support its weight and elongated shape.  Centralizing sensing also limits reconfiguration: modules can only drive independently in the vicinity of the sensor module, preventing the robot from operating as multiple disparate clusters. 
+
+Our high-level planner assumes all underlying components are reliable and robust, so failure of a low-level component can cause the high-level planner to behave unexpectedly, and result in failure of the entire task.  Table \ref{table:errors} shows the causes of failure for 24 attempts of Experiment II (placing the stamp on the package).  
+Nearly all failures are due to an error in one of the low-level components the system relies upon, with
+42\% of failure due to hardware errors and 38\% due to failures in low-level software (object recognition, navigation, environment characterization).
+This kind of cascading failure is a weakness of centralized, hierarchical systems: distributed systems are often designed so that failure of a single unit can be compensated for by other units, and does not result in global failure.
+
+This lack of robustness represents a challenge, but steps can be taken to address it.  Unsurprisingly, open-loop behaviors (like stair-climbing and reaching up to place the stamp) were the least robust, and vulnerable to small hardware errors.  Closing the loop using sensing made exploration and reconfiguration significantly less vulnerable to error.  Future systems could be made more robust by introducing more feedback from low-level components to high-level decisions making processes.  Existing high-level failure-recovery frameworks could also be incorporated \cite{Maniatopoulos16icra}.
+
+This paper presents the first modular robot system to autonomously complete high-level tasks by reactively reconfiguring in response to its perceived environment and task requirements. In addition, putting the entire system to the test in hardware experiments revealed several opportunities for future improvement in such systems.
+
+\section{Old Discussion}
+\label{sec:old-discussion}
 
 Modular self-reconfigurable robots are by their nature mechanically distributed, and as a result lend themselves naturally to distributed planning, sensing, and control.  Many modular self-reconfigurable systems of the past have taken a distributed approach to system design, demonstrating self-assembly and reconfiguration through distributed sensing, computation, and control \cite{Yim2007, Rubenstein2004,Murata2006}, and addressing simple tasks through emergent behaviors from distributed control \cite{Dorigo2005,Mondada2005,o2010self}.
 Our system is designed differently.  It is distributed at the low level, but
@@ -292,91 +319,6 @@ Nearly all failures are due to an error in one of the low-level components the s
 This kind of cascading failure is a weakness of centralized, hierarchical systems: distributed systems are often designed so that failure of a single unit can be compensated for by other units, and does not result in global failure.
 
 This lack of robustness represents a challenge, but steps can be taken to address it.  Unsurprisingly, open-loop behaviors (like stair-climbing and reaching up to place the stamp) were the least robust, and vulnerable to small hardware errors.  Closing the loop using sensing made exploration and reconfiguration significantly less vulnerable to error.  Future systems could be made more robust by introducing more feedback from low-level components to high-level decisions making processes.  Existing high-level failure-recovery frameworks could also be incorporated \cite{Maniatopoulos16icra}. 
-
-\subsection{Summary of Contributions}
-%
-This paper presents the first system allowing modular robots to autonomously complete high-level tasks by reconfiguring in response to their perceived environment and task requirements.  This completes a long-standing goal of the field, and represents the state-of-the-art of modern self-reconfigurable robotics.
-
-The success of our system is a product of the guiding principles used in its design.  Our centralized planning, control, and sensing framework represents a departure from the distributed frameworks typical of earlier MSRR systems, and has commonalities with frameworks employed successfully in many single-robot and non-modular multi-robot systems.  Combining this centralized control framework with largely homogeneous, distributed mechanical design maximizes the effectiveness of the total system in addressing tasks.
-
-The following section presents the structure of our system, discusses the role of each component, and highlights key implementation details.  By providing a clear example of how a modular robot system can be designed to leverage reactive reconfigurability in unknown environments, we have begun to blaze the path for MSRR systems to exit the lab and enter the real world, as functional robot systems that make impact on our daily lives.
-
-\section{Old Discussion}
-\label{sec:old-discussion}
-The real-world experiments demonstrate that our system has the ability to autonomously reconfigure in response to observations in an \textit{a priori} unknown environment in order to perform high-level tasks. The system performs complex tasks, determining robot actions and reconfiguration online in response to observations of the environment. Experiments I and II/III demonstrate one system successfully performing two different high-level tasks (``retrieve all objects'' vs. ``deliver an object to a target''). Experiments II and III demonstrate that the same high-level task being performed in two different environments, with the robot autonomously adapting to the challenges presented by each environment. This is the first demonstration of a modular robot system autonomously completing multiple high-level tasks by reconfiguring to appropriate morphologies in response to the perceived environment.
-
-In addition to demonstrating novel system capabilities, the experiments revealed several insights related to perception-informed autonomy on MSRR systems. We encountered challenges with achieving robust performance, and discovered limitations of the system implementation and modular robot hardware. %We hope to share these observations to aid those who may wish to implement our system or improve its robustness and capability.
-%
-\subsection{Single-Sensor Architecture Enables Autonomy}
-%
-Autonomy in unknown environments requires powerful sensing capabilities.  Our centralized sensing architecture allowed the robot to carry a single, powerful RGB-D camera, enabling sophisticated capabilities like Visual SLAM and environment characterization. In contrast, previous systems that used distributed sensing have been forced to rely on less sophisticated sensors that can be carried by each module in the cluster, limiting their ability to operate autonomously in unknown environments.   Our system has demonstrated more sensor-based autonomy than any previous modular robot, and we believe this is due in large part to the decision to use a single, powerful sensor module.
-
-Likewise, high-fidelity centralized sensing during reconfiguration, provided by AprilTags, allowed our implementation to transform between configurations quickly and reliably.  Each reconfiguration action (a module disconnecting, moving, and reattaching) takes about one minute, and succeeds about 85\% of the time.  In contrast, past systems required 5-15 minutes for single reconfiguration actions \cite{Yim2007, Rubenstein2004,Murata2006}, which would prohibit their use in the complex tasks and environments that our system demonstrated. 
-
-Centralized sensing has some drawbacks.  The sensor module is larger than a single SMORES-EP module, and is only compatible with configurations that can hold it in a good view of the robot's surroundings.  This also limits the kinds of behaviors that can be performed, because care must be taken to hold the sensor level and steady.  The configurations and behaviors used in our experiments move more slowly than in past experiments with SMORES-EP, in part for this reason. Supporting the sensor module while traversing obstacles and rough terrain is particularly challenging.  In Experiment II, rigid connectors were used to attach the sensor module to the surrounding SMORES-EP modules, in order to avoid connection breakage when climbing the stairs. 
-
-Centralized sensing also limits reconfiguration. Since modules can only move in 2D within the camera view,  some reconfigurations are not possible.  For example,  the ``Car'' cannot reconfigure into the ``Snake'' using  our implementation, because the camera cannot see the back wheels of the ``Car''. Consequently, if the robot had started out as the ``Car'' at the beginning of Task 3, it would not have been able to complete its task.
-
-%We believe the benefits provided to our system by centralized sensing outweigh the costs.
-The decision to use a centralized sensor module represents a tradeoff, sacrificing some of the flexibility of the modular system to achieve more capability and autonomy.%As future modular systems move out of the lab and into real-world deployment, it will become increasingly important for designers to consider similar tradeoffs.
-
-While our implementation relies in part on external computation and wireless network access, this is not a fundamental system requirement.   In fact,  in our implementation the majority of  heavy computation (mapping, navigation, video processing) was done onboard on the sensor module, with a few processes (high-level planner, reconfiguration planner, and next-best-view planner) run offboard, primarily for development convenience.
-%
-\subsection{Strengths - Reactive Capability}
-%
-%{\color{red}(Specifying high-level tasks:)}
-The high-level planner, environment characterization tools, and library work together to allow tasks to be represented in a flexible and reactive manner. For example, at the high level, Experiments II and III are the same task: deliver an object at a point of interest.  However, after characterizing the different environments (``High'' in II, ``Stairs'' in III), the system determines that different configurations and behaviors are required to complete each task:  the Proboscis to reach up high, and the Snake to climb the stairs. Similarly, in Experiment I there is no high-level distinction between the green and pink objects - the robot is simply asked to retrieve all objects it finds.  The sensed environment once again dictates the choice of behavior: the simple problem is solved in a simple way (green object), and the more difficult problem is solved in a more sophisticated way (pink object).
-
-%{\color{red}(Interacting:)}
-We selected the three scenarios in our experiments to showcase a range of different ways SMORES-EP can interact with environments and objects: movement over flat ground, fitting into tight spaces, reaching up high, and climbing over rough terrain, and manipulating objects.  This broad range of functionality is impressive for such a small robot, and is only accessible to SMORES-EP by reconfiguring between different morphologies.
-%
-\subsection{Major Challenge - Robustness}
-%
-% Experiment Failure Table
-%
-Our implementation is vulnerable to small errors, which could cause the task to fail. 
-Table \ref{table:errors} shows the causes of failure for 24 attempts of Experiment II (placing the stamp on the package).  
-Nearly all failures are due to an error in one of the low-level components the system relies upon, with
-42\% of failure due to hardware errors and 38\% due to failures in low-level software (object recognition, navigation, environment characterization). Because the successful cases demonstrated the key novelties of our MSRR, and because the robot hardware and software are research prototypes, these failures are deemed reasonable, and would be much improved with production hardware and software. 
-
-The simulator served as a valuable prototyping tool, but all behaviors required significant
-tuning in hardware before they would run reliably.  
-The open-loop behaviors used for stair-climbing and reaching up to place the stamp, and fairly
-inflexible with respect to environment conditions, and also vulnerable to hardware
-errors. % like poorly calibrated encoders.  
-Exploration and reconfiguration use the sensor module to close the
-loop, and are significantly less vulnerable to these kinds of errors.  
-However, these behaviors required much more up-front development effort.
-
-%Lack of robustness is  a weakness of the system architecture.
-The high-level planner assumes all underlying components are reliable and robust, so if any low-level component fails, the high-level planner might behave unexpected and the entire task may fail. Further development, with the failure-recovery framework introduced in \cite{Maniatopoulos16icra} would likely improve robustness of the system dramatically.
-
-%In the future, we will explore high-level strategies for error recovery: for example, recognizing that a module has failed and adapting the approach so that task will not fail entirely.
-%\TODO{From Mark C: Rather than use in the future, which you should not do in journal papers, can we reference a few of our papers and say that further development, with papers A, B and C would likely improve robustness dramatically. } 
-%
-\subsection{Challenges for Future Systems}
-%
-Based on our small-scale, proof of concept experiments, we believe this system has the potential to be scaled and deployed in a real-world setting. Our experiences have provided us with some insight into the challenges future systems might face.
-
-%{(\color{red} Gathering information:)}
-We opted to use simple techniques for navigation, object recognition, and differentiating between environments, which were suitable for our proof-of-concept experiments. To deploy a similar system in real life, more sophisticated techniques would be needed. Considering the ongoing trend towards high-performance sensors and computers at small sizes, we expect that implementing these sophisticated techniques onboard the sensor module will become easier over time.
-
-%{\color{red}(Moving around:)}
-The ability of the robot to move and maneuver in the environment relies heavily on the hardware.  The SMORES-EP designs we used for exploration move slowly, and can only drive over smooth, flat ground.  In a demanding real-world application like search-and-rescue, the hardware system would likely need to be able to move more quickly.  In general, real-world applications would require modules with more powerful actuators, and the ability to hold large payloads without breaking inter-module connections.
-
-In theory, the system architecture places no fundamental limitations on the kinds of gaits or behaviors used to locomote in the environment.  However, our architecture does require a suitable \textit{motion model} and \textit{path planner} for any behavior used for locomotion.  In practice, this means that while a modular robot may be capable of a large number of creative or unusual gaits for locomotion, those that conform to standard, well-understood motion models (like differential or holonomic drive) require much less effort to implement, and often end up being the most useful for actually accomplishing tasks.
-
-%In general, the range of ways in which the robot may interact with its environment is determined by the contents of the design library, which would ideally contain a large number of configurations and behaviors suitable for a diverse set of tasks.
-The fact that our architecture relies upon a discrete representation of behaviors could mean that a real-world implementation would require a very large library, which presents some challenges. To precisely describe capabilities and limits of each behavior, the system would need a large set of attributes when labeling library entries. 
-When searching the library for behaviors with user specified constraints, our method scales linearly with respect to the size of the library.%, which makes the system suitable in real-world experiments.
-
-It is important to consider how the presented system could be adapted to work with
-other modular robot hardware. Our system relies on a 3D sensor for performing RGB-D
-SLAM, sufficient onboard processing power for perception and control algorithms,
-and a robust modular hardware system with a versatile self-reconfiguration ability
-that doesn't rely on external sensors. As long as another MSRR system provides these
-features and its own hardware-specific and reconfiguration controllers, our system
-can be integrated into it for performing high-level tasks.
 %
 
 %     __  ___      __            _       __           __   __  ___     __  __              __
