@@ -674,7 +674,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 \label{fig:envs}
 \end{figure}
 
-\begin{figure*}[H]
+\begin{figure}[H]
 %
   \begin{subfigure}{\columnwidth}
   % Experiment 1 Figure
@@ -737,7 +737,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
   \end{subfigure}  
   \caption{Experiments 1, 2, and 3}
   \label{fig:experiments}
-\end{figure*}
+\end{figure}
 
 %   ______      __    __
 %  /_  __/___ _/ /_  / /__  ______
@@ -889,10 +889,10 @@ Based on the sensed environment, the perception and exploration subsystem (Secti
 The system then converts the robot velocity to joint values in parametric behaviors during run-time.
 
 To provide an illustrative example, this paper discusses two configurations and their capabilities in detail.
-The ``Car'' configuration shown in Figure~\ref{fig:demo}-5 is capable of picking
+The ``Car'' configuration shown in Figure~\ref{fig:experiments}a-5 is capable of picking
 up and dropping objects in a ``free'' environment. In addition, the ``Car'' configuration can locomote on flat terrain. It uses a parametric differential drive behavior to convert a desired velocity vector into motor commands (\textbf{drive} in Table \ref{table:1}).
 
-The ``Proboscis'' configuration shown in Figure~\ref{fig:demo}-4 has
+The ``Proboscis'' configuration shown in Figure~\ref{fig:experiments}a-4 has
 a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects or reaching up in a ``high'' environment to drop items.
 However, the locomotion behaviors available for this configuration are limited to forward/backward motion, making it unsuitable for general navigation.
 
@@ -913,7 +913,7 @@ As discussed in Section~\ref{sec:configuration-specifics-supplement}, the user s
 In Experiment II, our system can choose to do a drop action by executing any behavior from the library which has the behavior property \textbf{drop}, and which also satisfies the current ``stairs''-type environment. If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.  In this way, the system autonomously chooses to implement  \textbf{drop}  appropriately in response to the sensed environment.
 Our system evaluates propositions related to the state of the environment using perception and environment characterization tools in Section~\ref{sec:exploration}. For example, users can map proposition \textbf{mailBox} to the color tracking function in our perception subsystem, which assign the value \lt to \textbf{mailBox} if and only if the robot is currently seeing a mailbox with the onboard camera.
 The system treats propositions, such as \textbf{explore}, that require the robot to navigate in the workspace differently from the other simple robot actions, such as \textbf{drop}.
-In this example, users can map \textbf{explore} to behavior property \textbf{drive}, which represents a set of parametric behaviors as discussed in Section~\ref{sec:configuration-specifics}.
+In this example, users can map \textbf{explore} to behavior property \textbf{drive}, which represents a set of parametric behaviors as discussed in Section~\ref{sec:configuration-specifics-supplement}.
 In order to obtain joint values for behaviors at run-time, a path planner in the perception and planning subsystem (Section~\ref{sec:exploration}) takes into account the robot goal as well as the current environment information from the perception subsystem, and generates a collision-free path for the robot to follow.
 Our system then converts this path to joint values, which are used to execute the \textbf{drive} behaviors.
 
