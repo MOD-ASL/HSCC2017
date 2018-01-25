@@ -180,16 +180,22 @@
 \maketitle 
 
 % Place your abstract within the special {sciabstract} environment.
-
+%     ___    __         __                  __
+%    /   |  / /_  _____/ /__________ ______/ /_
+%   / /| | / __ \/ ___/ __/ ___/ __ `/ ___/ __/
+%  / ___ |/ /_/ (__  ) /_/ /  / /_/ / /__/ /_
+% /_/  |_/_.___/____/\__/_/   \__,_/\___/\__/
+%
 \begin{sciabstract}
 %
-The theoretical ability of modular robots to reconfigure in response to complex tasks in \textit{a priori} unknown environments has frequently been cited as an advantage, but has never been experimentally demonstrated.
-For the first time, we present a system that integrates perception, high-level mission planning, and modular robot hardware, allowing a modular robot to autonomously reconfigure in response to an \textit{a priori} unknown environment in order to complete high-level tasks.
-Three hardware experiments validate the system, and demonstrate a modular robot autonomously exploring, reconfiguring, and manipulating objects to complete high-level tasks in unknown environments.
+The theoretical ability of modular robots to reconfigure in response to complex tasks in \textit{a priori} unknown environments has frequently been cited as an advantage, but never demonstrated. Today, this vision remains a major motivator for work in the field.
 
-We present system architecture, software and hardware in a general framework that enables modular robots to solve tasks in unknown environments using autonomous, reactive reconfiguration. The physical robot is composed of modules that support multiple robot configurations. An onboard 3D sensor provides information about the environment and informs exploration, reconfiguration decision making and feedback control.  A centralized high-level mission planner uses information from the environment and the user-specified task description to autonomously compose low-level controllers to perform locomotion, reconfiguration, and other behaviors. A novel, centralized self-reconfiguration method is used to change robot configurations as needed.
+We present the first modular robot system capable of autonomously completing high-level tasks by reactively reconfiguring to meet the needs of a perceived, a-priori unknown environment.  The system tightly integrates perception, high-level planning, and modular hardware, and is validated in three hardware experiments.  Based on a high-level task specification, the modular robot autonomously explores an unknown environment, decides when and how to reconfigure, and manipulates objects to complete its task.  This results marks a milestone in the field, and demonstrates mature technology representing the state-of-the-art of self-reconfigurable modular robotics.
+
+The success of our system is a product of our choice of architecture, which balances distributed mechanical elements with centralized perception, planning, and control.  By providing a clear example of how a modular robot system can be designed to leverage reactive reconfigurability in unknown environments, we have begun to blaze the path for MSRR systems to exit the lab and enter the real world, as functional robot systems that make impact on our daily lives.
 %
 \end{sciabstract}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %     ____      __                 __           __  _
@@ -198,7 +204,7 @@ We present system architecture, software and hardware in a general framework tha
 %  _/ // / / / /_/ /  / /_/ / /_/ / /_/ / /__/ /_/ / /_/ / / / /
 % /___/_/ /_/\__/_/   \____/\__,_/\__,_/\___/\__/_/\____/_/ /_/
 %
-\section{Introduction}
+
 
 Modular self-reconfigurable robot (MSRR) systems are composed of repeated robot elements (called \textit{modules}) that connect together to form larger robotic structures, and can \textit{self-reconfigure}, changing the connective arrangement of their own modules to form different structures with different capabilities.  Since the field of modular robotics was in its nascence, researchers have presented a vision that promised flexible, reactive systems capable of operating in unknown environments.  Modular self-reconfigurable robots would be able to enter unknown environments, assess their surroundings, and self-reconfigure to take on a form suitable to the task and environment at hand \cite{Yim1994}.  Today, this vision remains a major motivator for work in the field \cite{Yim2007a}.  
 
@@ -389,7 +395,7 @@ To enable the high-level planner to choose appropriate configurations for a task
 %                        /____/        /_/
 
 \subsection{Library of Configurations and Behaviors}
-\label{sec:configuration-specifics}
+\label{sec:supplement-configuration-specifics}
 
 In this work, we use user designed configurations and behaviors to build and control the SMORES-EP system.
 We present a library-based framework for organizing configurations and behaviors.
@@ -409,7 +415,6 @@ More importantly, all behaviors designed in VSPARC can be used to directly contr
 We hosted several design competitions and invites students to create different robot configurations and behaviors for different environments.
 The library introduced currently has 57 robot configurations and 97 behaviors.
 Table~\ref{table:1} lists 10 entries for four different configurations that are used in this work. \TODO{Make sure the table reference is still valid in the main section}
-
 
 %     ____                        _____                        __  _
 %    / __ \___  _________  ____  / __(_)___ ___  ___________ _/ /_(_)___  ____
@@ -433,7 +438,7 @@ Figure~\ref{fig:reconf} shows reconfiguration from the ``Car'' to the ``Probosci
 % Reconfiguration Figure
 
 \subsection{High-Level Planner}
-\label{sec:high-level}
+\label{sec:supplement-high-level}
 
 In our architecture, the high-level planner subsystem provides a framework for users to specify robot tasks using a formal language, and generates a centralized controller that directs robot motion and actions based on environment information.
 Users do not specify the exact configurations and behaviors used to complete tasks, but rather describe desired actions using the properties from the robot design library.
@@ -460,16 +465,6 @@ Our implementation employs an existing tool called LTLMoP (Linear Temporal Logic
 %The system then maps the system proposition specified in the next state to its set of behavior properties, and selects a behavior from the design library which satisfies both the behavior properties and current environment properties.
 %If the robot is not currently in a configuration capable of executing the selected behavior, the system commands the robot to reconfigure. Finally, the behavior is executed, and the program continues on to the next iteration. 
 
-\section{Conclusion}
-%
-To conclude, this paper presents the first modular self-reconfigurable robot system that uses perception of an unknown environment to reactively perform complex high-level tasks using intelligent reconfiguration. Experiments I and II/III demonstrate
-the system successfully performing two different high-level tasks (``retrieve
-all objects'' vs. ``deliver an object to a target''). Experiments II and
-III demonstrate that the same high-level task being performed in two different
-environments, with the robot autonomously adapting to the challenges presented
-by each environment.
-
-Components of this system include novel controller synthesis, environment characterization, and self-reconfiguration methods. The demonstration of this novel capability is crucial to the success of modular robots as a technology, and takes a step toward the application of modular robots to tasks in the real world.
 %
 \section*{Acknowledgments}
 %
@@ -497,7 +492,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 %         /____/
 
 % System Overview Figure
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 %\includegraphics[width=0.4\textwidth]{images/overview.png}
 \includegraphics[width=0.8\columnwidth]{images/RSS17FlowchartV5.png}
@@ -508,7 +503,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 
 % SMORES-EP module DoF picture
 % Sensor Module Figure
-\begin{figure}
+\begin{figure}[H]
   \begin{subfigure}{0.5\columnwidth}
   \begin{center}
   \includegraphics[height=1.5in]{images/smores_dof.pdf}
@@ -527,7 +522,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
   \caption{SMORES-EP Module and Sensor Module}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 % Environment types figure
 \begin{subfigure}[t]{0.45\columnwidth}
     \centering
@@ -568,7 +563,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 \end{figure}
 
 % Reconfiguration Figure
-\begin{figure}[t]
+\begin{figure}[H]
 \begin{center}
   \includegraphics[width=0.32\columnwidth]{images/reconf_start.jpg}
   \includegraphics[width=0.32\columnwidth]{images/reconf_motion.png}
@@ -579,7 +574,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 \end{figure}
 
 % Controller Automaton Figure
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.4\textwidth]{images/autSimple.png}
 \caption{An example of a synthesized controller automaton. A proposition with ``!'' has a value of \lf, and \lt otherwise.}
@@ -587,7 +582,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 \end{center}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
   % Map Figure
   \begin{subfigure}{0.5\columnwidth}
   \begin{center}
@@ -658,7 +653,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 \label{fig:envs}
 \end{figure}
 
-\begin{figure*}
+\begin{figure*}[H]
 %
   \begin{subfigure}{\columnwidth}
   % Experiment 1 Figure
@@ -730,7 +725,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 % /_/  \__,_/_.___/_/\___/____(_)
 
 % Library table
-\begin{table}
+\begin{table}[H]
 \centering
 \begin{tabular}{ |c|c|c| } 
  \hline
@@ -754,7 +749,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 \end{table}
 
 % Experiment Failure Table
-\begin{table}
+\begin{table}[H]
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
@@ -774,7 +769,6 @@ Human Error & 4 & 16.7\% \\
 \caption{Reasons for experiment failure.}
 \label{table:errors}
 \end{table}
-
 
 %    _____                   __                          __
 %   / ___/__  ______  ____  / /__  ____ ___  ___  ____  / /_____ ________  __
@@ -828,16 +822,8 @@ Recent work includes a system which integrates many low-level capabilities of a 
 Our system goes beyond existing work by using self-reconfiguration capabilities of an MSRR system to take autonomy a step further.  The system uses perception of the environment to inform the choice of robot configuration, allowing the robot to adapt its abilities to surmount challenges arising from \textit{a priori} unknown features in the environment. Through hardware experiments, we demonstrate that autonomous self-reconfiguration allows our system to adapt to the environment to complete complex tasks.
 
 
-
-%    _____            __
-%   / ___/__  _______/ /____  ____ ___
-%   \__ \/ / / / ___/ __/ _ \/ __ `__ \
-%  ___/ / /_/ (__  ) /_/  __/ / / / / /
-% /____/\__, /____/\__/\___/_/ /_/ /_/
-%      /____/
-\section{System Components}
-
-\subsection{Environment Characterization}
+\section{Environment Characterization}
+%
 When the system recognizes an object in the environment, the characterization algorithm evaluates the 3D information in the object's surroundings. It creates an occupancy grid around the object location, and denotes all grid cells within a robot-radius of obstacles as unreachable (illustrated in Figure~\ref{fig:characterization}). The algorithm then selects the closest reachable point to the object within $20^o$ of the robot's line of sight to the object. If the distance from this point to the object is greater than a threshold value and the object is on the ground, the algorithm characterizes the environment as a ``tunnel''. If above the ground, it characterizes the environment as a ``stairs'' environment. If the closest reachable point is under the threshold value, the system assigns a ``free'' or ``high'' environment characterization, depending on the height of the colored object.
 
 Based on the environment characterization and target location, the algorithm also returns a waypoint for the robot to position itself to perform its task (or to reconfigure, if necessary).  In the mail delivery example, the environment characterization algorithm directs the robot to drive to a waypoint at the base of the stairs, which is the best place for the robot to reconfigure and begin climbing the stairs.
@@ -848,7 +834,7 @@ Based on the environment characterization and target location, the algorithm als
 % / /___/ /_/ / / / / __/ / /_/ /   ___/ / /_/ /  __/ /__/ / __/ / /__(__  )
 % \____/\____/_/ /_/_/ /_/\__, /   /____/ .___/\___/\___/_/_/ /_/\___/____/
 %
-\subsection{Library of Configurations and Behaviors}
+\section{Library of Configurations and Behaviors}
 \label{sec:configuration-specifics}
 %
 In this work, we use the architecture introduced in \cite{Jing2016}. We encode the full set of capabilities of the modular robot, such as driving and picking up items, in a library of robot configurations and behaviors.
@@ -905,41 +891,7 @@ For example, if the perception system reports that the environment is of type ``
 %
 % Library table
 
-
-%     ____                        _____                        __  _
-%    / __ \___  _________  ____  / __(_)___ ___  ___________ _/ /_(_)___  ____
-%   / /_/ / _ \/ ___/ __ \/ __ \/ /_/ / __ `/ / / / ___/ __ `/ __/ / __ \/ __ \
-%  / _, _/  __/ /__/ /_/ / / / / __/ / /_/ / /_/ / /  / /_/ / /_/ / /_/ / / / /
-% /_/ |_|\___/\___/\____/_/ /_/_/ /_/\__, /\__,_/_/   \__,_/\__/_/\____/_/ /_/
-%                                   /____/
-\subsection{Reconfiguration}
-\label{sec:reconfiguration-supplement}
-%
-When the high-level planner decides to use a new configuration during a task, the robot must reconfigure. Our system architecture allows any method for reconfiguration, provided that the method requires no external sensing. SMORES-EP is capable of all three classes of modular self-reconfiguration (chain, lattice, and mobile reconfiguration) \cite{Davey2012,yim2003modular}.  We have implemented tools for mobile reconfiguration with SMORES-EP, taking advantage of the fact that individual modules can drive on flat surfaces as described in Section \ref{sec:hardware}.
-
-Determining the relative positions of modules during mobile self-reconfiguration is an important challenge. 
-%As discussed in Section~\ref{sec:related-work}, past systems have relied on offboard global positioning systems \cite{Paulos2015} or distributed approaches, in which sensors are mounted on each disconnected set of modules \cite{Yim2007}.  
-In this work, the localization method is centralized, using a camera carried by the robot to track AprilTag fiducials mounted to individual modules.
-As discussed in Section~\ref{sec:hardware}, the camera provides a view of a $0.75\text{m}\times0.5\text{m}$ area on the ground in front of the sensor module.  
-Within this area, the localization system provides pose for any module equipped with an AprilTag marker to perform reconfiguration. 
-%Within this area (which we call the \emph{reconfiguration zone}), any module equipped with an AprilTag marker can detach from the cluster, drive to another location, and reattach to the cluster, provided that both of its wheels were in contact with the ground in its starting position.% \TODO{Get accurate number for height and FoV.}
-
-%\subsection{Reconfiguration Procedure}
-Given an initial configuration and a goal configuration, the reconfiguration controller commands a set of modules to disconnect, move and reconnect in order to form the new topology of the goal configuration. 
-The robot first takes actions to establish the conditions needed for reconfiguration by confirming that the reconfiguration zone is a flat surface free of obstacles (other than the modules themselves).
-%If the robot is carrying an object, it drops the object outside of the reconfiguration zone.
-The robot then sets its joint angles so that all modules that need to detach have both of their wheels on the ground, ready to drive.
-Then the robot performs operations to change the topology of the cluster by detaching a module from the cluster, driving, and re-attaching at its new location in the goal configuration, as shown in Figure~\ref{fig:reconf}.
-Currently, reconfiguration plans from one configuration to another are created manually and stored in the library. However the framework can work with existing assembly planning algorithms (\cite{Werfel2007,Seo2013}) to generate reconfiguration plans automatically.
-Because the reconfiguration zone is free of obstacles, the controller compute collision-free paths offline and store them as part of the reconfiguration plan.
-Once all module movement operations have completed and the goal topology is formed, the robot sets its joints to appropriate angles for the goal configuration to begin performing desired behaviors.
-
-We developed several techniques to ensure reliable connection and disconnection during reconfiguration.  
-When a module disconnects from the cluster, the electro-permanent magnets on the connected faces are turned off.  To guarantee a clean break of the magnetic connection, the disconnecting module bends its tilt joint up and down, mechanically separating itself from the cluster. During docking, accurate alignment is crucial to the strength of the magnetic connection \cite{tosun2016design}.  For this reason, rather than driving directly to its final docking location, a module instead drives to a pre-docking waypoint directly in front of its docking location.  At the waypoint, the module spins in place slowly until its heading is aligned with the dock point, and then drives in straight to attach. To guarantee a good connection, the module intentionally overdrives its dock point, pushing itself into the cluster while firing its magnets.
-%
-% Reconfiguration Figure
-
-\subsection{High-Level Planner}
+\section{High-Level Planner}
 \label{sec:high-level}
 
 In order to generate controllers from high-level task specifications, we first abstract the robot and environment status as a set of Boolean propositions.
@@ -1023,92 +975,37 @@ If the current configuration cannot execute the behavior, the controller instruc
 %The system then maps the system proposition specified in the next state to its set of behavior properties, and selects a behavior from the design library which satisfies both the behavior properties and current environment properties.
 %If the robot is not currently in a configuration capable of executing the selected behavior, the system commands the robot to reconfigure. Finally, the behavior is executed, and the program continues on to the next iteration.
 
-%     ______                     _                      __     ____                  ____
-%    / ____/  ______  ___  _____(_)___ ___  ___  ____  / /_   / __ \___  _______  __/ / /______
-%   / __/ | |/_/ __ \/ _ \/ ___/ / __ `__ \/ _ \/ __ \/ __/  / /_/ / _ \/ ___/ / / / / __/ ___/
-%  / /____>  </ /_/ /  __/ /  / / / / / / /  __/ / / / /_   / _, _/  __(__  ) /_/ / / /_(__  )
-% /_____/_/|_/ .___/\___/_/  /_/_/ /_/ /_/\___/_/ /_/\__/  /_/ |_|\___/____/\__,_/_/\__/____/
-%           /_/
-%\section{Experiment Results}
-%\label{sec:experiments}
+%     ____                        _____                        __  _
+%    / __ \___  _________  ____  / __(_)___ ___  ___________ _/ /_(_)___  ____
+%   / /_/ / _ \/ ___/ __ \/ __ \/ /_/ / __ `/ / / / ___/ __ `/ __/ / __ \/ __ \
+%  / _, _/  __/ /__/ /_/ / / / / __/ / /_/ / /_/ / /  / /_/ / /_/ / /_/ / / / /
+% /_/ |_|\___/\___/\____/_/ /_/_/ /_/\__, /\__,_/_/   \__,_/\__/_/\____/_/ /_/
+%                                   /____/
+\section{Reconfiguration}
+\label{sec:reconfiguration-supplement}
 %
-%\begin{notes}
-%This is the old Experiment Results section from the TRO paper
+When the high-level planner decides to use a new configuration during a task, the robot must reconfigure. Our system architecture allows any method for reconfiguration, provided that the method requires no external sensing. SMORES-EP is capable of all three classes of modular self-reconfiguration (chain, lattice, and mobile reconfiguration) \cite{Davey2012,yim2003modular}.  We have implemented tools for mobile reconfiguration with SMORES-EP, taking advantage of the fact that individual modules can drive on flat surfaces as described in Section \ref{sec:hardware}.
+
+Determining the relative positions of modules during mobile self-reconfiguration is an important challenge. 
+%As discussed in Section~\ref{sec:related-work}, past systems have relied on offboard global positioning systems \cite{Paulos2015} or distributed approaches, in which sensors are mounted on each disconnected set of modules \cite{Yim2007}.  
+In this work, the localization method is centralized, using a camera carried by the robot to track AprilTag fiducials mounted to individual modules.
+As discussed in Section~\ref{sec:hardware}, the camera provides a view of a $0.75\text{m}\times0.5\text{m}$ area on the ground in front of the sensor module.  
+Within this area, the localization system provides pose for any module equipped with an AprilTag marker to perform reconfiguration. 
+%Within this area (which we call the \emph{reconfiguration zone}), any module equipped with an AprilTag marker can detach from the cluster, drive to another location, and reattach to the cluster, provided that both of its wheels were in contact with the ground in its starting position.% \TODO{Get accurate number for height and FoV.}
+
+%\subsection{Reconfiguration Procedure}
+Given an initial configuration and a goal configuration, the reconfiguration controller commands a set of modules to disconnect, move and reconnect in order to form the new topology of the goal configuration. 
+The robot first takes actions to establish the conditions needed for reconfiguration by confirming that the reconfiguration zone is a flat surface free of obstacles (other than the modules themselves).
+%If the robot is carrying an object, it drops the object outside of the reconfiguration zone.
+The robot then sets its joint angles so that all modules that need to detach have both of their wheels on the ground, ready to drive.
+Then the robot performs operations to change the topology of the cluster by detaching a module from the cluster, driving, and re-attaching at its new location in the goal configuration, as shown in Figure~\ref{fig:reconf}.
+Currently, reconfiguration plans from one configuration to another are created manually and stored in the library. However the framework can work with existing assembly planning algorithms (\cite{Werfel2007,Seo2013}) to generate reconfiguration plans automatically.
+Because the reconfiguration zone is free of obstacles, the controller compute collision-free paths offline and store them as part of the reconfiguration plan.
+Once all module movement operations have completed and the goal topology is formed, the robot sets its joints to appropriate angles for the goal configuration to begin performing desired behaviors.
+
+We developed several techniques to ensure reliable connection and disconnection during reconfiguration.  
+When a module disconnects from the cluster, the electro-permanent magnets on the connected faces are turned off.  To guarantee a clean break of the magnetic connection, the disconnecting module bends its tilt joint up and down, mechanically separating itself from the cluster. During docking, accurate alignment is crucial to the strength of the magnetic connection \cite{tosun2016design}.  For this reason, rather than driving directly to its final docking location, a module instead drives to a pre-docking waypoint directly in front of its docking location.  At the waypoint, the module spins in place slowly until its heading is aligned with the dock point, and then drives in straight to attach. To guarantee a good connection, the module intentionally overdrives its dock point, pushing itself into the cluster while firing its magnets.
 %
-%\end{notes}
-%
-%% Map Figure
-%
-%% Experiment 1 Figure
-%%
-%Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available at \url{https://youtu.be/eJsnG9DZjgM}. The robot starts in the ``Car'' configuration. The starting location prevents the robot from seeing the objects initially, forcing it to explore the environment. After a period of exploration, the robot locates the pink object. The characterization algorithm correctly classifies the surrounding environment as a ``tunnel'' type, and gives this classification to the high-level planner. Based on this classification, the high-level planner directs the robot to navigate in front of the object and reconfigure to the ``Proboscis'' configuration. The ``Proboscis'' then uses its long arm to reach into the tunnel and pull the object out into the open.
-%
-% The ``Proboscis'' only has behaviors to drive forwards and backwards (it has no turning behavior), so the robot concludes that it must reconfigure back to the ``Car'' to drive the object to the drop-off zone.  To do so, the robot drops the object, reconfigures, and picks the object back up. The ``Car'' then navigates to and drops off the object at the drop-off zone, which the robot previously located during exploration and recorded in the global map built by the SLAM algorithm.
-%
-%After delivering the pink object, the robot navigates directly to the green object, discovered while dropping off the pink object. The robot correctly determines that the green object is in a ``free'' environment, and picks it up without reconfiguring. The robot finishes the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows a volumetric map of the environment generated as the robot explores and delivers objects. The robot successfully completed all tasks in the experiment in approximately 26 minutes.
-%
-%Note that at one point in the video a person reaches onto the field to dislodge the green object from a crack in the floor.  This was due to a defect in the experimental setup (which is not supposed to have a crack in the floor) and not an error in the robot's performance.
-%
-%In three hardware experiments, we demonstrate how our system allows the robot to autonomously explore, decide how and when to reconfigure, and manipulate objects to complete tasks in unknown environments. Table \ref{table:task-compare} presents the environments and tasks in each experiment.
-%In Experiment I, the robot completes a complex, multi-part object retrieval task that requires significant exploration, reactive decision-making, and reconfiguration in response to its environment.
-%Experiments II and III give the robot the task of delivering an object to an \textit{a priori} unknown goal in two different environments.  The system reacts to the two scenarios by taking very different actions, both requiring reconfiguration.
-%
-%These experiments accomplish two goals.  First, they fill an experimental
-%gap in the field, representing the first evidence of a modular robot autonomously reconfiguring in response to its perceived (\textit{a priori} unknown) environment in order to complete tasks.  Second, they provide observations and insights into the challenges presented by autonomous modular robot systems.  By discussing lessons learned, others may build on our work and create even more capable systems. 
-%
-%
-%% Environments and tasks table:
-%
-%\subsection{Experiment I}
-%%
-%Experiment I tasks the robot with cleaning a messy graduate student office.  Figure \ref{fig:map} illustrates the environment layout. The robot must explore the unknown office environment and search for any green- or pink-colored metal garbage that can be recycled.  The robot must find, retrieve, and deliver all metal garbage to a designated drop-off zone for recycling, which is marked with a blue square on the wall.
-%
-%The high-level task is compact, consisting of three sub-tasks: explore the environment, find and retrieve all metal objects, and deliver each to the drop-off zone.  Successful completion of the task in the given environment requires complex behavior that fully utilizes the robot's exploration, reconfiguration, and manipulation abilities. The environment contains two colored objects: a green soda can in the open (a ``free'' environment type), and a pink spool of wire in a narrow gap between two trash cans (a ``tunnel'' environment). Although the colors of the target objects are known \textit{a priori}, the types of environments surrounding the objects, the locations of the objects and drop-off zone, and obstacles in the environment are unknown \textit{a priori}.  Note that the object colors (pink and green) have no influence on environment characterization: in other words, the robot does not know that the pink object is in a ``tunnel''  before the experiment starts.  Both objects have small pieces of steel attached, giving the modules something to grasp using their magnetic connectors.
-%
-%Five SMORES-EP modules, one Sensor Module\footnote{This experiment uses an older version of the sensor module.}, and three passive cubes composed the robot for performing the task. The body is larger (160 $\times$ 80 $\times$ 80mm box), and it uses an older Asus Xtion Pro Live RGB-D camera, which is larger than the Orbecc Astra but provides similar data.  The only functional difference between this older sensor module and the version presented in Section~\ref{sec:sensor_module} is the larger size.
-%During the experiment, the high-level planner used the library of configurations and behaviors described in Section \ref{sec:configuration-specifics}.
-%
-%% Map Figure
-%
-%% Experiment 1 Figure
-%%
-%Figure \ref{fig:demo} shows snapshots from the experiment run. A video of the entire experiment is available at \url{https://youtu.be/eJsnG9DZjgM}. The robot starts in the ``Car'' configuration. The starting location prevents the robot from seeing the objects initially, forcing it to explore the environment. After a period of exploration, the robot locates the pink object. The characterization algorithm correctly classifies the surrounding environment as a ``tunnel'' type, and gives this classification to the high-level planner. Based on this classification, the high-level planner directs the robot to navigate in front of the object and reconfigure to the ``Proboscis'' configuration. The ``Proboscis'' then uses its long arm to reach into the tunnel and pull the object out into the open.
-%
-% The ``Proboscis'' only has behaviors to drive forwards and backwards (it has no turning behavior), so the robot concludes that it must reconfigure back to the ``Car'' to drive the object to the drop-off zone.  To do so, the robot drops the object, reconfigures, and picks the object back up. The ``Car'' then navigates to and drops off the object at the drop-off zone, which the robot previously located during exploration and recorded in the global map built by the SLAM algorithm.
-%
-%After delivering the pink object, the robot navigates directly to the green object, discovered while dropping off the pink object. The robot correctly determines that the green object is in a ``free'' environment, and picks it up without reconfiguring. The robot finishes the experiment by also delivering the green object to the drop-off zone. Figure \ref{fig:octomap} shows a volumetric map of the environment generated as the robot explores and delivers objects. The robot successfully completed all tasks in the experiment in approximately 26 minutes.
-%
-%Note that at one point in the video a person reaches onto the field to dislodge the green object from a crack in the floor.  This was due to a defect in the experimental setup (which is not supposed to have a crack in the floor) and not an error in the robot's performance.
-%%
-%% Octomap figure
-%
-%\subsection{Experiment II}
-%%
-%In Experiments II and III, the robot helps researchers at the University of Pennsylvania mail a circuit board to collaborators at Cornell.  First, in Experiment II, the robot must place the circuit board in a mailbox, and then in Experiment III, the robot must place a postage stamp on the box so that it can be shipped.  Experiments I and II have the same high-level task specification: starting with an object in its possession, the robot must explore until finding a drop-off point, then deposit the object at the drop-off point.
-%
-%%%%%%%%%%%%%%%%
-%
-%%The second and third experiments were designed to demonstrate the breadth of our system's adaptive capabilities. As such, these two experiments included the same high-level task specification that is different from the task in Experiment I. However, differing environments between Experiment II and Experiment III force the robot to adapt differently while performing the task.
-%%For Experiment II, the robot is given a circuit that needs to be shipped, and is tasked with finding the shipping bin in which to place the circuit.
-%%The high-level task includes sub-tasks of exploring the unknown environment, locating and characterizing the environment surrounding the mail bin, and delivering the package to the bin.
-%
-%The environment setup for Experiment II (see Table \ref{table:task-compare}) includes an obstacle (cardboard box), a staircase, and the mailbox at the top of the staircase.  A pink rectangle indicates the mailbox.  Note that this scenario is identical to the mail delivery example mentioned as motivation earlier in the paper.
-%
-%%The full performance of the experiment is included in the video attachment to this paper.
-%The robot begins the experiment in the ``Scorpion'' configuration with its view of the staircase and mailbox blocked by the cardboard box.  After a short period of exploration, the robot observes and recognizes the mailbox, and characterizes the surrounding environment as ``stairs''. Based on this characterization, the high-level planner directs the robot to use the ``Snake'' configuration to traverse the stairs. Using the 3D map and characterization of the environment surrounding the mail bin, the robot navigates to a point directly in front of the stairs, faces the bin, and reconfigures to the ``Snake'' configuration. The robot then executes the stair climbing gait to reach the mail bin, and drops the circuit successfully. It then descends the stairs and reconfigures back to the ``Scorpion'' configuration to end the mission.
-%
-%% Experiment 2 and 3 Figure
-%
-%\subsection{Experiment III}
-%
-%For the final experiment, a student gives the robot a postage stamp\footnote{The postage stamp has a thin steel backing, so that the robot can pick it up with its magnets, and so that it adheres to magnets on the package.} to place on the package so that it can be shipped to Cornell. The high-level task has the same specification as in Experiment II: explore the unknown environment, find the delivery goal indicated by a pink area, and place the object at the target. The environment is different, most significantly in that the delivery goal is in a ``high'' environment type instead of the ``stairs'' environment used in Experiment II (see Table \ref{table:task-compare}).
-%
-%%Please see the video attachment for the full performance of this experiment.
-%The robot begins in the ``Car'' configuration, and cannot see the package from its starting location.  After a short exploration, the robot identifies the pink square marking the package.  The pink square is unobstructed, but is approximately 25cm above the ground; the system correctly characterizes this as the ``high''-type environment, and recognizes that reconfiguration will be needed to reach up and place the stamp on the target.  The robot navigates to a position directly in front of the package, reconfigures to the ``Proboscis'' configuration, and executes the ``highReach'' behavior to place the stamp on the target, completing its task.
-%     ______          __
-%    / ____/___  ____/ /
-%   / __/ / __ \/ __  /
-%  / /___/ / / / /_/ /
-% /_____/_/ /_/\__,_/
+% Reconfiguration Figure
 
 \end{document}
