@@ -909,7 +909,7 @@ Moreover the proposition \textbf{explore} encodes whether or not the robot is cu
 
 %A wide range of reactive robotic tasks can be specified in terms of these propositions.
 By using a library of robot configurations and behaviors as well as environment characterization tools, we can map these high-level abstraction to low-level sensing programs and robot controllers.
-As discussed in Section~\ref{sec:configuration-specifics}, the user specifies high-level robot actions in terms of behavior properties from the library. 
+As discussed in Section~\ref{sec:configuration-specifics-supplement}, the user specifies high-level robot actions in terms of behavior properties from the library. 
 In Experiment II, our system can choose to do a drop action by executing any behavior from the library which has the behavior property \textbf{drop}, and which also satisfies the current ``stairs''-type environment. If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.  In this way, the system autonomously chooses to implement  \textbf{drop}  appropriately in response to the sensed environment.
 Our system evaluates propositions related to the state of the environment using perception and environment characterization tools in Section~\ref{sec:exploration}. For example, users can map proposition \textbf{mailBox} to the color tracking function in our perception subsystem, which assign the value \lt to \textbf{mailBox} if and only if the robot is currently seeing a mailbox with the onboard camera.
 The system treats propositions, such as \textbf{explore}, that require the robot to navigate in the workspace differently from the other simple robot actions, such as \textbf{drop}.
