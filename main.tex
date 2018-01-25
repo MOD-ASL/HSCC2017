@@ -855,17 +855,16 @@ Based on the environment characterization and target location, the algorithm als
 % / /___/ /_/ / / / / __/ / /_/ /   ___/ / /_/ /  __/ /__/ / __/ / /__(__  )
 % \____/\____/_/ /_/_/ /_/\__, /   /____/ .___/\___/\___/_/_/ /_/\___/____/
 %
-\section{Library of Configurations and Behaviors}
-\label{sec:configuration-specifics}
+\subsection{Library of Configurations and Behaviors}
+\label{sec:configuration-specifics-supplement}
 %
 In this work, we use the architecture introduced in \cite{Jing2016}. We encode the full set of capabilities of the modular robot, such as driving and picking up items, in a library of robot configurations and behaviors.
-Specifically, the library labels each entry with attributes that describe the behavior's capabilities and environment conditions. 
-This allows the high-level planner to match environment characterizations from the perception subsystem with configurations and behaviors that can perform the task in the current environment. 
-In the case of our mail delivery example, when the environment characterization algorithm reports that the mailbox is located in a ``stairs''-type environment, the high-level planner queries the library for configurations that can climb stairs.  
-Since the library indicates that current configuration is only capable of driving on flat ground, the high-level planner opts to reconfigure to the stair-climber configuration, and executes its \textbf{climbUp} behavior.
+To create robot configurations and behaviors, users can utilize our simulator toolbox VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}) presented in \cite{Jing2016}.
+VSPARC allows users to design, simulate and test configurations and behaviors for the SMORES-EP robot system.
+The library currently has 57 robot configurations and 97 behaviors, which can be used to directly control the physical SMORES-EP robot to perform various actions.
 
 Our implementation relies on a framework first presented in \cite{Jing2016}, which is summarized here.
-In this framework, a library entry is defined as $l = (C,B_C,P_b,P_e)$ where:
+A library entry is defined as $l = (C,B_C,P_b,P_e)$ where:
 \begin{itemize}
 \item $C$ is the robot \emph{configuration}, specified by the connected structure of the modules.
 \item $B_C$ is a \emph{behavior} that $C$ can perform. A behavior is a controller that specifies commands for robot joints to perform a specific action. 
@@ -875,10 +874,9 @@ In this framework, a library entry is defined as $l = (C,B_C,P_b,P_e)$ where:
 %
 To specify tasks at the high level, behavior properties $P_b$ describes a desired robot action without explicitly specifying a configuration or behavior.
 Environment types $P_e$ specify the conditions under which a behavior can be used.
-
-To create robot configurations and behaviors, users can utilize the VSPARC (Verification, Simulation, Programming And Robot Construction \footnote{\url{www.vsparc.org}}) simulator presented in \cite{Jing2016}.
-VSPARC allows users to design, simulate and test configurations and behaviors for the SMORES-EP robot system.
-The system can then use the behavior designs to control the physical SMORES-EP robot to perform various actions.
+This allows the high-level planner to match environment characterizations from the perception subsystem with configurations and behaviors that can perform the task in the current environment. 
+In Experiment II, when the environment characterization algorithm reports that the mailbox is located in a ``stairs''-type environment, the high-level planner queries the library for configurations that can climb stairs.  
+Since the library indicates that current configuration is only capable of driving on flat ground, the high-level planner opts to reconfigure to the stair-climber configuration, and executes its \textbf{climbUp} behavior.
 
 In \cite{Jing2016}, all robot behaviors are \textit{static} behaviors.
 That is, once users create a behavior in VSPARC, joint values for each module are fixed and cannot be modified during behavior execution.
@@ -890,30 +888,20 @@ The system associates a parametric behavior with a program that generates values
 Based on the sensed environment, the perception and exploration subsystem (Section~\ref{sec:exploration}) can generate a collision-free path, which is used to calculate real-time velocity for the robot.
 The system then converts the robot velocity to joint values in parametric behaviors during run-time.
 
-%The library introduced in \cite{Jing2016} has 57 robot configurations and 97 behaviors.
-%Table~\ref{table:1} lists 10 entries for four different configurations that are used in this work.
-%This library was created to enables the robot to explore and interact with the environment and objects, but the library can be expanded to include more entries for other environments and tasks. 
-%Note that each library entry consists of a configuration with its available behaviors subject to restrictions in environment conditions. To characterize the environment in terms of these restrictions, we use the perception algorithm described in Section \ref{sec:exploration}.
-
 To provide an illustrative example, this paper discusses two configurations and their capabilities in detail.
 The ``Car'' configuration shown in Figure~\ref{fig:demo}-5 is capable of picking
 up and dropping objects in a ``free'' environment. In addition, the ``Car'' configuration can locomote on flat terrain. It uses a parametric differential drive behavior to convert a desired velocity vector into motor commands (\textbf{drive} in Table \ref{table:1}).
 
 The ``Proboscis'' configuration shown in Figure~\ref{fig:demo}-4 has
 a long arm in front, and is suitable for reaching between obstacles in a narrow ``tunnel'' environment to grasp objects or reaching up in a ``high'' environment to drop items.
-However, the locomotion behaviors available for this configuration are limited to forward/backward
-motion, making it unsuitable for general navigation.
+However, the locomotion behaviors available for this configuration are limited to forward/backward motion, making it unsuitable for general navigation.
 
 This library-based framework allows users to express desired robot actions in an abstract way by specifying behavior properties. For example, if a task specifies that the robot should execute a behavior with the \textbf{drop} property, the system could choose to use either the Car or Proboscis configurations to perform the action, since both have behaviors with the \textbf{drop} property.
 The decision of which configuration to use is made during task execution, based on the sensed environment.
 For example, if the perception system reports that the environment is of type ``tunnel'', the Proboscis configuration will be used, because the library indicates that it can be used in ``tunnel''-type environments while the Car cannot.
 
-% I moved the disccusion about this to highlevel %Since self-reconfiguration is time-consuming, decisions are biased toward behaviors associated with the current configuration whenever possible, so that the robot only reconfigures when it is necessary to complete a task.
-%
-% Library table
-
-\section{High-Level Planner}
-\label{sec:high-level}
+\subsection{High-Level Planner}
+\label{sec:high-level-supplement}
 
 In order to generate controllers from high-level task specifications, we first abstract the robot and environment status as a set of Boolean propositions.
 In Experiment II, the robot action \textbf{drop} is \lt if the robot is currently dropping an object to the mailbox (and \lf otherwise) and the environment proposition \textbf{mailBox} is \lt if the robot is currently sensing a mailbox (and \lf otherwise).
