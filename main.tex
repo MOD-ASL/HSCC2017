@@ -190,7 +190,7 @@
 %
 The theoretical ability of modular robots to reconfigure in response to complex tasks in \textit{a priori} unknown environments has frequently been cited as an advantage, but never demonstrated. Today, this vision remains a major motivator for work in the field.
 
-We present the first modular robot system capable of autonomously completing high-level tasks by reactively reconfiguring to meet the needs of a perceived, a-priori unknown environment.  The system tightly integrates perception, high-level planning, and modular hardware, and is validated in three hardware experiments.  Based on a high-level task specification, the modular robot autonomously explores an unknown environment, decides when and how to reconfigure, and manipulates objects to complete its task.  This results marks a milestone in the field, and demonstrates mature technology representing the state-of-the-art of self-reconfigurable modular robotics.
+We present the first modular robot system capable of autonomously completing high-level tasks by reactively reconfiguring to meet the needs of a perceived, \textit{a priori} unknown environment.  The system tightly integrates perception, high-level planning, and modular hardware, and is validated in three hardware experiments.  Based on a high-level task specification, the modular robot autonomously explores an unknown environment, decides when and how to reconfigure, and manipulates objects to complete its task.  This results marks a milestone in the field, and demonstrates mature technology representing the state of the art of self-reconfigurable modular robotics.
 
 The success of our system is a product of our choice of architecture, which balances distributed mechanical elements with centralized perception, planning, and control.  By providing a clear example of how a modular robot system can be designed to leverage reactive reconfigurability in unknown environments, we have begun to blaze the path for MSRR systems to exit the lab and enter the real world, as functional robot systems that make impact on our daily lives.
 %
@@ -400,7 +400,7 @@ Moreover, users can save and share their designs with us and with other users.
 More importantly, all behaviors designed in VSPARC can be used to directly control our SMORES-EP robot system to perform the same action.
 We hosted several design competitions and invites students to create different robot configurations and behaviors for different environments.
 The library introduced currently has 57 robot configurations and 97 behaviors.
-Table~\ref{table:1} lists 10 entries for four different configurations that are used in this work. \TODO{Make sure the table reference is still valid in the main section}
+Table~\ref{table:1} lists 10 entries for four different configurations that are used in this work. %\TODO{Make sure the table reference is still valid in the main section}
 
 %     ____                        _____                        __  _
 %    / __ \___  _________  ____  / __(_)___ ___  ___________ _/ /_(_)___  ____
@@ -823,7 +823,7 @@ Based on the environment characterization and target location, the algorithm als
 % / /___/ /_/ / / / / __/ / /_/ /   ___/ / /_/ /  __/ /__/ / __/ / /__(__  )
 % \____/\____/_/ /_/_/ /_/\__, /   /____/ .___/\___/\___/_/_/ /_/\___/____/
 %
-\subsection{Library of Configurations and Behaviors}
+\section{Library of Configurations and Behaviors}
 \label{sec:configuration-specifics-supplement}
 %
 In this work, we use the architecture introduced in \cite{Jing2016}. We encode the full set of capabilities of the modular robot, such as driving and picking up items, in a library of robot configurations and behaviors.
@@ -868,7 +868,7 @@ This library-based framework allows users to express desired robot actions in an
 The decision of which configuration to use is made during task execution, based on the sensed environment.
 For example, if the perception system reports that the environment is of type ``tunnel'', the Proboscis configuration will be used, because the library indicates that it can be used in ``tunnel''-type environments while the Car cannot.
 
-\subsection{High-Level Planner}
+\section{High-Level Planner}
 \label{sec:high-level-supplement}
 
 In order to generate controllers from high-level task specifications, we first abstract the robot and environment status as a set of Boolean propositions.
