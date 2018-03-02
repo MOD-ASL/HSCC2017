@@ -24,7 +24,7 @@
 % This package should properly format in-text
 % reference calls and reference-list numbers.
 
-\usepackage{scicite}
+%\usepackage{scicite}
 \usepackage{times}
 
 % The preamble here sets up a lot of new/revised commands and
@@ -249,9 +249,9 @@ For Experiment III, the robot begins in the ``Car'' configuration, and cannot se
 
 Modular robots promise the potential to create a new frontier in autonomous robotics with the ability to adapt to challenges encountered in their environments. This paper presents a breakthrough in the state of the art by demonstrating an integrated hardware, planning, and perception system that can reactively adapt to observations of an \textit{a priori} unknown environment to accomplish complex tasks. Due to the distributed nature of the hardware, most past works in autonomous modular robots use entirely distributed frameworks \cite{Yim2007, Rubenstein2004,Murata2006,Dorigo2005,Mondada2005,o2010self}. Our system is designed differently.  It is distributed for the low level hardware, but centralized for the high level planning and perception algorithms, leveraging the advantages of both design paradigms.
 
-We selected the three scenarios in our experiments to showcase a range of different ways SMORES-EP can interact with environments and objects: movement over flat ground, fitting into tight spaces, reaching up high, and climbing over rough terrain, and manipulating objects.  This broad range of functionality is impressive for such a small robot, and is only accessible to SMORES-EP by reconfiguring between different morphologies.
+We selected the three scenarios in our experiments to showcase a range of different ways SMORES-EP can interact with environments and objects: movement over flat ground, fitting into tight spaces, reaching up high, climbing over rough terrain, and manipulating objects.  This broad range of functionality is only accessible to SMORES-EP by reconfiguring between different morphologies.
 
-The high-level planner, environment characterization tools, and library work together to allow tasks to be represented in a flexible and reactive manner. For example, at the high level, Experiments II and III are the same task: deliver an object at a point of interest.  However, after characterizing the different environments (``High'' in II, ``Stairs'' in III), the system determines that different configurations and behaviors are required to complete each task:  the Proboscis to reach up high, and the Snake to climb the stairs.  
+The high-level planner, environment characterization tools, and library work together to allow tasks to be represented in a flexible and reactive manner. For example, at the high level, Experiments II and III are the same task: deliver an object at a point of interest.  However, after characterizing the different environments (``High'' in II, ``Stairs'' in III), the system automatically determines that different configurations and behaviors are required to complete each task:  the Proboscis to reach up high, and the Snake to climb the stairs.  
 Similarly, in Experiment I there is no high-level distinction between the green and pink objects - the robot is simply asked to retrieve all objects it finds.  The sensed environment once again dictates the choice of behavior: the simple problem (object in the open) is solved in a simple way (with the Car configuration), and the more difficult problem (object in tunnel) is solved in a more sophisticated way (by reconfiguring into the Proboscis).  Achieving this level of sophistication in control and decision-making through a distributed architecture would have been significantly more difficult.
 
 Centralized sensing and control during reconfiguration, provided by AprilTags and a centralized path planner, allowed our implementation to transform between configurations more rapidly than previous distributed systems. 
@@ -302,13 +302,13 @@ Each SMORES-EP module is the size of an 80mm cube
 and has four actuated joints, including two wheels that can be
 used for differential drive on flat ground \cite{tosun2016design},
 \cite{tosun2017paintpots}.  The modules are equipped
-with electro-permanent magnets that allow any face of one module to connect to
+with electro-permanent (EP) magnets that allow any face of one module to connect to
 any face of another, allowing the robot to self-reconfigure. The magnetic faces
 can also be used to attach to objects made of ferromagnetic materials (e.g. steel). 
 The EP magnets require very little energy to connect and disconnect, and no energy to maintain their attachment force of 90N \cite{tosun2016design}.
 
 Each module has an onboard battery, microcontroller, and WiFi
-module to send and receive messages.  In this work, clusters of SMORES
+module to send and receive messages.  In this work, clusters of SMORES-EP
 modules are controlled by a central computer running a Python program that
 sends WiFi commands to control the four DoF and magnets of each module.
 Wireless networking is provided by a standard off-the-shelf  router, with a range of about 100 feet, and commands to a single module can be received at a rate of about 20hz.
@@ -413,7 +413,7 @@ Table~\ref{table:1} lists 10 entries for four different configurations that are 
 \label{sec:reconfiguration}
 %
 When the high-level planner decides to use a new configuration during a task, the robot must reconfigure.
-We have implemented tools for driving-based reconfiguration with SMORES-EP, taking advantage of the fact that individual modules can drive on flat surfaces.
+We have implemented tools for mobile reconfiguration with SMORES-EP, taking advantage of the fact that individual modules can drive on flat surfaces.
 As discussed in Section~\ref{sec:hardware}, a downward-facing camera on the Sensor Module provides a view of a $0.75\text{m}\times0.5\text{m}$ area on the ground in front of the sensor module.  
 Within this area, the localization system provides pose for any module equipped with an AprilTag marker to perform reconfiguration. 
 %\subsection{Reconfiguration Procedure}
@@ -465,6 +465,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 
 %% Use plainnat to work nicely with natbib. 
 \bibliographystyle{Science}
+%\bibliographystyle{plain}
 \bibliography{references}
 %
 
