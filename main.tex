@@ -288,7 +288,7 @@ This paper presents the first modular robot system to autonomously complete high
 
 \section{Methods and Materials}\label{sec:system}
 %
-The following sections discuss the role of each component within the general system architecture. Inter-process communication between the many software components in our implementation is provided by the Robot Operating System (ROS)\footnote{http://www.ros.org}. For more details of the implementation used in the demonstrations see the Supplementary Materials.
+The following sections discuss the role of each component within the general system architecture. Inter-process communication between the many software components in our implementation is provided by the Robot Operating System (ROS)\footnote{http://www.ros.org}. Figure \ref{fig:overview} gives a flowchart of the entire system. For more details of the implementation used in the demonstrations see the Supplementary Materials.
 
 %
 % System Overview Figure
@@ -484,97 +484,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 % /_/   /_/\__, /\__,_/_/   \___/____(_)
 %         /____/
 
-% System Overview Figure
-\begin{figure}[H]
-\begin{center}
-%\includegraphics[width=0.4\textwidth]{images/overview.png}
-\includegraphics[width=0.8\columnwidth]{images/RSS17FlowchartV5.png}
-\caption{System Overview Flowchart}
-\label{fig:overview}
-\end{center}
-\end{figure}
-
-% SMORES-EP module DoF picture
-% Sensor Module Figure
-\begin{figure}[H]
-  \begin{subfigure}{0.5\columnwidth}
-  \begin{center}
-  \includegraphics[height=1.5in]{images/smores_dof.pdf}
-  \end{center}
-  \caption{SMORES-EP module}
-  \label{fig:smores-module}
-  \end{subfigure}
-  %
-  \begin{subfigure}{0.5\columnwidth}
-  \begin{center}
-  \includegraphics[width=0.3\textwidth]{images/sensor_module_new_labelled.jpg}
-  \caption{Sensor Module with labelled components.  UP board and battery are inside the body.}
-  \label{fig:sensor-module}
-  \end{center}
-  \end{subfigure}
-  \caption{SMORES-EP Module and Sensor Module}
-\end{figure}
-
-\begin{figure}[H]
-% Environment types figure
-\begin{subfigure}[t]{0.45\columnwidth}
-    \centering
-    \begin{subfigure}[t]{0.45\columnwidth}
-        \includegraphics[width=\textwidth]{images/FreeEnvironment.png}
-        %\label{fig:obja}
-        \caption{\textbf{``free'}' environment}
-    \end{subfigure} \ \ \ \ \ \
-    \begin{subfigure}[t]{0.45\columnwidth}
-        \includegraphics[width=\textwidth]{images/TunnelEnvironment.png}
-        %\label{fig:objb}
-        \caption{\textbf{``tunnel''} environment}
-    \end{subfigure}
-    
-    \begin{subfigure}[t]{0.45\columnwidth}
-        \includegraphics[width=\textwidth]{images/HighFreeEnvironment.png}
-        %\label{fig:objb}
-        \caption{\textbf{``high''} environment}
-    \end{subfigure} \ \ \ \ \ \
-    \begin{subfigure}[t]{0.45\columnwidth}
-        \includegraphics[width=\textwidth]{images/LedgeEnvironment.png}
-        %\label{fig:objb}
-        \caption{\textbf{``stairs''} environment}
-    \end{subfigure}
-      \caption{Environment characterization types.}
-      \label{fig:characters}
-\end{subfigure}
-%
-% Characterization method figure
-\begin{subfigure}{0.5\columnwidth}
-\begin{center}
-\includegraphics[width=\columnwidth]{images/characterization.png}
-\caption{An example of a \textbf{tunnel} environment characterization. Yellow grid cells are occupied, light blue cells are unreachable resulting from bloating obstacles.}
-\label{fig:characterization}
-\end{center}
-\end{subfigure}
-\caption{Environment Characterization}
-\end{figure}
-
-% Reconfiguration Figure
-\begin{figure}[H]
-\begin{center}
-  \includegraphics[width=0.32\columnwidth]{images/reconf_start.jpg}
-  \includegraphics[width=0.32\columnwidth]{images/reconf_motion.png}
-  \includegraphics[width=0.32\columnwidth]{images/reconf_end.jpg}
-  \caption{Module movement during reconfiguration. Left: initial configuration (``Car''). Middle: module movement, using AprilTags for localization. Right: final configuration (``Proboscis'').}
-  \label{fig:reconf}
-\end{center}
-\end{figure}
-
-% Controller Automaton Figure
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=0.4\textwidth]{images/autSimple.png}
-\caption{An example of a synthesized controller automaton. A proposition with ``!'' has a value of \lf, and \lt otherwise.}
-\label{fig:autSimple}
-\end{center}
-\end{figure}
-
+%Results Figures
 \begin{figure}[H]
   % Map Figure
   \begin{subfigure}{0.5\columnwidth}
@@ -709,6 +619,97 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
   \end{subfigure}  
   \caption{Demonstrations 1, 2, and 3}
   \label{fig:experiments}
+\end{figure}
+
+% System Overview Figure
+\begin{figure}[H]
+\begin{center}
+%\includegraphics[width=0.4\textwidth]{images/overview.png}
+\includegraphics[width=0.8\columnwidth]{images/RSS17FlowchartV5.png}
+\caption{System Overview Flowchart}
+\label{fig:overview}
+\end{center}
+\end{figure}
+
+% SMORES-EP module DoF picture
+% Sensor Module Figure
+\begin{figure}[H]
+  \begin{subfigure}{0.5\columnwidth}
+  \begin{center}
+  \includegraphics[height=1.5in]{images/smores_dof.pdf}
+  \end{center}
+  \caption{SMORES-EP module}
+  \label{fig:smores-module}
+  \end{subfigure}
+  %
+  \begin{subfigure}{0.5\columnwidth}
+  \begin{center}
+  \includegraphics[width=0.3\textwidth]{images/sensor_module_new_labelled.jpg}
+  \caption{Sensor Module with labelled components.  UP board and battery are inside the body.}
+  \label{fig:sensor-module}
+  \end{center}
+  \end{subfigure}
+  \caption{SMORES-EP Module and Sensor Module}
+\end{figure}
+
+\begin{figure}[H]
+% Environment types figure
+\begin{subfigure}[t]{0.45\columnwidth}
+    \centering
+    \begin{subfigure}[t]{0.45\columnwidth}
+        \includegraphics[width=\textwidth]{images/FreeEnvironment.png}
+        %\label{fig:obja}
+        \caption{\textbf{``free'}' environment}
+    \end{subfigure} \ \ \ \ \ \
+    \begin{subfigure}[t]{0.45\columnwidth}
+        \includegraphics[width=\textwidth]{images/TunnelEnvironment.png}
+        %\label{fig:objb}
+        \caption{\textbf{``tunnel''} environment}
+    \end{subfigure}
+    
+    \begin{subfigure}[t]{0.45\columnwidth}
+        \includegraphics[width=\textwidth]{images/HighFreeEnvironment.png}
+        %\label{fig:objb}
+        \caption{\textbf{``high''} environment}
+    \end{subfigure} \ \ \ \ \ \
+    \begin{subfigure}[t]{0.45\columnwidth}
+        \includegraphics[width=\textwidth]{images/LedgeEnvironment.png}
+        %\label{fig:objb}
+        \caption{\textbf{``stairs''} environment}
+    \end{subfigure}
+      \caption{Environment characterization types.}
+      \label{fig:characters}
+\end{subfigure}
+%
+% Characterization method figure
+\begin{subfigure}{0.5\columnwidth}
+\begin{center}
+\includegraphics[width=\columnwidth]{images/characterization.png}
+\caption{An example of a \textbf{tunnel} environment characterization. Yellow grid cells are occupied, light blue cells are unreachable resulting from bloating obstacles.}
+\label{fig:characterization}
+\end{center}
+\end{subfigure}
+\caption{Environment Characterization}
+\end{figure}
+
+% Reconfiguration Figure
+\begin{figure}[H]
+\begin{center}
+  \includegraphics[width=0.32\columnwidth]{images/reconf_start.jpg}
+  \includegraphics[width=0.32\columnwidth]{images/reconf_motion.png}
+  \includegraphics[width=0.32\columnwidth]{images/reconf_end.jpg}
+  \caption{Module movement during reconfiguration. Left: initial configuration (``Car''). Middle: module movement, using AprilTags for localization. Right: final configuration (``Proboscis'').}
+  \label{fig:reconf}
+\end{center}
+\end{figure}
+
+% Controller Automaton Figure
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.4\textwidth]{images/autSimple.png}
+\caption{An example of a synthesized controller automaton. A proposition with ``!'' has a value of \lf, and \lt otherwise.}
+\label{fig:autSimple}
+\end{center}
 \end{figure}
 
 %   ______      __    __
