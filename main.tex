@@ -435,7 +435,7 @@ Figure~\ref{fig:reconf} shows reconfiguration from the ``Car'' to the ``Probosci
 
 In our architecture, the high-level planner subsystem provides a framework for users to specify robot tasks using a formal language, and generates a centralized controller that directs robot motion and actions based on environment information.
 Users do not specify the exact configurations and behaviors used to complete tasks, but rather describe desired actions using the properties from the robot design library.
-The sequence of configurations and behaviors used to complete this task is not specified by the user, but instead determined by the high-level planner as it continually reacts to the sensed environment.
+The configurations and behaviors used to complete this task are not directly specified by the user, but instead determined by the high-level planner as it continually reacts to the sensed environment.
 
 Consider the robot task in Demonstration II, the user indicates that the robot should \textbf{explore} until it locates the \textbf{mailBox}, then \textbf{drop} the object off.
 In addition, the user describes desired robot actions in terms of properties from the library.
