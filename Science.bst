@@ -1035,7 +1035,8 @@ FUNCTION {format.organization.address}
 
 FUNCTION {article}
 { output.bibitem
-  format.authors "author" output.check
+  format.authors "author" output.
+  format.title "title" output.check new.block 
   crossref missing$
     { journal
       emphasize
@@ -1149,6 +1150,7 @@ FUNCTION {incollection}
 FUNCTION {inproceedings}
 { output.bibitem
   format.authors "author" output.check
+  format.title "title" output.check new.block 
   crossref missing$
     { format.in.ed.booktitle "booktitle" output.check
       format.number.series output
