@@ -226,11 +226,11 @@ We validate our system in three hardware demonstrations, showing that, based on 
 \label{sec:results}
 %
 %%%%% Compression Attempt 2
-We demonstrate an autonomous, perception-informed, modular robot system that can reactively adapt to unknown environments via reconfiguration in order to perform complex tasks. The system hardware consists of a set of \textbf{robot modules} (that can move independently and dock with each other to form larger morphologies), and a \textbf{sensor module} that contains multiple cameras and small computer for collecting and processing data from the environment. Software components consist of a \textbf{high-level planner} to direct robot actions and reconfiguration, and \textbf{perception algorithms} to perform mapping, navigation, and classification of the environment.
+We demonstrate an autonomous, perception-informed, modular robot system that can reactively adapt to unknown environments via reconfiguration in order to perform complex tasks. The system hardware consists of a set of \textbf{robot modules} (that can move independently and dock with each other to form larger morphologies), and a \textbf{sensor module} that contains multiple cameras and a small computer for collecting and processing data from the environment. Software components consist of a \textbf{high-level planner} to direct robot actions and reconfiguration, and \textbf{perception algorithms} to perform mapping, navigation, and classification of the environment.
 Our implementation is built around the SMORES-EP modular robot \cite{tosun2016design}, but could be adapted to work with other modular robots.
 
 %Our system is the first to show that modular robots can autonomously complete high-level, complex tasks by reconfiguring to appropriate morphologies in response to the perceived environment. We demonstrate this ability with three hardware experiments using two different tasks. For each experiment, the environment is unknown \textit{a priori}, and the robot must explore and reactively reconfigure to adapt to discovered environmental challenges.
-Our system is the first to demonstrate high-level decision-making in conjunction with reconfiguration in an autonomous setting.  In three hardware demonstrations, the robot explores an \textit{a priori} unknown environment, and acts autonomously to complete a complex task.  Tasks are specified a the high level: users do not explicitly specify which configurations and behaviors the robot should use; rather, tasks are specified in terms of \textit{behavior properties}, which describe desired effects and outcomes \cite{JingAURO2017}.  During task execution, the high-level planner gathers information about the environment and reactively selects appropriate behaviors from a design library, fulfilling the requirements of the task while respecting the constraints of the environment.  Different configurations of the robot have different capabilities (sets of behaviors).  Whenever the high-level planner recognizes that task and environment require a behavior the current robot configuration cannot execute, it directs the robot to reconfigure to a different configuration that can execute the behavior.
+Our system is the first to demonstrate high-level decision-making in conjunction with reconfiguration in an autonomous setting.  In three hardware demonstrations, the robot explores an \textit{a priori} unknown environment, and acts autonomously to complete a complex task.  Tasks are specified at a high level: users do not explicitly specify which configurations and behaviors the robot should use; rather, tasks are specified in terms of \textit{behavior properties}, which describe desired effects and outcomes \cite{JingAURO2017}.  During task execution, the high-level planner gathers information about the environment and reactively selects appropriate behaviors from a design library, fulfilling the requirements of the task while respecting the constraints of the environment.  Different configurations of the robot have different capabilities (sets of behaviors).  Whenever the high-level planner recognizes that task and environment require a behavior the current robot configuration cannot execute, it directs the robot to reconfigure to a different configuration that can execute the behavior.
 
 Figure \ref{fig:envs} shows the environments used for each demonstration, and Figure \ref{fig:experiments} shows snapshots during each of the demonstrations. A video of all three demonstrations is available as part of the supplementary material.
 %at \url{https://youtu.be/eJsnG9DZjgM}.
@@ -263,9 +263,8 @@ Centralized sensing and control during reconfiguration, provided by AprilTags an
 Each reconfiguration action (a module disconnecting, moving, and reattaching) takes about one minute.  In contrast, past systems that utilized distributed sensing and control required 5-15 minutes for single reconfiguration actions \cite{Yim2007, Rubenstein2004,Murata2006}, which would prohibit their use in the complex tasks and environments that our system demonstrated.
 
 
-\subsection{Challenges and Observations}
+\subsection{Challenges and Limitations}
 %
-% Homogeneity/Heterogeneity
 
 Through the hardware demonstrations performed with our system, we observed several challenges and opportunities for future improvement with autonomous perception-informed modular systems. All SMORES-EP body modules are identical, and therefore interchangeable for the purposes of reconfiguration.  However, the sensor module has a significantly different shape than a SMORES-EP body module, which introduces heterogeneity in a way that complicates motion planning and reconfiguration planning.  Configurations and behaviors must be designed to provide the sensor module with an adequate view, and to support its weight and elongated shape.  Centralizing sensing also limits reconfiguration: modules can only drive independently in the vicinity of the sensor module, preventing the robot from operating as multiple disparate clusters. 
 
@@ -274,7 +273,9 @@ Nearly all failures are due to an error in one of the low-level components the s
 42\% of failure due to hardware errors and 38\% due to failures in low-level software (object recognition, navigation, environment characterization).
 This kind of cascading failure is a weakness of centralized, hierarchical systems: distributed systems are often designed so that failure of a single unit can be compensated for by other units, and does not result in global failure.
 
-This lack of robustness represents a challenge, but steps can be taken to address it.  Unsurprisingly, open-loop behaviors (like stair-climbing and reaching up to place the stamp) were the least robust, and vulnerable to small hardware errors.  Closing the loop using sensing made exploration and reconfiguration significantly less vulnerable to error.  Future systems could be made more robust by introducing more feedback from low-level components to high-level decisions making processes.  Existing high-level failure-recovery frameworks could also be incorporated \cite{Maniatopoulos16icra}.
+This lack of robustness represents a challenge, but steps can be taken to address it.  Unsurprisingly, open-loop behaviors (like stair-climbing and reaching up to place the stamp) were the least robust, and vulnerable to small hardware errors.  Closing the loop using sensing made exploration and reconfiguration significantly less vulnerable to error.  Future systems could be made more robust by introducing more feedback from low-level components to high-level decisions making processes, and by incorporating existing high-level failure-recovery frameworks \cite{Maniatopoulos16icra}.  Distributed repair strategies could also be explored, to replace malfunctioning modules with nearby working ones on the fly \cite{tomita1999self}.
+
+\TODO{Add a paragraph/sentence on limitations of perception}
 
 This paper presents the first modular robot system to autonomously complete high-level tasks by reactively reconfiguring in response to its perceived environment and task requirements. In addition, putting the entire system to the test in hardware demonstrations revealed several opportunities for future improvement in such systems.
 
@@ -708,7 +709,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
 \begin{subfigure}[t]{\columnwidth}
 \centering
     \includegraphics[width=\textwidth]{images/spec.png}
-\caption{The specification for dropping an object to the mailbox.}
+\caption{Specification for dropping an object in the mailbox. \TODO{Jim, can you change top caption to "Drop an object in the mailbox"?}}
 \label{fig:spec}
 \end{subfigure}
 
