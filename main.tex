@@ -190,7 +190,10 @@
 %
 The theoretical ability of modular robots to reconfigure in response to complex tasks in \textit{a priori} unknown environments has frequently been cited as an advantage, but never demonstrated. Today, this vision remains a major motivator for work in the field.
 
-We present the first modular robot system capable of autonomously completing high-level tasks by reactively reconfiguring to meet the needs of a perceived, \textit{a priori} unknown environment.  The system integrates perception, high-level planning, and modular hardware tools. Based on a high-level task specification, the modular robot autonomously explores an unknown environment using a depth camera to search for objects or regions of interest. When such objects are discovered, perception tools characterize the environment to inform the high-level planner when and how to reconfigure the robot morphology and to manipulate objects to complete its task. This work represents an extension of the current state of the art in autonomous modular robots to enable intelligent reconfiguration in response to perception of unknown environments.
+We present the first modular robot system capable of autonomously completing high-level tasks by reactively reconfiguring to meet the needs of a perceived, \textit{a priori} unknown environment.  The system integrates perception, high-level planning, and modular hardware, and is validated in three hardware demonstrations. Based on a high-level task specification, a modular robot autonomously explores an unknown environment, decides when and how to reconfigure, and manipulates objects to complete its task.
+
+The success of this system is enabled by its architecture, which balances distributed mechanical elements with centralized perception, planning, and control.  By providing a clear example of how a modular robot system can
+be designed to leverage reactive reconfigurability in unknown environments, we have begun to lay the groundwork for MSRR systems to exit the lab and enter the real world.
 %
 \end{sciabstract}
 
@@ -215,7 +218,7 @@ Many systems have demonstrated limited autonomy, relying on beacons for mapping 
 This paper presents a novel system allowing modular robots to complete complex high-level tasks autonomously.  The system automatically selects appropriate behaviors to meet the requirements of the task and constraints of the perceived environment.  Whenever the task and environment require a particular capability, the robot autonomously self-reconfigures to a configuration that has that capability.
 The success of this system is a product of our choice of system architecture, which balances distributed and centralized elements.  Distributed, homogeneous robot modules provide flexibility, reconfiguring between morphologies to access a range of functionality.  Centralized sensing, perception, and high-level mission planning components provide autonomy and decision-making capabilities.  Tight integration between the distributed low-level and centralized high-level elements allows us to leverage advantages of distributed and centralized architectures.
 
-The system is validated in three hardware demonstrations, showing that, based on a high-level task specification, the modular robot autonomously explores an unknown environment, decides if, when, and how to reconfigure, and manipulates objects to complete its task.
+The system is validated in three hardware demonstrations, showing that, based on a high-level task specification, the modular robot autonomously explores an unknown environment, decides if, when, and how to reconfigure, and manipulates objects to complete its task. By providing a clear example of how a modular robot system can be designed to leverage reactive reconfigurability in unknown environments, we have begun to lay the groundwork for reconfigurable systems to address tasks in the real world. 
 
 %     ____                  ____
 %    / __ \___  _______  __/ / /______
