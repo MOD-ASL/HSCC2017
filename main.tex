@@ -403,7 +403,7 @@ Then the high-level planner search the design library for a configuration and be
 
 To aid users in designing configurations and behaviors, we created a open-source computer design tool called Verification, Simulation, Programming And Robot Construction (VSPARC\footnote{\url{www.vsparc.org}}) and made it available online.
 Users can use VSPARC to create, simulate and test designs in various environment scenarios with an included physics engine.
-Moreover, users can save and share their designs with us and with other users.
+Moreover, users can save their \abj{designs of configurations (connectivity among modules) and behaviors (joint commands for each module) on our server and share them with other users}.
 More importantly, all behaviors designed in VSPARC can be used to directly control the SMORES-EP robot system to perform the same action.
 %We hosted several design competitions and invites students to create different robot configurations and behaviors for different environments.
 %The library introduced currently has 57 robot configurations and 97 behaviors.
@@ -432,10 +432,12 @@ Figure~\ref{fig:reconf} shows reconfiguration from the ``Car'' to the ``Probosci
 \subsection{High-Level Planner}
 \label{sec:supplement-high-level}
 
-\TODO{Reviewer 2 points out that we don't actually say what the high level planner \emph{is} in the section. Be sure to cite the autonomous robots paper and provide a one-sentence summary of what the planner is.}
 In our architecture, the high-level planner subsystem provides a framework for users to specify robot tasks using a formal language, and generates a centralized controller that directs robot motion and actions based on environment information.
-Users do not specify the exact configurations and behaviors used to complete tasks, but rather describe desired actions using the properties from the robot design library.
-The configurations and behaviors used to complete this task are not directly specified by the user, but instead determined by the high-level planner as it continually reacts to the sensed environment.
+\abj{Our implementation is base on the Linear Temporal Logic MissiOn Planning (LTLMoP) toolkit, which automatically generates robot controllers from user-specified high-level instructions using synthesis \cite{DBLP:conf/iros/FinucaneJK10,DBLP:journals/trob/Kress-GazitFP09}.
+In LTLMoP, users describe the desired robot tasks with high-level specifications over a set of Boolean variables, and provide mapping from each variable to a robot sensing or action function.
+In our framework, users do not specify the exact configurations and behaviors used to complete tasks, but rather specify constraints and desired outcomes for each Boolean variable using properties from the robot design library.
+LTLMoP automatically converts the specification to logic formulas, which are then used to synthesize a robot controller that satisfies the given tasks (if one exists).
+The high-level planner determines configurations and behaviors associated to each Boolean variable based on properties specified by users and continually executes the synthesized robot controller to react to the sensed environment.}
 
 Consider the robot task in Demonstration II, the user indicates that the robot should \textbf{explore} until it locates the \textbf{mailBox}, then \textbf{drop} the object off.
 In addition, the user describes desired robot actions in terms of properties from the library.
@@ -446,9 +448,6 @@ The high-level planner coordinates each component of the system to control our M
 At the system level, the sensing components gather and process environment information for the high-level planner, which then takes actions based on the given robot tasks by invoking appropriate low-level behaviors.
 In Demonstration II, when the robot is asked to deliver the object, the perception subsystem informs the robot that the mailbox is in a ``stairs''-type environment.
 Therefore, the robot self-reconfigures to a ``Snake'' configuration to climb the stairs and deliver the object.
-
-Our implementation employs the Linear Temporal Logic MissiOn Planning (LTLMoP) toolkit to automatically generate robot controllers from user-specified high-level instructions using synthesis \cite{DBLP:conf/iros/FinucaneJK10,DBLP:journals/trob/Kress-GazitFP09}.
-
 
 % Controller Automaton Figure
 
