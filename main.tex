@@ -78,9 +78,6 @@
 
 % For marking Todos and changes
 \newcommand{\TODO}[1]{ {\bf \textcolor{red}{TODO:} #1 }}
-\newcommand{\abj}[1]{\textcolor{blue}{#1}}
-\newcommand{\dbj}[1]{\textcolor{blue}{\sout{#1}}}
-\newcommand{\cbj}[2]{\textcolor{blue}{\sout{#1}}\textcolor{blue}{~#2}}
 %\newcommand{\abt}[1]{\textcolor{magenta}{#1}}
 % Handy commands
 \newcommand{\lt}{{\tt True}}
@@ -245,6 +242,8 @@ For Demonstrations II and III, the high-level task specification is the followin
 For Demonstration II, the robot begins exploring in the ``Scorpion'' configuration. Shortly, the robot observes and recognizes the mailbox, and characterizes the surrounding environment as ``stairs.'' Based on this characterization, the high-level planner directs the robot to use the ``Snake'' configuration to traverse the stairs. Using the 3D map and characterization of the environment surrounding the mail bin, the robot navigates to a point directly in front of the stairs, faces the bin, and reconfigures to the ``Snake'' configuration. The robot then executes the stair climbing gait to reach the mail bin, and drops the circuit successfully. It then descends the stairs and reconfigures back to the ``Scorpion'' configuration to end the mission.
 
 For Demonstration III, the robot begins in the ``Car'' configuration, and cannot see the package from its starting location.  After a short period of exploration, the robot identifies the pink square marking the package.  The pink square is unobstructed, but is approximately 25cm above the ground; the system correctly characterizes this as the ``high''-type environment, and recognizes that reconfiguration will be needed to reach up and place the stamp on the target.  The robot navigates to a position directly in front of the package, reconfigures to the ``Proboscis'' configuration, and executes the ``highReach'' behavior to place the stamp on the target, completing its task.
+
+It should be noted that all experiments were run using the same software architecture, same SMORES modules, and system described in this paper. The library of behaviors was extended with new entries for Demonstrations II and III to expand the system abilities for the new challenges presented in the new environments. Minor adjustments to motor speeds, SLAM parameters, and the low-level reconfiguration controller. In addition, Demonstrations II and III used a newer, improved 3D sensor, and therefore a different sensor driver was used.
 %
 %     ____  _                           _
 %    / __ \(_)___________  ____________(_)___  ____
@@ -276,7 +275,7 @@ Nearly all failures are due to an error in one of the low-level components the s
 42\% of failure due to hardware errors and 38\% due to failures in low-level software (object recognition, navigation, environment characterization).
 This kind of cascading failure is a weakness of centralized, hierarchical systems: distributed systems are often designed so that failure of a single unit can be compensated for by other units, and does not result in global failure.
 
-This lack of robustness represents a challenge, but steps can be taken to address it.  Unsurprisingly, open-loop behaviors (like stair-climbing and reaching up to place the stamp) were vulnerable to small hardware errors \abj{ and less robust against variations in the environment. For example, if the height of stairs in the actual environment is higher than the property value of the library entry, the stair-climbing behavior is likely to fail.} Closing the loop using sensing made exploration and reconfiguration significantly less vulnerable to error.  Future systems could be made more robust by introducing more feedback from low-level components to high-level decisions making processes, and by incorporating existing high-level failure-recovery frameworks \cite{Maniatopoulos16icra}.  Distributed repair strategies could also be explored, to replace malfunctioning modules with nearby working ones on the fly \cite{tomita1999self}.
+This lack of robustness represents a challenge, but steps can be taken to address it.  Unsurprisingly, open-loop behaviors (like stair-climbing and reaching up to place the stamp) were vulnerable to small hardware errors and less robust against variations in the environment. For example, if the height of stairs in the actual environment is higher than the property value of the library entry, the stair-climbing behavior is likely to fail. Closing the loop using sensing made exploration and reconfiguration significantly less vulnerable to error.  Future systems could be made more robust by introducing more feedback from low-level components to high-level decisions making processes, and by incorporating existing high-level failure-recovery frameworks \cite{Maniatopoulos16icra}.  Distributed repair strategies could also be explored, to replace malfunctioning modules with nearby working ones on the fly \cite{tomita1999self}.
 
 To implement our perception characterization component, we assumed a simplified set of environment types and implemented a simple characterization function to distinguish between them. This function does not generalize very well to completely unstructured environments and also is not very scalable. Thus, to expand the system to work well for more realistic environments and to distinguish between a large number of environment types, a more general characterization function should be implemented. 
 
@@ -395,13 +394,13 @@ A library-based framework is employed to organize user-designed configurations a
 Users can create designs for modular robot using our simulation tool and save designs to a library.
 Configurations and behaviors are labeled with properties, which are high-level descriptions of behaviors.
 Specifically, environment properties specify the appropriate environment that the behavior is designed for (e.g. a 3 module-high ledge) and behavior properties specify the capabilities of the behavior (e.g. climb). 
-Therefore in this framework, a library entry is defined as $l = (C,B_C,P_b,P_e)$ where $C$ is a robot configuration, $B_C$ is the behavior of $C$, $P_b$ is a set of behavior properties, and $P_e$ is a set of environment properties. \cbj{The high-level planner then can select appropriate configurations and behaviors based on given task specifications and environment information from the perception subsystem to accomplish the robot tasks.
+Therefore in this framework, a library entry is defined as $l = (C,B_C,P_b,P_e)$ where $C$ is a robot configuration, $B_C$ is the behavior of $C$, $P_b$ is a set of behavior properties, and $P_e$ is a set of environment properties. The high-level planner then can select appropriate configurations and behaviors based on given task specifications and environment information from the perception subsystem to accomplish the robot tasks.
 In our Demonstration II, the task specifications require the robot to deliver an object to a mailbox and the environment characterization algorithm reports that the mailbox is in a ``stairs''-type environment.
-Then the high-level planner search the design library for a configuration and behavior that is capable to climb stairs with the object.}{Each entry is capable of controlling the robot to perform some actions in a specific environment. In Demonstration II, we show a library entry which controls the robot to ``climb'' a ``stairs''-type environment.}
+Then the high-level planner search the design library for a configuration and behavior that is capable to climb stairs with the object. Each entry is capable of controlling the robot to perform some actions in a specific environment. In Demonstration II, we show a library entry which controls the robot to ``climb'' a ``stairs''-type environment.
 
 To aid users in designing configurations and behaviors, we created a design tool called VSPARC\footnote{\url{www.vsparc.org}}) and made it available online \cite{JingAURO2017}.
 Users can use VSPARC to create, simulate and test designs in various environment scenarios with an included physics engine.
-Moreover, users can save their \abj{designs of configurations (connectivity among modules) and behaviors (joint commands for each module) in plain text files on our server and share them with other users}.
+Moreover, users can save their designs of configurations (connectivity among modules) and behaviors (joint commands for each module) in plain text files on our server and share them with other users.
 More importantly, all behaviors designed in VSPARC can be used to directly control the SMORES-EP robot system to perform the same action.
 %We hosted several design competitions and invites students to create different robot configurations and behaviors for different environments.
 %The library introduced currently has 57 robot configurations and 97 behaviors.
@@ -431,11 +430,11 @@ Figure~\ref{fig:reconf} shows reconfiguration from the ``Car'' to the ``Probosci
 \label{sec:supplement-high-level}
 
 In our architecture, the high-level planner subsystem provides a framework for users to specify robot tasks using a formal language, and generates a centralized controller that directs robot motion and actions based on environment information.
-\abj{Our implementation is based on the Linear Temporal Logic MissiOn Planning (LTLMoP) toolkit, which automatically generates robot controllers from user-specified high-level instructions using synthesis \cite{DBLP:conf/iros/FinucaneJK10,DBLP:journals/trob/Kress-GazitFP09}.
+Our implementation is based on the Linear Temporal Logic MissiOn Planning (LTLMoP) toolkit, which automatically generates robot controllers from user-specified high-level instructions using synthesis \cite{DBLP:conf/iros/FinucaneJK10,DBLP:journals/trob/Kress-GazitFP09}.
 In LTLMoP, users describe the desired robot tasks with high-level specifications over a set of Boolean variables, and provide mapping from each variable to a robot sensing or action function.
 In our framework, users do not specify the exact configurations and behaviors used to complete tasks, but rather specify constraints and desired outcomes for each Boolean variable using properties from the robot design library.
 LTLMoP automatically converts the specification to logic formulas, which are then used to synthesize a robot controller that satisfies the given tasks (if one exists).
-The high-level planner determines configurations and behaviors associated to each Boolean variable based on properties specified by users and continually executes the synthesized robot controller to react to the sensed environment.}
+The high-level planner determines configurations and behaviors associated to each Boolean variable based on properties specified by users and continually executes the synthesized robot controller to react to the sensed environment.
 
 Consider the robot task in Demonstration II, the user indicates that the robot should \textbf{explore} until it locates the \textbf{mailBox}, then \textbf{drop} the object off.
 In addition, the user describes desired robot actions in terms of properties from the library.
