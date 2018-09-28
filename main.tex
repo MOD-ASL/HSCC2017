@@ -131,6 +131,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{graphicx}
 %\IEEEoverridecommandlockouts
+\usepackage{makeidx}
+\makeindex
 
 \begin{document}
 
@@ -190,7 +192,7 @@ The theoretical ability of modular robots to reconfigure in response to complex 
 
 We present the first modular robot system capable of autonomously completing high-level tasks by reactively reconfiguring to meet the needs of a perceived, \textit{a priori} unknown environment.  The system integrates perception, high-level planning, and modular hardware, and is validated in three hardware demonstrations. Based on a high-level task specification, a modular robot autonomously explores an unknown environment, decides when and how to reconfigure, and manipulates objects to complete its task.
 
-The system architecture balances distributed mechanical elements with centralized perception, planning, and control.  By providing a clear example of how a modular robot system can be designed to leverage reactive reconfigurability in unknown environments, we have begun to lay the groundwork for MSRR systems to address tasks in the real world.
+The system architecture balances distributed mechanical elements with centralized perception, planning, and control.  By providing a clear example of how a modular robot system can be designed to leverage reactive reconfigurability in unknown environments, we have begun to lay the groundwork for modular self-reconfigurable robots to address tasks in the real world.
 %
 \end{sciabstract}
 
@@ -243,7 +245,7 @@ For Demonstration II, the robot begins exploring in the ``Scorpion'' configurati
 
 For Demonstration III, the robot begins in the ``Car'' configuration, and cannot see the package from its starting location.  After a short period of exploration, the robot identifies the pink square marking the package.  The pink square is unobstructed, but is approximately 25cm above the ground; the system correctly characterizes this as the ``high''-type environment, and recognizes that reconfiguration will be needed to reach up and place the stamp on the target.  The robot navigates to a position directly in front of the package, reconfigures to the ``Proboscis'' configuration, and executes the ``highReach'' behavior to place the stamp on the target, completing its task.
 
-It should be noted that all experiments were run using the same software architecture, same SMORES modules, and system described in this paper. The library of behaviors was extended with new entries for Demonstrations II and III to expand the system abilities for the new challenges presented in the new environments. Minor adjustments to motor speeds, SLAM parameters, and the low-level reconfiguration controller. In addition, Demonstrations II and III used a newer, improved 3D sensor, and therefore a different sensor driver was used.
+It should be noted that all experiments were run using the same software architecture, same SMORES modules, and system described in this paper. The library of behaviors was extended with new entries for Demonstrations II and III to expand the system abilities for the new challenges presented in the new environments. Minor adjustments to motor speeds, SLAM parameters, and the low-level reconfiguration controller were made. In addition, Demonstrations II and III used a newer, improved 3D sensor, and therefore a different sensor driver was used.
 %
 %     ____  _                           _
 %    / __ \(_)___________  ____________(_)___  ____
@@ -259,7 +261,9 @@ Modular self-reconfigurable robots are by their nature mechanically distributed,
 The three scenarios in the demonstrations showcase a range of different ways SMORES-EP can interact with environments and objects: movement over flat ground, fitting into tight spaces, reaching up high, climbing over rough terrain, and manipulating objects.  This broad range of functionality is only accessible to SMORES-EP by reconfiguring between different morphologies.
 
 The high-level planner, environment characterization tools, and library work together to allow tasks to be represented in a flexible and reactive manner. For example, at the high level, Demonstrations II and III are the same task: deliver an object at a point of interest.  However, after characterizing the different environments (``High'' in II, ``Stairs'' in III), the system automatically determines that different configurations and behaviors are required to complete each task:  the Proboscis to reach up high, and the Snake to climb the stairs.  
-Similarly, in Demonstration I there is no high-level distinction between the green and pink objects - the robot is simply asked to retrieve all objects it finds.  The sensed environment once again dictates the choice of behavior: the simple problem (object in the open) is solved in a simple way (with the Car configuration), and the more difficult problem (object in tunnel) is solved in a more sophisticated way (by reconfiguring into the Proboscis).  Achieving this level of sophistication in control and decision-making through a distributed architecture would have been significantly more difficult.
+Similarly, in Demonstration I there is no high-level distinction between the green and pink objects - the robot is simply asked to retrieve all objects it finds.  The sensed environment once again dictates the choice of behavior: the simple problem (object in the open) is solved in a simple way (with the Car configuration), and the more difficult problem (object in tunnel) is solved in a more sophisticated way (by reconfiguring into the Proboscis).
+This level of sophistication in control and decision making goes beyond the capabilties demonstrated by past systems with distributed architectures.
+%Achieving this level of sophistication in control and decision-making through a distributed architecture would have been significantly more difficult.
 
 Centralized sensing and control during reconfiguration, provided by AprilTags and a centralized path planner, allowed our implementation to transform between configurations more rapidly than previous distributed systems. 
 Each reconfiguration action (a module disconnecting, moving, and reattaching) takes about one minute.  In contrast, past systems that utilized distributed sensing and control required 5-15 minutes for single reconfiguration actions \cite{Yim2007, Rubenstein2004,Murata2006}, which would prohibit their use in the complex tasks and environments that our system demonstrated.
@@ -371,7 +375,7 @@ Environment characterization is done using a discrete classifier (using the 3D o
 
 Based on the environment characterization and target location, the function also returns a waypoint for the robot to position itself to perform its task (or to reconfigure, if necessary).  In Demonstration II, the environment characterization algorithm directs the robot to drive to a waypoint at the base of the stairs, which is the best place for the robot to reconfigure and begin climbing the stairs.
 
-Our implementation for other components of the perception architecture use previous work and open-soure algorithms. The RGB-D SLAM software package RTAB-MAP\cite{rtabmap} provides mapping and robot pose. The system incrementally builds a 3D map of the environment and stores the map in an efficient octree-based volumetric map using Octomap\cite{octomap}. The Next Best View algorithm by Daudelin et. al.\cite{Daudelin2017} enables the system to explore unknown environments by using the current volumetric map of the environment to estimate the next reachable sensor viewpoint that will observe the largest volume of undiscovered portions of objects (the Next Best View). In the example object delivery task, the system begins the task by iteratively navigating to these Next Best View waypoints to explore objects in the environment until discovering the dropoff zone.
+Our implementation for other components of the perception architecture use previous work and open-source algorithms. The RGB-D SLAM software package RTAB-MAP\cite{rtabmap} provides mapping and robot pose. The system incrementally builds a 3D map of the environment and stores the map in an efficient octree-based volumetric map using Octomap\cite{octomap}. The Next Best View algorithm by Daudelin et. al.\cite{Daudelin2017} enables the system to explore unknown environments by using the current volumetric map of the environment to estimate the next reachable sensor viewpoint that will observe the largest volume of undiscovered portions of objects (the Next Best View). In the example object delivery task, the system begins the task by iteratively navigating to these Next Best View waypoints to explore objects in the environment until discovering the dropoff zone.
 
 To identify objects of interest in the task (such as the dropoff zone), we implemented our system using color detection and tracking.  The system recognizes colored objects using CMVision\footnote{CMVision: http://www.cs.cmu.edu/$\sim$jbruce/cmvision/}, and tracks them in 3D\footnote{Lucas Coelho Figueiredo: https://github.com/lucascoelho91/ballFollower} using depth information from the onboard RGB-D sensor. Although we implement object recognition by color, more sophisticated methods could be used instead, under the same system architecture.
 
@@ -396,7 +400,7 @@ Configurations and behaviors are labeled with properties, which are high-level d
 Specifically, environment properties specify the appropriate environment that the behavior is designed for (e.g. a 3 module-high ledge) and behavior properties specify the capabilities of the behavior (e.g. climb). 
 Therefore in this framework, a library entry is defined as $l = (C,B_C,P_b,P_e)$ where $C$ is a robot configuration, $B_C$ is the behavior of $C$, $P_b$ is a set of behavior properties, and $P_e$ is a set of environment properties. The high-level planner then can select appropriate configurations and behaviors based on given task specifications and environment information from the perception subsystem to accomplish the robot tasks.
 In our Demonstration II, the task specifications require the robot to deliver an object to a mailbox and the environment characterization algorithm reports that the mailbox is in a ``stairs''-type environment.
-Then the high-level planner search the design library for a configuration and behavior that is capable to climb stairs with the object. Each entry is capable of controlling the robot to perform some actions in a specific environment. In Demonstration II, we show a library entry which controls the robot to ``climb'' a ``stairs''-type environment.
+Then the high-level planner searches the design library for a configuration and behavior that is able\index{self-reconfiguration capabilities} to climb stairs with the object. Each entry is capable of controlling the robot to perform some actions in a specific environment. In Demonstration II, we show a library entry which controls the robot to ``climb'' a ``stairs''-type environment.
 
 To aid users in designing configurations and behaviors, we created a design tool called VSPARC\footnote{\url{www.vsparc.org}}) and made it available online \cite{JingAURO2017}.
 Users can use VSPARC to create, simulate and test designs in various environment scenarios with an included physics engine.
@@ -497,7 +501,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
   \begin{subfigure}{0.5\columnwidth}
   \begin{center}
   \includegraphics[height=1.5in]{images/map4.jpg}
-  \caption{Volumetric map of environment 1 built by visual SLAM}
+  \caption{Map of environment 1 built by visual SLAM}
   \label{fig:octomap}
   \end{center}
   \end{subfigure}
@@ -850,7 +854,7 @@ MSRR systems have demonstrated the ability to accomplish low-level tasks such as
 Recent work includes a system which integrates many low-level capabilities of a MSRR system in a design library, and accomplishes high-level user-specified tasks by synthesizing elements of the library into a reactive state-machine \cite{Jing2016}. This system demonstrates autonomy with respect to task-related decision making, but is designed to operate in a fully known environment with external sensing.
 
 % Traditional systems and wrapup statement
-Our system goes beyond existing work by using self-reconfiguration capabilities of an MSRR system to take autonomy a step further.  The system uses perception of the environment to inform the choice of robot configuration, allowing the robot to adapt its abilities to surmount challenges arising from \textit{a priori} unknown features in the environment. Through hardware demonstrations, we show that autonomous self-reconfiguration allows our system to adapt to the environment to complete complex tasks.
+Our system goes beyond existing work by using the self-reconfiguration capabilities of an MSRR system to take autonomy a step further.  The system uses perception of the environment to inform the choice of robot configuration, allowing the robot to adapt its abilities to surmount challenges arising from \textit{a priori} unknown features in the environment. Through hardware demonstrations, we show that autonomous self-reconfiguration allows our system to adapt to the environment to complete complex tasks.
 
 %    ______            _____          _____                 _ _____
 %   / ____/___  ____  / __(_)___ _   / ___/____  ___  _____(_) __(_)_________
@@ -883,7 +887,7 @@ Since the library indicates that current configuration is only capable of drivin
 
 In \cite{Jing2016}, all robot behaviors are \textit{static} behaviors.
 That is, once users create a behavior in VSPARC, joint values for each module are fixed and cannot be modified during behavior execution.
-Static behaviors, such as a car with a fixed turning radius, do not provide enough maneuverability for the robot to navigate around unknown environment.
+Static behaviors, such as a car with a fixed turning radius, do not provide enough maneuverability for the robot to navigate around unknown environments.
 In this work, we expand the type of behaviors in the library by using \textit{parametric} behaviors, which were first introduced in \cite{JingAURO2017}.
 Parametric behaviors have joint commands that can be altered during run-time, and therefore allow a wider range of motions.
 For example, a parametric behavior for a car configuration can be a driving action with two parameters: turning angle and driving velocity.  
@@ -914,7 +918,7 @@ Moreover the proposition \textbf{explore} encodes whether or not the robot is cu
 By using a library of robot configurations and behaviors as well as environment characterization tools, we can map these high-level abstraction to low-level sensing programs and robot controllers.
 As discussed in Section~\ref{sec:configuration-specifics-supplement}, the user specifies high-level robot actions in terms of behavior properties from the library. 
 In Demonstration II, our system can choose to do a drop action by executing any behavior from the library which has the behavior property \textbf{drop}, and which also satisfies the current ``stairs''-type environment. If the current robot configuration cannot execute an appropriate behavior, the robot will reconfigure to a different configuration that can.  In this way, the system autonomously chooses to implement  \textbf{drop}  appropriately in response to the sensed environment.
-Our system evaluates propositions related to the state of the environment using perception and environment characterization tools in Section~\ref{sec:exploration}. For example, users can map the proposition \textbf{mailBox} to the color tracking function in our perception subsystem, which assign the value \lt{} to \textbf{mailBox} if and only if the robot is currently seeing a mailbox with the onboard camera.
+Our system evaluates propositions related to the state of the environment using perception and environment characterization tools in Section~\ref{sec:exploration}. For example, users can map the proposition \textbf{mailBox} to the color tracking function in our perception subsystem, which assigns the value \lt{} to \textbf{mailBox} if and only if the robot is currently seeing a mailbox with the onboard camera.
 The system treats propositions, such as \textbf{explore}, that require the robot to navigate in the workspace differently from the other simple robot actions, such as \textbf{drop}.
 In this example, users can map \textbf{explore} to behavior property \textbf{drive}, which represents a set of parametric behaviors as discussed in Section~\ref{sec:configuration-specifics-supplement}.
 In order to obtain joint values for behaviors at run-time, a path planner in the perception and planning subsystem (Section~\ref{sec:exploration}) takes into account the robot goal as well as the current environment information from the perception subsystem, and generates a collision-free path for the robot to follow.
@@ -971,7 +975,7 @@ The user describes the desired robot tasks with high-level specifications over t
 LTLMoP automatically converts the specification to logic formulas, which are then used to synthesize a robot controller that satisfies the given tasks (if one exists).
 The controller is in the form of a finite state automaton, as shown in Figure~\ref{fig:autSimple}.
 Each state specifies a set of high-level robot actions that need to be performed, and transitions between states include a set of environment propositions.
-Note some of propositions are omitted in Figure~\ref{fig:autSimple} for clarity.
+Note some  propositions are omitted in Figure~\ref{fig:autSimple} for clarity.
 Execution of the high-level controller begins at the predefined initial state in the finite state automaton. In each iteration, LTLMoP determines the values of all environment propositions by calling the corresponding sensing program. Then, LTLMoP chooses the next state in the finite state machine by taking the transition that matches the current value of all environment propositions. 
 In the next state, for each robot proposition LTLMoP chooses a behavior from the design library which satisfies both the behavior properties and current environment type.
 For example, in Figure~\ref{fig:autSimple} we start in the top state and execute the \textbf{explore} program.
@@ -1013,11 +1017,13 @@ The robot first takes actions to establish the conditions needed for reconfigura
 The robot then sets its joint angles so that all modules that need to detach have both of their wheels on the ground, ready to drive.
 Then the robot performs operations to change the topology of the cluster by detaching a module from the cluster, driving, and re-attaching at its new location in the goal configuration, as shown in Figure~\ref{fig:reconf}.
 Currently, reconfiguration plans from one configuration to another are created manually and stored in the library. However the framework can work with existing assembly planning algorithms (\cite{Werfel2007,Seo2013}) to generate reconfiguration plans automatically.
-Because the reconfiguration zone is free of obstacles, the controller compute collision-free paths offline and store them as part of the reconfiguration plan.
+Because the reconfiguration zone is free of obstacles, the controller computes collision-free paths offline and stores them as part of the reconfiguration plan.
 Once all module movement operations have completed and the goal topology is formed, the robot sets its joints to appropriate angles for the goal configuration to continue performing desired behaviors.
 
 We developed several techniques to ensure reliable connection and disconnection during reconfiguration.  
 When a module disconnects from the cluster, the electro-permanent magnets on the connected faces are turned off.  To guarantee a clean break of the magnetic connection, the disconnecting module bends its tilt joint up and down, mechanically separating itself from the cluster. During docking, accurate alignment is crucial to the strength of the magnetic connection \cite{tosun2016design}.  For this reason, rather than driving directly to its final docking location, a module instead drives to a pre-docking waypoint directly in front of its docking location.  At the waypoint, the module spins in place slowly until its heading is aligned with the dock point, and then drives in straight to attach. To guarantee a good connection, the module intentionally overdrives its dock point, pushing itself into the cluster while firing its magnets.
 %
 % Reconfiguration Figure
+\printindex
+
 \end{document}
