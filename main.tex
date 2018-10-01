@@ -233,7 +233,7 @@ Our implementation is built around the SMORES-EP modular robot \cite{tosun2016de
 
 %Our system is the first to show that modular robots can autonomously complete high-level, complex tasks by reconfiguring to appropriate morphologies in response to the perceived environment. We demonstrate this ability with three hardware experiments using two different tasks. For each experiment, the environment is unknown \textit{a priori}, and the robot must explore and reactively reconfigure to adapt to discovered environmental challenges.
 Our system is the first to demonstrate high-level decision-making in conjunction with reconfiguration in an autonomous setting.  In three hardware demonstrations, the robot explores an \textit{a priori} unknown environment, and acts autonomously to complete a complex task.  Tasks are specified at a high level: users do not explicitly specify which configurations and behaviors the robot should use; rather, tasks are specified in terms of \textit{behavior properties}, which describe desired effects and outcomes \cite{JingAURO2017}.  During task execution, the high-level planner gathers information about the environment and reactively selects appropriate behaviors from a design library, fulfilling the requirements of the task while respecting the constraints of the environment.  Different configurations of the robot have different capabilities (sets of behaviors).  Whenever the high-level planner recognizes that task and environment require a behavior the current robot configuration cannot execute, it directs the robot to reconfigure to a different configuration that can execute the behavior.
-
+	
 Figure \ref{fig:envs} shows the environments used for each demonstration, and Figure \ref{fig:experiments} shows snapshots during each of the demonstrations. A video of all three demonstrations is available as part of the supplementary material.
 %at \url{https://youtu.be/eJsnG9DZjgM}.
 
@@ -245,7 +245,7 @@ For Demonstration II, the robot begins exploring in the ``Scorpion'' configurati
 
 For Demonstration III, the robot begins in the ``Car'' configuration, and cannot see the package from its starting location.  After a short period of exploration, the robot identifies the pink square marking the package.  The pink square is unobstructed, but is approximately 25cm above the ground; the system correctly characterizes this as the ``high''-type environment, and recognizes that reconfiguration will be needed to reach up and place the stamp on the target.  The robot navigates to a position directly in front of the package, reconfigures to the ``Proboscis'' configuration, and executes the ``highReach'' behavior to place the stamp on the target, completing its task.
 
-It should be noted that all experiments were run using the same software architecture, same SMORES-EP modules, and system described in this paper. The library of behaviors was extended with new entries for Demonstrations II and III to expand the system abilities for the new challenges presented in the new environments. Minor adjustments to motor speeds, SLAM parameters, and the low-level reconfiguration controller were made. In addition, Demonstrations II and III used a newer, improved 3D sensor, and therefore a different sensor driver was used.
+It should be noted that all experiments were run using the same software architecture, same SMORES-EP modules, and system described in this paper. The library of behaviors was extended with new entries as system abilities were added, and minor adjustments were made to motor speeds, SLAM parameters, and the low-level reconfiguration controller. In addition, Demonstrations II and III used a newer, improved 3D sensor, and therefore a different sensor driver was used from Demonstration I.
 %
 %     ____  _                           _
 %    / __ \(_)___________  ____________(_)___  ____
@@ -256,7 +256,7 @@ It should be noted that all experiments were run using the same software archite
 \label{sec:discussion}
 %
 %Modular robots promise the potential to create a new frontier in autonomous robotics with the ability to adapt to challenges encountered in their environments. This paper presents a breakthrough in the state of the art by demonstrating an integrated hardware, planning, and perception system that can reactively adapt to observations of an \textit{a priori} unknown environment to accomplish complex tasks. Due to the distributed nature of the hardware, most past works in autonomous modular robots use entirely distributed frameworks \cite{Yim2007, Rubenstein2004,Murata2006,Dorigo2005,Mondada2005,o2010self}. Our system is designed differently.  It is distributed for the low level hardware, but centralized for the high level planning and perception algorithms, leveraging the advantages of both design paradigms.
-Modular self-reconfigurable robots are by their nature mechanically distributed, and as a result lend themselves naturally to distributed planning, sensing, and control. Most past systems have used entirely distributed frameworks \cite{Yim2007, Rubenstein2004,Murata2006,Dorigo2005,Mondada2005,o2010self}. Our system is designed differently.  It is distributed at the low level (hardware), but centralized at the high level (planning and perception), leveraging the advantages of both design paradigms.
+This paper presents the first modular robot system to autonomously complete high-level tasks by reactively reconfiguring in response to its perceived environment and task requirements. In addition, putting the entire system to the test in hardware demonstrations revealed several opportunities for future improvement in such systems. Modular self-reconfigurable robots are by their nature mechanically distributed, and as a result lend themselves naturally to distributed planning, sensing, and control. Most past systems have used entirely distributed frameworks \cite{Yim2007, Rubenstein2004,Murata2006,Dorigo2005,Mondada2005,o2010self}. Our system is designed differently.  It is distributed at the low level (hardware), but centralized at the high level (planning and perception), leveraging the advantages of both design paradigms.
 
 The three scenarios in the demonstrations showcase a range of different ways SMORES-EP can interact with environments and objects: movement over flat ground, fitting into tight spaces, reaching up high, climbing over rough terrain, and manipulating objects.  This broad range of functionality is only accessible to SMORES-EP by reconfiguring between different morphologies.
 
@@ -268,10 +268,6 @@ This level of sophistication in control and decision making goes beyond the capa
 Centralized sensing and control during reconfiguration, provided by AprilTags and a centralized path planner, allowed our implementation to transform between configurations more rapidly than previous distributed systems. 
 Each reconfiguration action (a module disconnecting, moving, and reattaching) takes about one minute.  In contrast, past systems that utilized distributed sensing and control required 5-15 minutes for single reconfiguration actions \cite{Yim2007, Rubenstein2004,Murata2006}, which would prohibit their use in the complex tasks and environments that our system demonstrated.
 
-
-\subsection{Challenges and Limitations}
-%
-
 Through the hardware demonstrations performed with our system, we observed several challenges and opportunities for future improvement with autonomous perception-informed modular systems. All SMORES-EP body modules are identical, and therefore interchangeable for the purposes of reconfiguration.  However, the sensor module has a significantly different shape than a SMORES-EP body module, which introduces heterogeneity in a way that complicates motion planning and reconfiguration planning.  Configurations and behaviors must be designed to provide the sensor module with an adequate view, and to support its weight and elongated shape.  Centralizing sensing also limits reconfiguration: modules can only drive independently in the vicinity of the sensor module, preventing the robot from operating as multiple disparate clusters. 
 
 Our high-level planner assumes all underlying components are reliable and robust, so failure of a low-level component can cause the high-level planner to behave unexpectedly, and result in failure of the entire task.  Table \ref{table:errors} shows the causes of failure for 24 attempts of Demonstration II (placing the stamp on the package).  
@@ -281,9 +277,7 @@ This kind of cascading failure is a weakness of centralized, hierarchical system
 
 This lack of robustness represents a challenge, but steps can be taken to address it.  Unsurprisingly, open-loop behaviors (like stair-climbing and reaching up to place the stamp) were vulnerable to small hardware errors and less robust against variations in the environment. For example, if the height of stairs in the actual environment is higher than the property value of the library entry, the stair-climbing behavior is likely to fail. Closing the loop using sensing made exploration and reconfiguration significantly less vulnerable to error.  Future systems could be made more robust by introducing more feedback from low-level components to high-level decisions making processes, and by incorporating existing high-level failure-recovery frameworks \cite{Maniatopoulos16icra}.  Distributed repair strategies could also be explored, to replace malfunctioning modules with nearby working ones on the fly \cite{tomita1999self}.
 
-To implement our perception characterization component, we assumed a simplified set of environment types and implemented a simple characterization function to distinguish between them. This function does not generalize very well to completely unstructured environments and also is not very scalable. Thus, to expand the system to work well for more realistic environments and to distinguish between a large number of environment types, a more general characterization function should be implemented. 
-
-This paper presents the first modular robot system to autonomously complete high-level tasks by reactively reconfiguring in response to its perceived environment and task requirements. In addition, putting the entire system to the test in hardware demonstrations revealed several opportunities for future improvement in such systems.
+To implement our perception characterization component, we assumed a simplified set of environment types and implemented a simple characterization function to distinguish between them. This function does not generalize very well to completely unstructured environments and also is not very scalable. Thus, to expand the system to work well for more realistic environments and to distinguish between a large number of environment types, a more general characterization function should be implemented.
 
 %     __  ___      __            _       __           __   __  ___     __  __              __
 %    /  |/  /___ _/ /____  _____(_)___ _/ /____     _/_/  /  |/  /__  / /_/ /_  ____  ____/ /____
@@ -371,7 +365,7 @@ A single sensor module carried by the cluster of SMORES-EP modules provides cent
 Completing tasks in unknown environments requires the robot to explore and gain information about its surroundings, and use that information to inform actions and reconfiguration.
 Our system architecture includes active perception components to perform SLAM, choose waypoints for exploration, and recognize objects and regions of interest.  It is also includes a framework to characterize the environment in terms of robot capabilities, allowing the high-level planner to reactively reconfigure the robot to adapt to different environment types. Implementations of these tools should be selected to fit the MSRR system being used and types of environments expected to be encountered.
 
-Environment characterization is done using a discrete classifier (using the 3D occupancy grid of the environment as input) to distinguish between a discrete set of environment types corresponding to the library of robot configurations and gaits. To implement our system for a particular MSRR, the classification function must be defined by the user to classify the desired types of environments. For our proof-of-concept hardware demonstrations, we assumed a simplified set of possible environment types around objects of interest. We assumed the object of interest must be in one of four environment types shown in Figure \ref{fig:characters}: ``tunnel" (the object is in a narrow corridor), ``stairs" (the object is at the top of low stairs), ``high" (the object is on a wall above the ground), and ``free" (the object is on the ground with no obstacles around). Our implemented function performs characterization as follows: When the system recognizes an object in the environment, the characterization function evaluates the 3D information in the object's surroundings. It creates an occupancy grid around the object location, and denotes all grid cells within a robot-radius of obstacles as unreachable (illustrated in Figure~\ref{fig:characterization}). The algorithm then selects the closest reachable point to the object within $20^o$ of the robot's line of sight to the object. If the distance from this point to the object is greater than a threshold value and the object is on the ground, the function characterizes the environment as a ``tunnel''. If above the ground, it function the environment as a ``stairs'' environment. If the closest reachable point is under the threshold value, the system assigns a ``free'' or ``high'' environment characterization, depending on the height of the colored object.
+Environment characterization is done using a discrete classifier (using the 3D occupancy grid of the environment as input) to distinguish between a discrete set of environment types corresponding to the library of robot configurations and gaits. To implement our system for a particular MSRR, the classification function must be defined by the user to classify the desired types of environments. For our proof-of-concept hardware demonstrations, we assumed a simplified set of possible environment types around objects of interest. We assumed the object of interest must be in one of four environment types shown in Figure \ref{fig:characters}: ``tunnel" (the object is in a narrow corridor), ``stairs" (the object is at the top of low stairs), ``high" (the object is on a wall above the ground), and ``free" (the object is on the ground with no obstacles around). Our implemented function performs characterization as follows: When the system recognizes an object in the environment, the characterization function evaluates the 3D information in the object's surroundings. It creates an occupancy grid around the object location, and denotes all grid cells within a robot-radius of obstacles as unreachable (illustrated in Figure~\ref{fig:characterization}). The algorithm then selects the closest reachable point to the object within $20^o$ of the robot's line of sight to the object. If the distance from this point to the object is greater than a threshold value and the object is on the ground, the function characterizes the environment as a ``tunnel''. If above the ground, the function characterizes the environment as a ``stairs'' environment. If the closest reachable point is under the threshold value, the system assigns a ``free'' or ``high'' environment characterization, depending on the height of the colored object.
 
 Based on the environment characterization and target location, the function also returns a waypoint for the robot to position itself to perform its task (or to reconfigure, if necessary).  In Demonstration II, the environment characterization algorithm directs the robot to drive to a waypoint at the base of the stairs, which is the best place for the robot to reconfigure and begin climbing the stairs.
 
@@ -566,13 +560,13 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
   \begin{tabular}{c c c}
     \pbox{0.32\textwidth}{
         \includegraphics[width=0.32\textwidth]{images/overhead_starting.jpg}
-        1. Environment and robot starting location} & 
+        1. Demonstration environment} & 
     \pbox{0.32\textwidth}{
         \includegraphics[width=0.32\textwidth]{images/exploration.jpg}
-        2. Exploring  while searching for objects} &
+        2. Exploration of environment} &
     \pbox{0.32\textwidth}{
         \includegraphics[width=0.32\textwidth]{images/reconfiguration.png}
-        3. Reconfiguring to retrieve pink object}
+        3. Reconfiguration}
     \\
     \pbox{0.32\textwidth}{
         \includegraphics[width=0.32\textwidth]{images/pink_retrieval.png}
@@ -580,7 +574,7 @@ This work was funded by NSF grant numbers CNS-1329620 and CNS-1329692.
         % \label{fig:pink_grab}
     \pbox{0.32\textwidth}{
         \includegraphics[width=0.32\textwidth]{images/dropoff.jpg}
-        5. Depositing an object in the drop-off zone} &
+        5. Delivering an object} &
         % \label{fig:dropoff}
     \pbox{0.32\textwidth}{
         \includegraphics[width=0.32\textwidth]{images/green_retrieval.jpg}
@@ -1024,6 +1018,5 @@ We developed several techniques to ensure reliable connection and disconnection 
 When a module disconnects from the cluster, the electro-permanent magnets on the connected faces are turned off.  To guarantee a clean break of the magnetic connection, the disconnecting module bends its tilt joint up and down, mechanically separating itself from the cluster. During docking, accurate alignment is crucial to the strength of the magnetic connection \cite{tosun2016design}.  For this reason, rather than driving directly to its final docking location, a module instead drives to a pre-docking waypoint directly in front of its docking location.  At the waypoint, the module spins in place slowly until its heading is aligned with the dock point, and then drives in straight to attach. To guarantee a good connection, the module intentionally overdrives its dock point, pushing itself into the cluster while firing its magnets.
 %
 % Reconfiguration Figure
-\printindex
 
 \end{document}
