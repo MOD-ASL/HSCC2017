@@ -797,6 +797,9 @@ Human Error & 4 & 16.7\% \\
 \label{table:errors}
 \end{table}
 
+\pagebreak
+\setcounter{page}{1}
+
 %    _____                   __                          __
 %   / ___/__  ______  ____  / /__  ____ ___  ___  ____  / /_____ ________  __
 %   \__ \/ / / / __ \/ __ \/ / _ \/ __ `__ \/ _ \/ __ \/ __/ __ `/ ___/ / / /
@@ -995,7 +998,7 @@ If the current configuration cannot execute the behavior, the controller instruc
 \section{Reconfiguration}
 \label{sec:reconfiguration-supplement}
 %
-When the high-level planner decides to use a new configuration during a task, the robot must reconfigure. Our system architecture allows any method for reconfiguration, provided that the method requires no external sensing. SMORES-EP is capable of all three classes of modular self-reconfiguration (chain, lattice, and mobile reconfiguration) \cite{Davey2012,yim2003modular}.  We have implemented tools for mobile reconfiguration with SMORES-EP, taking advantage of the fact that individual modules can drive on flat surfaces as described in Section \ref{sec:hardware}.
+When the high-level planner decides to use a new configuration during a task, the robot must reconfigure. Our system architecture allows any method for reconfiguration, provided that the method requires no external sensing. SMORES-EP is capable of all three classes of modular self-reconfiguration (chain, lattice, and mobile reconfiguration) \cite{tosun2016design}.  We have implemented tools for mobile reconfiguration with SMORES-EP, taking advantage of the fact that individual modules can drive on flat surfaces as described in Section \ref{sec:hardware}.
 
 Determining the relative positions of modules during mobile self-reconfiguration is an important challenge. 
 %As discussed in Section~\ref{sec:related-work}, past systems have relied on offboard global positioning systems \cite{Paulos2015} or distributed approaches, in which sensors are mounted on each disconnected set of modules \cite{Yim2007}.  
